@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<robot name="uflite_gripper">
+  
+  <link name="lite6_uflite_gripper_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.030"/>
+      <mass value="0.28"/>
+      <inertia ixx="0.00047106" ixy="3.9292E-07" ixz="2.6537E-06" iyy="0.00033072" iyz="-1.0975E-05" izz="0.00025642"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://xarm_description/meshes/gripper/lite/visual/gripper_lite.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="White"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://xarm_description/meshes/gripper/lite/collision/gripper_lite.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+  <link name="lite6_link_tcp"/>
+
+  <joint name="lite6_joint_tcp" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.0836"/>
+    <parent link="lite6_uflite_gripper_link"/>
+    <child link="lite6_link_tcp"/>
+  </joint>
+
+</robot>
+
