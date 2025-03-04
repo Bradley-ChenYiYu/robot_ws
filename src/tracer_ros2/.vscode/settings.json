@@ -1,0 +1,7 @@
+{
+    "cmake.sourceDirectory": "/home/jason9308/robot_ws/src/tracer_ros2/tracer_base",
+    "files.associations": {
+        "condition_variable": "cpp",
+        "__mutex_base": "cpp"
+    }
+}

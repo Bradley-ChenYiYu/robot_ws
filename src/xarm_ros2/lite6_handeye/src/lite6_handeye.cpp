@@ -29,6 +29,13 @@ public:
         setupSubscriptions();  // 初始化影像訂閱
         setupClients();        // 初始化服務客戶端
         RCLCPP_INFO(this->get_logger(), "xArm Hand-Eye Calibration Node Started.");
+
+        std::array<double, 6> initial_pose = {150, 0, 250, 3.14, 0, 0};
+        if (!moveXArmToPose(initial_pose)) {
+            RCLCPP_ERROR(this->get_logger(), "Failed to move to initial position!");
+        } else {
+            RCLCPP_INFO(this->get_logger(), "Moved to initial position.");
+        }
     }
 
     void performHandEyeCalibration();  // 執行手眼校正
@@ -56,7 +63,7 @@ private:
 void XArmHandEyeCalibration::setupSubscriptions() {
     // 訂閱 RGB 影像
     rgb_realsense_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera/realsense_camera/color/image_raw", 10,
+        "/camera/camera/color/image_raw", 10,
         [this](const sensor_msgs::msg::Image::SharedPtr msg) {
             try {
                 rgb_image_ = cv_bridge::toCvCopy(msg, "bgr8")->image.clone();
@@ -67,7 +74,7 @@ void XArmHandEyeCalibration::setupSubscriptions() {
 
     // 訂閱深度影像
     depth_realsense_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera/aligned_depth_to_color/image_raw", 10,
+        "/camera/camera/depth/image_rect_raw", 10,
         [this](const sensor_msgs::msg::Image::SharedPtr msg) {
             try {
                 depth_image_ = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::TYPE_32FC1)->image.clone();
@@ -79,7 +86,7 @@ void XArmHandEyeCalibration::setupSubscriptions() {
 
     // 訂閱機械手臂狀態回饋
     xarm_feedback_subscription_ = this->create_subscription<xarm_msgs::msg::RobotMsg>(
-        "/xarm/xarm_states", 10,
+        "/ufactory/robot_states", 10,
         [this](const xarm_msgs::msg::RobotMsg::SharedPtr msg) {
             xarm_feedback_state_ = msg;
         });
@@ -93,14 +100,30 @@ void XArmHandEyeCalibration::setupClients() {
 
 // **控制機械手臂移動**
 bool XArmHandEyeCalibration::moveXArmToPose(const std::array<double, 6>& pose) {
+
+    if (!xarm_move_cartesian_client_->wait_for_service(std::chrono::seconds(5))) {
+        RCLCPP_ERROR(this->get_logger(), "Service /xarm/set_position is not available!");
+        return false;
+    }
+    
     auto req = std::make_shared<xarm_msgs::srv::MoveCartesian::Request>();
     req->pose.assign(pose.begin(), pose.end());
     req->speed = 50;
     req->acc = 500;
 
     auto future = xarm_move_cartesian_client_->async_send_request(req);
-    return future.get()->ret == 0;
+    auto timeout = std::chrono::seconds(10);  // 最多等 10 秒
+    if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), future, timeout) == 
+        rclcpp::FutureReturnCode::SUCCESS) {
+        RCLCPP_INFO(this->get_logger(), "Move command sent successfully.");
+        return future.get()->ret == 0;
+    } else {
+        RCLCPP_ERROR(this->get_logger(), "Failed to send move command within timeout.");
+        return false;
+    }
+    // consider return true directly
 }
+
 
 bool XArmHandEyeCalibration::topHomingExecute() {
     RCLCPP_INFO(this->get_logger(), "xArm Lite6 Homing");
@@ -109,20 +132,35 @@ bool XArmHandEyeCalibration::topHomingExecute() {
     auto req = std::make_shared<xarm_msgs::srv::MoveHome::Request>();
     auto future = xarm_move_home_client_->async_send_request(req);
 
-    if (future.get()->ret == 0) {
-        RCLCPP_INFO(this->get_logger(), "xArm Lite6 is at home position.");
-        return true;
-    }
+    // 最多等待 10 秒，看是否成功收到服務端回覆
+    auto timeout = std::chrono::seconds(10);
 
-    RCLCPP_WARN(this->get_logger(), "Homing failed!");
-    return false;
+    // 使用 spin_until_future_complete 來驅動回呼並等待未來物件完成
+    if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), future, timeout) 
+        == rclcpp::FutureReturnCode::SUCCESS) 
+    {
+        // 取得服務回傳結果
+        auto result = future.get();
+        if (result->ret == 0) {
+            RCLCPP_INFO(this->get_logger(), "xArm Lite6 is at home position.");
+            return true;
+        }
+        else {
+            RCLCPP_WARN(this->get_logger(), "Homing failed, ret = %d", result->ret);
+            return false;
+        }
+    }
+    else {
+        RCLCPP_ERROR(this->get_logger(), "Failed to send home command within timeout.");
+        return false;
+    }
 }
+
 
 
 // **執行手眼校正**
 void XArmHandEyeCalibration::performHandEyeCalibration() {
     RCLCPP_INFO(this->get_logger(), "Starting Hand-Eye Calibration...");
-
     // **讀取 YAML 設定檔**
     YAML::Node config = YAML::LoadFile("/home/jason9308/robot_ws/src/xarm_ros2/lite6_handeye/config/calibration_camera_eih_001.yaml");
     auto xarm_config = config["xarm_lite6"];
@@ -130,6 +168,8 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
     if (!xarm_config["sampleTrajectory"] || !xarm_config["chessboard_info"]) {
         throw std::runtime_error("Missing required configuration fields in YAML file");
     }
+
+    RCLCPP_INFO(this->get_logger(), "debug_1");
 
     // **讀取標定軌跡與棋盤格設定**
     auto trajectories = xarm_config["sampleTrajectory"].as<std::vector<std::vector<double>>>();
@@ -139,6 +179,7 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
     double square_size = chessboard["square_size"].as<double>();
     cv::Size pattern_size(pattern_width, pattern_height);
 
+    RCLCPP_INFO(this->get_logger(), "debug_2");
     // **相機內參與畸變係數**
     cv::Mat cameraMatrix = (cv::Mat_<double>(3,3) << 
         9.1748012527594449e+02, 0.0, 6.4252364235136827e+02,
@@ -161,7 +202,7 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
             object_corners.push_back(cv::Point3f(j * square_size, i * square_size, 0.0f));
         }
     }
-
+    RCLCPP_INFO(this->get_logger(), "debug_3");
     // **標定影像儲存**
     std::filesystem::path save_dir("/home/jason9308/robot_ws/src/xarm_ros2/lite6_handeye/data/calibration");
     auto now = std::chrono::system_clock::now();
@@ -174,22 +215,56 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
 
     std::filesystem::create_directories(save_dir);
     std::filesystem::create_directories(image_dir);
-
+    RCLCPP_INFO(this->get_logger(), "debug_4");
     int valid_image_count = 0;
     for (const auto& pose : trajectories) {
+        RCLCPP_INFO(this->get_logger(), "debug_5");
         std::array<double, 6> robot_pose;
         for (size_t i = 0; i < 6; i++) robot_pose[i] = pose[i];
-
+        
         if (!moveXArmToPose(robot_pose)) {
             RCLCPP_ERROR(this->get_logger(), "Failed to move to calibration position");
             continue;
         }
+        else{
+            RCLCPP_INFO(this->get_logger(), "debug_6");
+        }
 
         rclcpp::sleep_for(std::chrono::seconds(3));
+
+        RCLCPP_INFO(this->get_logger(), "test1");
         std::array<double, 6> actual_pose;
+
+        auto start_time = this->now();
+        while (rclcpp::ok()) {
+            // 讓 ROS2 執行 callback
+            rclcpp::spin_some(this->get_node_base_interface());
+
+            // 檢查是否已拿到有效資料
+            if (xarm_feedback_state_ && xarm_feedback_state_->pose.size() >= 6) {
+                break;
+            }
+
+            if ((this->now() - start_time).seconds() > 5.0) {
+                RCLCPP_ERROR(this->get_logger(), "Timeout waiting for xarm feedback state!");
+                return;
+            }
+            rclcpp::sleep_for(std::chrono::milliseconds(100));
+        }
+
+        RCLCPP_INFO(this->get_logger(), "xarm_feedback_state_->pose = %f", xarm_feedback_state_->pose[0]);
+        RCLCPP_INFO(this->get_logger(), "xarm_feedback_state_->pose = %f", xarm_feedback_state_->pose[1]);
+        RCLCPP_INFO(this->get_logger(), "xarm_feedback_state_->pose = %f", xarm_feedback_state_->pose[2]);
+        RCLCPP_INFO(this->get_logger(), "xarm_feedback_state_->pose = %f", xarm_feedback_state_->pose[3]);
+        RCLCPP_INFO(this->get_logger(), "xarm_feedback_state_->pose = %f", xarm_feedback_state_->pose[4]);
+        RCLCPP_INFO(this->get_logger(), "xarm_feedback_state_->pose = %f", xarm_feedback_state_->pose[5]);
+
+        RCLCPP_INFO(this->get_logger(), "test2");
         std::copy(xarm_feedback_state_->pose.begin(), 
           xarm_feedback_state_->pose.end(), 
           actual_pose.begin());
+
+        RCLCPP_INFO(this->get_logger(), "copy pose success");
 
         
         if (rgb_image_.empty() || depth_image_.empty()) {
@@ -203,8 +278,10 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
         cv::cvtColor(rgb, gray, cv::COLOR_BGR2GRAY);
         std::vector<cv::Point2f> corners;
         bool found = cv::findChessboardCorners(gray, pattern_size, corners);
+        RCLCPP_INFO(this->get_logger(), "check corners");
 
         if (found) {
+            RCLCPP_INFO(this->get_logger(), "debug_8");
             valid_image_count++;
         
             // **1. 儲存影像**
@@ -298,7 +375,7 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
         }
     }
     this->topHomingExecute();
-
+    RCLCPP_INFO(this->get_logger(), "debug_7");
     // **進行相機標定**
     std::vector<cv::Mat> rvecs, tvecs;
     double error = cv::calibrateCamera(objectPoints, imagePoints, rgb_image_.size(),
@@ -440,4 +517,6 @@ int main(int argc, char** argv) {
     rclcpp::shutdown();
     return 0;
 }
+
+
 

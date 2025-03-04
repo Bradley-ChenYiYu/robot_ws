@@ -5,7 +5,7 @@ from rclpy.node import Node
 import cv2
 import torch
 import numpy as np
-from facenet_pytorch import InceptionResnetV1
+from facenet_pytorch import InceptionResnetV1, MTCNN
 from ultralytics import YOLO
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
@@ -19,8 +19,11 @@ class FaceRecognitionNode(Node):
         self.bridge = CvBridge()
 
         # 訂閱攝影機影像
+        # self.image_sub = self.create_subscription(
+        #     Image, "/camera/image_raw", self.image_callback, 10
+        # )
         self.image_sub = self.create_subscription(
-            Image, "/camera/image_raw", self.image_callback, 10
+            Image, "/camera/camera/color/image_raw", self.image_callback, 10
         )
 
         # 發佈辨識結果
@@ -32,12 +35,14 @@ class FaceRecognitionNode(Node):
         # 載入 YOLOv8/YOLOv10 人臉偵測模型
         self.face_detector = YOLO('/home/jason9308/robot_ws/src/face_recognition/best.pt') # 你可以換成 yolov10-face.pt
         
+        # 初始化 MTCNN (只用來對齊，不做偵測)
+        self.mtcnn = MTCNN(image_size=160, margin=20, keep_all=False, post_process=True)
+
         # 載入 FaceNet (人臉辨識模型)
         self.face_recognizer = InceptionResnetV1(pretrained='vggface2').eval()
 
         # 設定參考影像 (用來進行身份比對)
         self.reference_embedding = self.load_reference_image('/home/jason9308/robot_ws/src/face_recognition/me.jpeg')
-
 
         # 設定辨識參數
         self.threshold = 0.75  # 相似度閾值
@@ -117,7 +122,7 @@ class FaceRecognitionNode(Node):
             # self.result_pub.publish(result_msg)
 
             # 在畫面上繪製框線與相似度
-            label = f"Sim: {cosine_similarity:.2f} | Conf: {confidence:.2f}"
+            label = f"Sim: {cosine_similarity:.2f}"
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
             cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
@@ -162,3 +167,188 @@ def main(args=None):
 
 if __name__ == "__main__":
     main()
+
+
+
+# #!/usr/bin/env python3
+
+# import rclpy
+# from rclpy.node import Node
+# import cv2
+# import torch
+# import numpy as np
+# from facenet_pytorch import InceptionResnetV1, MTCNN
+# from ultralytics import YOLO
+# from cv_bridge import CvBridge, CvBridgeError
+# from sensor_msgs.msg import Image
+# from std_msgs.msg import String
+
+# class FaceRecognitionNode(Node):
+#     def __init__(self):
+#         super().__init__('face_recognition_node')
+
+#         # 初始化 OpenCV 與 ROS 相關物件
+#         self.bridge = CvBridge()
+
+#         # 訂閱攝影機影像
+#         # self.image_sub = self.create_subscription(
+#         #     Image, "/camera/image_raw", self.image_callback, 10
+#         # )
+#         self.image_sub = self.create_subscription(
+#             Image, "/camera/camera/color/image_raw", self.image_callback, 10
+#         )
+
+#         # 發佈辨識結果
+#         self.result_pub = self.create_publisher(String, '/face_recognition/result', 10)
+
+#         # 清除 GPU 記憶體
+#         torch.cuda.empty_cache()
+
+#         # 載入 YOLOv8/YOLOv10 人臉偵測模型
+#         self.face_detector = YOLO('/home/jason9308/robot_ws/src/face_recognition/best.pt') # 你可以換成 yolov10-face.pt
+        
+#         # 初始化 MTCNN (只用來對齊，不做偵測)
+#         self.mtcnn = MTCNN(image_size=160, margin=0, keep_all=False, post_process=True)
+
+#         # 載入 FaceNet (人臉辨識模型)
+#         self.face_recognizer = InceptionResnetV1(pretrained='vggface2').eval()
+
+#         # 設定參考影像 (用來進行身份比對)
+#         self.reference_embedding = self.load_reference_image('/home/jason9308/robot_ws/src/face_recognition/me.jpeg')
+
+#         # 設定辨識參數
+#         self.threshold = 0.75  # 相似度閾值
+#         self.pass_count = 0
+#         self.pass_required = 70  # 需要累積 20 次高於閾值才通過
+
+#     def load_reference_image(self, img_path):
+#         """載入參考影像，提取特徵向量"""
+#         reference_image = cv2.imread(img_path)
+#         if reference_image is None:
+#             self.get_logger().error("無法讀取參考影像！")
+#             return None
+
+#         # 偵測參考影像中的人臉
+#         results = self.face_detector(reference_image)
+#         if results and results[0].boxes:
+#             x1, y1, x2, y2 = map(int, results[0].boxes[0].xyxy[0].tolist())
+#             reference_face = reference_image[y1:y2, x1:x2]
+#             return self.get_embedding(reference_face)
+#         else:
+#             self.get_logger().error("未偵測到參考人臉！")
+#             return None
+
+#     def process_face(self, face_img):
+#         """使用 MTCNN 來對齊人臉"""
+#         face_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)  # 轉換 BGR → RGB
+#         boxes, probs, landmarks = self.mtcnn.detect(face_rgb, landmarks=True)
+
+#         if landmarks is None:
+#             self.get_logger().error("人臉對齊失敗！")
+#             return None
+
+#         # 設定標準化的 5 個關鍵點位置
+#         reference_pts = np.array([
+#             [30.2946, 51.6963],   # 左眼
+#             [65.5318, 51.5014],   # 右眼
+#             [48.0252, 71.7366],   # 鼻子
+#             [33.5493, 92.3655],   # 左嘴角
+#             [62.7299, 92.2041]    # 右嘴角
+#         ], dtype=np.float32)
+
+#         reference_pts[:, 0] += 8  # 調整至 112x112
+#         dst = np.array(landmarks[0], dtype=np.float32)
+
+#         # 計算仿射變換矩陣
+#         M, _ = cv2.estimateAffinePartial2D(dst, reference_pts)
+#         aligned_face = cv2.warpAffine(face_rgb, M, (160, 160))  # 進行仿射變換
+
+#         # 轉換 PyTorch 張量
+#         aligned_face = np.transpose(aligned_face, (2, 0, 1))  # (H, W, C) -> (C, H, W)
+#         aligned_face = aligned_face / 255.0  # 正規化
+#         aligned_face = torch.tensor(aligned_face).float().unsqueeze(0)  # 轉為 Tensor
+#         return aligned_face
+
+#     def get_embedding(self, face_img):
+#         """計算人臉特徵向量"""
+#         face_tensor = self.process_face(face_img)
+#         if face_tensor is None:
+#             return None
+        
+#         with torch.no_grad():
+#             embedding = self.face_recognizer(face_tensor)
+#         return embedding.squeeze().detach().numpy()
+
+#     def image_callback(self, msg):
+#         """當攝影機影像進來時，進行人臉偵測與辨識"""
+#         try:
+#             frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+#         except CvBridgeError as e:
+#             self.get_logger().error(f"影像轉換失敗: {e}")
+#             return
+
+#         # YOLO 偵測人臉
+#         results = self.face_detector(frame)
+
+#         for box in results[0].boxes:
+#             x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
+#             confidence = box.conf[0]
+
+#             # 擷取偵測到的人臉
+#             face_img = frame[y1:y2, x1:x2]
+
+#             # 計算特徵向量 (先對齊人臉)
+#             detected_embedding = self.get_embedding(face_img)
+#             if detected_embedding is None:
+#                 continue  # 跳過未對齊的人臉
+
+#             # 計算餘弦相似度
+#             cosine_similarity = np.dot(self.reference_embedding, detected_embedding) / (
+#                 np.linalg.norm(self.reference_embedding) * np.linalg.norm(detected_embedding)
+#             )
+
+#             # 更新辨識累積計數
+#             if cosine_similarity > self.threshold:
+#                 self.pass_count += 1
+#             else:
+#                 self.pass_count = 0  # 若有一次不合格，則重新計數
+
+
+#             # 在畫面上繪製框線與相似度
+#             label = f"Sim: {cosine_similarity:.2f}"
+#             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+#             cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+            
+
+#             # 若達到通過標準，發佈成功訊息並關閉節點
+#             if self.pass_count >= self.pass_required:
+#                 success_msg = String()
+#                 success_msg.data = "身份確認成功"
+#                 self.result_pub.publish(success_msg)
+#                 self.get_logger().info("身份確認成功！即將關閉節點...")
+#                 self.destroy_node()
+#                 exit(0)
+#                 return
+
+#         # 顯示畫面
+#         cv2.imshow("Face Recognition", frame)
+#         if cv2.waitKey(1) & 0xFF == ord('q'):
+#             self.get_logger().info("手動結束辨識")
+#             cv2.destroyAllWindows()
+#             rclpy.shutdown()
+            
+
+# def main(args=None):
+#     rclpy.init(args=args)
+#     node = FaceRecognitionNode()
+
+#     if rclpy.ok():
+#         rclpy.spin(node)
+
+#     # node.destroy_node()
+#     # rclpy.shutdown()
+#     return
+
+
+# if __name__ == "__main__":
+#     main()
