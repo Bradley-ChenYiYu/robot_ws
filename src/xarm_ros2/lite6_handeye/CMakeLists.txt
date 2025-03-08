@@ -24,8 +24,32 @@ include_directories(
 add_executable(lite6_handeye_node src/lite6_handeye.cpp)
 target_link_libraries(lite6_handeye_node yaml-cpp)
 
+add_executable(lite6_handeye_node2 src/lite6_handeye2.cpp)
+target_link_libraries(lite6_handeye_node2 yaml-cpp)
+
+add_executable(lite6_handeye_node3 src/lite6_handeye3.cpp)
+target_link_libraries(lite6_handeye_node3 yaml-cpp)
+
 # 4. **設定目標相依性**
 ament_target_dependencies(lite6_handeye_node 
+  rclcpp
+  sensor_msgs
+  cv_bridge
+  OpenCV
+  yaml-cpp
+  xarm_msgs
+)
+
+ament_target_dependencies(lite6_handeye_node2 
+  rclcpp
+  sensor_msgs
+  cv_bridge
+  OpenCV
+  yaml-cpp
+  xarm_msgs
+)
+
+ament_target_dependencies(lite6_handeye_node3 
   rclcpp
   sensor_msgs
   cv_bridge
@@ -37,6 +61,8 @@ ament_target_dependencies(lite6_handeye_node
 # 5. **安裝節點**
 install(TARGETS
   lite6_handeye_node
+  lite6_handeye_node2
+  lite6_handeye_node3
   DESTINATION lib/${PROJECT_NAME}
 )
 
