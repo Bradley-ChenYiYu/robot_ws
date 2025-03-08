@@ -30,7 +30,7 @@ public:
         setupClients();        // 初始化服務客戶端
         RCLCPP_INFO(this->get_logger(), "xArm Hand-Eye Calibration Node Started.");
 
-        std::array<double, 6> initial_pose = {150, 0, 250, 3.14, 0, 0};
+        std::array<double, 6> initial_pose = {350, 0, 350, 3.14, 0, 0};
         if (!moveXArmToPose(initial_pose)) {
             RCLCPP_ERROR(this->get_logger(), "Failed to move to initial position!");
         } else {
@@ -78,7 +78,7 @@ void XArmHandEyeCalibration::setupSubscriptions() {
         [this](const sensor_msgs::msg::Image::SharedPtr msg) {
             try {
                 depth_image_ = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::TYPE_32FC1)->image.clone();
-                depth_image_ /= 1000.0;  // 轉換為米
+                // depth_image_ /= 1000.0;  // 轉換為米
             } catch (cv_bridge::Exception& e) {
                 RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
             }
@@ -230,7 +230,7 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
             RCLCPP_INFO(this->get_logger(), "debug_6");
         }
 
-        rclcpp::sleep_for(std::chrono::seconds(3));
+        rclcpp::sleep_for(std::chrono::seconds(5));
 
         RCLCPP_INFO(this->get_logger(), "test1");
         std::array<double, 6> actual_pose;
@@ -337,6 +337,7 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
                           0, 0, 1);
         
             cv::Mat R = Rz * Ry * Rx;  // 旋轉矩陣 = ZYX 歐拉角轉換
+            // cv::Mat R = Rx * Ry * Rz;
             R.copyTo(robot_transform(cv::Rect(0, 0, 3, 3)));
         
             robot_poses.push_back(robot_transform);  // 儲存機械手臂位姿
@@ -517,6 +518,3 @@ int main(int argc, char** argv) {
     rclcpp::shutdown();
     return 0;
 }
-
-
-
