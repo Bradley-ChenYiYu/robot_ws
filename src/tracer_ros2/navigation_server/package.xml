@@ -14,6 +14,7 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_action</depend>
   <depend>nav2_msgs</depend>
+  <depend>std_msgs</depend>
   <!-- <depend>navigation_interfaces</depend>  **確保這行存在** -->
 
   <exec_depend>navigation_interfaces</exec_depend>  <!-- **確保執行時也能找到 `navigation_interfaces`** -->
