@@ -74,7 +74,7 @@ void XArmHandEyeCalibration::setupSubscriptions() {
 
     // 訂閱深度影像
     depth_realsense_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera/camera/depth/image_rect_raw", 10,
+        "/camera/camera/aligned_depth_to_color/image_raw", 10,
         [this](const sensor_msgs::msg::Image::SharedPtr msg) {
             try {
                 depth_image_ = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::TYPE_32FC1)->image.clone();
@@ -231,7 +231,7 @@ void XArmHandEyeCalibration::performHandEyeCalibration() {
         }
 
         auto start_time = this->now();
-        rclcpp::Time timeout_time = start_time + rclcpp::Duration::from_seconds(5);
+        rclcpp::Time timeout_time = start_time + rclcpp::Duration::from_seconds(10.0);
 
         //rclcpp::sleep_for(std::chrono::seconds(5));
         while (rclcpp::ok() && this->now() < timeout_time) 

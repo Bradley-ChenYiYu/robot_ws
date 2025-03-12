@@ -26,9 +26,9 @@ ufactory_driver:
       ft_sensor_set_zero: false
       set_linear_track_stop: false
       clean_linear_track_error: false
-      open_lite6_gripper: false
-      close_lite6_gripper: false
-      stop_lite6_gripper: false
+      open_lite6_gripper: true
+      close_lite6_gripper: true
+      stop_lite6_gripper: true
       get_state: false
       get_cmdnum: false
       get_vacuum_gripper: false
