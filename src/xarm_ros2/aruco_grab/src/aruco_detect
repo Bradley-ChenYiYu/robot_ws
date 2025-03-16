@@ -37,16 +37,7 @@ public:
             RCLCPP_ERROR(this->get_logger(), "Failed to load hand-eye calibration data!");
             rclcpp::shutdown();
         }
-
-        std::array<double, 6> initial_pose = {200, -50, 400, 3.14, 0, 0};
-        if (moveXArmToPose(initial_pose)) {
-            RCLCPP_INFO(this->get_logger(), "Successfully moved to initial position.");
-        } else {
-            RCLCPP_ERROR(this->get_logger(), "Failed to move to initial marker.");
-        }
     }
-
-    void performGrasping();
 
 private:
     // 訂閱 RGB & 深度影像
@@ -66,8 +57,6 @@ private:
     cv::Mat distCoeffs_;
     cv::Mat handEyeRotation_;
     cv::Mat handEyeTranslation_;
-    std::vector<std::vector<cv::Point2f>> detected_marker_corners_;  // 存放 ArUco 角點
-    std::vector<int> detected_marker_ids_;  // 存放 ArUco ID
 
     cv::Mat computeEEtoBaseTransform(const std::array<double, 6>& pose);
     void setupSubscriptions();
@@ -140,7 +129,7 @@ cv::Mat ArUcoXArmControl::computeEEtoBaseTransform(const std::array<double, 6>& 
 
 // **讀取手眼校正結果**
 bool ArUcoXArmControl::loadHandEyeCalibration() {
-    std::string yaml_path = "/home/jason9308/robot_ws/src/xarm_ros2/aruco_grab/camera_calibration_result2.yaml";
+    std::string yaml_path = "/home/jason9308/robot_ws/src/xarm_ros2/aruco_grab/camera_calibration_result.yaml";
     YAML::Node config = YAML::LoadFile(yaml_path);
 
     if (!config["cameraMatrix"] || !config["distCoeffs"] || !config["handEyeRotation"] || !config["handEyeTranslation"]) {
@@ -198,7 +187,7 @@ void ArUcoXArmControl::imageCallback(const sensor_msgs::msg::Image::SharedPtr ms
         return;
     }
 
-    if (rgb_image_.empty()) return;
+    if (rgb_image_.empty() || depth_image_.empty()) return;
 
     cv::Mat gray;
     cv::cvtColor(rgb_image_, gray, cv::COLOR_BGR2GRAY);
@@ -216,11 +205,34 @@ void ArUcoXArmControl::imageCallback(const sensor_msgs::msg::Image::SharedPtr ms
         return;
     }
 
-    // 將 ArUco 角點存起來，供 `performGrasping()` 使用
-    detected_marker_corners_ = markerCorners;
-    detected_marker_ids_ = markerIds;
-}
+    // **讀取 ArUco 標記的深度 (單位：mm)**
+    float depth_value = depth_image_.at<float>(markerCorners[0][0].y, markerCorners[0][0].x);
 
+    // **計算 ArUco 在相機座標系下的位置**
+    cv::Point2f marker_center = (markerCorners[0][0] + markerCorners[0][2]) * 0.5;
+    double x = (marker_center.x - cameraMatrix_.at<double>(0, 2)) / cameraMatrix_.at<double>(0, 0) * depth_value;
+    double y = (marker_center.y - cameraMatrix_.at<double>(1, 2)) / cameraMatrix_.at<double>(1, 1) * depth_value;
+    // double z = depth_value / 1000.0;  // 轉換成公尺 (mm → m)
+    double z = depth_value;
+
+    cv::Mat aruco_camera_pos = (cv::Mat_<double>(4, 1) << x, y, z, 1);
+
+    // **1. 轉換到手臂末端 (End-Effector) 座標系**
+    cv::Mat aruco_ee_pos = handEyeRotation_ * aruco_camera_pos.rowRange(0, 3) + handEyeTranslation_;
+
+    // **2. 取得手臂當前的變換矩陣 (手臂回饋資訊)**
+    cv::Mat T_EE2Base = computeEEtoBaseTransform(xarm_current_pose_);
+
+    // **3. 轉換到機械手臂基座座標系**
+    cv::Mat aruco_base_pos = T_EE2Base(cv::Rect(0, 0, 3, 3)) * aruco_ee_pos + T_EE2Base(cv::Rect(3, 0, 1, 3));
+
+    // **取得基座座標系下的 x, y, z**
+    double base_x = aruco_base_pos.at<double>(0);
+    double base_y = aruco_base_pos.at<double>(1);
+    double base_z = aruco_base_pos.at<double>(2);
+
+    RCLCPP_INFO(this->get_logger(), "ArUco in Base Frame: x=%.3f, y=%.3f, z=%.3f", base_x, base_y, base_z);
+}
 
 
 // **控制機械手臂移動**
@@ -246,72 +258,6 @@ bool ArUcoXArmControl::moveXArmToPose(const std::array<double, 6>& pose) {
     }
 }
 
-void ArUcoXArmControl::performGrasping() {
-
-    auto start_time = this->now();
-    rclcpp::Time timeout_time = start_time + rclcpp::Duration::from_seconds(5.0);
-
-    //rclcpp::sleep_for(std::chrono::seconds(5));
-    while (rclcpp::ok() && this->now() < timeout_time) 
-    {
-        // 讓 ROS 2 執行 callback，確保訂閱的回調函式能夠執行
-        rclcpp::spin_some(this->get_node_base_interface());
-        rclcpp::sleep_for(std::chrono::milliseconds(100));  // 每 100ms 等待一次
-    }
-
-    if (detected_marker_corners_.empty()) {
-        RCLCPP_WARN(this->get_logger(), "No valid ArUco marker detected for grasping.");
-        return;
-    }
-
-    if (depth_image_.empty()) {
-        RCLCPP_WARN(this->get_logger(), "Depth image is empty! Cannot compute marker depth.");
-        return;
-    }
-
-    // 取得 ArUco 標記的深度 (單位：mm)
-    float depth_value = depth_image_.at<float>(detected_marker_corners_[0][0].y, detected_marker_corners_[0][0].x);
-
-    if (depth_value <= 0) {
-        RCLCPP_WARN(this->get_logger(), "Invalid depth value detected!");
-        return;
-    }
-
-    // **計算 ArUco 在相機座標系下的位置**
-    cv::Point2f marker_center = (detected_marker_corners_[0][0] + detected_marker_corners_[0][2]) * 0.5;
-    double x = (marker_center.x - cameraMatrix_.at<double>(0, 2)) / cameraMatrix_.at<double>(0, 0) * depth_value;
-    double y = (marker_center.y - cameraMatrix_.at<double>(1, 2)) / cameraMatrix_.at<double>(1, 1) * depth_value;
-    double z = depth_value;
-
-    cv::Mat aruco_camera_pos = (cv::Mat_<double>(3, 1) << x, y, z);
-
-    // **1. 轉換到手臂末端 (End-Effector) 座標系**
-    cv::Mat aruco_ee_pos = handEyeRotation_ * aruco_camera_pos + handEyeTranslation_;
-
-    // **2. 取得手臂當前的變換矩陣 (手臂回饋資訊)**
-    cv::Mat T_EE2Base = computeEEtoBaseTransform(xarm_current_pose_);
-
-    // **3. 轉換到機械手臂基座座標系**
-    cv::Mat aruco_base_pos = T_EE2Base(cv::Rect(0, 0, 3, 3)) * aruco_ee_pos + T_EE2Base(cv::Rect(3, 0, 1, 3));
-
-    // **取得基座座標系下的 x, y, z**
-    double base_x = aruco_base_pos.at<double>(0);
-    double base_y = aruco_base_pos.at<double>(1);
-    double base_z = aruco_base_pos.at<double>(2);
-
-    RCLCPP_INFO(this->get_logger(), "ArUco in Base Frame: x=%.3f, y=%.3f, z=%.3f", base_x, base_y, base_z);
-
-    // **控制機械手臂移動到該點**
-    std::array<double, 6> target_pose = {base_x, base_y, base_z , 3.14, 0, 0};
-
-    if (moveXArmToPose(target_pose)) {
-        RCLCPP_INFO(this->get_logger(), "Successfully moved to ArUco marker position.");
-    } else {
-        RCLCPP_ERROR(this->get_logger(), "Failed to move to ArUco marker.");
-    }
-}
-
-
 int main(int argc, char** argv) 
 {
     // **初始化 ROS 2**
@@ -320,10 +266,8 @@ int main(int argc, char** argv)
     // **建立 ArUcoXArmControl 節點**
     auto node = std::make_shared<ArUcoXArmControl>();
 
-    node->performGrasping();
-
     // **進入 ROS 2 事件迴圈，保持節點運行**
-    //rclcpp::spin(node);
+    rclcpp::spin(node);
 
     // **結束時清理**
     rclcpp::shutdown();

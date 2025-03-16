@@ -75,6 +75,18 @@ int main(int argc, char **argv) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
+    node->send_navigation_request(-5.27, -0.54, 0.17, 1.0);
+    while (rclcpp::ok()) {
+        executor.spin_some(); // 讓回呼函數能夠執行
+
+        if (node->is_navigation_done()) {
+            RCLCPP_INFO(node->get_logger(), "導航完成，等待新的指令...");
+            break;
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
     rclcpp::shutdown();
     return 0;
 }

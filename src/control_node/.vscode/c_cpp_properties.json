@@ -1,0 +1,45 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/jason9308/robot_ws/install/xarm_planner/include/**",
+        "/home/jason9308/robot_ws/install/xarm_gazebo/include/**",
+        "/home/jason9308/robot_ws/install/xarm_controller/include/**",
+        "/home/jason9308/robot_ws/install/xarm_api/include/**",
+        "/home/jason9308/robot_ws/install/xarm_msgs/include/**",
+        "/home/jason9308/robot_ws/install/tracer_msgs/include/**",
+        "/home/jason9308/robot_ws/install/tm_msgs/include/**",
+        "/home/jason9308/robot_ws/install/techman_robot_msgs/include/**",
+        "/home/jason9308/robot_ws/install/realsense_gazebo_plugin/include/**",
+        "/home/jason9308/robot_ws/install/navigation_interfaces/include/**",
+        "/home/jason9308/robot_ws/install/grpr2f85_ifaces/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/jason9308/robot_ws/src/control_node/include/**",
+        "/home/jason9308/robot_ws/src/tmr_ros2/tm_driver/include/**",
+        "/home/jason9308/robot_ws/src/tracer_ros2/navigation_interfaces/include/**",
+        "/home/jason9308/robot_ws/src/tracer_ros2/navigation_server/include/**",
+        "/home/jason9308/robot_ws/src/tracer_ros2/tracer_base/include/**",
+        "/home/jason9308/robot_ws/src/ugv_sdk/include/**",
+        "/home/jason9308/robot_ws/src/xarm_ros2/aruco_grab/include/**",
+        "/home/jason9308/robot_ws/src/xarm_ros2/lite6_handeye/include/**",
+        "/home/jason9308/robot_ws/src/xarm_ros2/thirdparty/realsense_gazebo_plugin/include/**",
+        "/home/jason9308/robot_ws/src/xarm_ros2/xarm_api/include/**",
+        "/home/jason9308/robot_ws/src/xarm_ros2/xarm_controller/include/**",
+        "/home/jason9308/robot_ws/src/xarm_ros2/xarm_gazebo/include/**",
+        "/home/jason9308/robot_ws/src/xarm_ros2/xarm_moveit_servo/include/**",
+        "/home/jason9308/robot_ws/src/xarm_ros2/xarm_planner/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
