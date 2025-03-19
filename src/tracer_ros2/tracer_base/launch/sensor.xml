@@ -1,7 +1,8 @@
 <launch>
   <include file="$(find-pkg-share tracer_base)/launch/tracer_base.launch.py"/>
   <!-- <include file="$(find-pkg-share rplidar_ros)/launch/rplidar_a3_launch.py"/> -->
-  <include file="$(find-pkg-share velodyne)/launch/velodyne-all-nodes-VLP16-launch.py"/>
+  <!-- <include file="$(find-pkg-share velodyne)/launch/velodyne-all-nodes-VLP16-launch.py"/> -->
+  <include file="$(find-pkg-share lslidar_driver)/launch/lslidar_c32_launch.py"/>
   <include file="$(find-pkg-share realsense2_camera)/launch/rs_launch.py">
   	<arg name="initial_reset" value="true"/>
   	<arg name="align_depth.enable" value="true"/>
@@ -14,5 +15,8 @@
     <arg name="pointcloud.enable" value="true"/>
   </include>
   <node pkg="tf2_ros" exec="static_transform_publisher" name="baselink_to_camera" args="0.25 0 0.69 0 0 0 /base_link /camera_link"/>
-  <node pkg="tf2_ros" exec="static_transform_publisher" name="baselink_to_velodyne" args="0.0 0.0 0.71 -3.14 0.0 0.0 /base_link /velodyne"/>
+  <!-- <node pkg="tf2_ros" exec="static_transform_publisher" name="baselink_to_velodyne" args="0.0 0.0 0.71 -3.14 0.0 0.0 /base_link /velodyne"/> -->
+  <node pkg="tf2_ros" exec="static_transform_publisher"
+      name="baselink_to_lslidar"
+      args="0.0 0.0 0.02 -3.14 0.0 0.0 /base_link /laser_link"/>
 </launch>

@@ -1,0 +1,42 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/jason9308/robot_ws/install/lslidar_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/xarm_simulation/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/xarm_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/voice_control/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/uf_ros_lib/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/tracer_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/tm_simulation_node/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/tm_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/tm_mod_urdf/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/tm_get_status/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/techman_robot_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/navigation_interfaces/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/my_2f85gripper_py/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/grpr2f85_ifaces/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/face_recognition/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/calibration_cross/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/jason9308/robot_ws/install/lslidar_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/xarm_simulation/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/xarm_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/voice_control/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/uf_ros_lib/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/tracer_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/tm_simulation_node/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/tm_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/tm_mod_urdf/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/tm_get_status/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/techman_robot_msgs/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/navigation_interfaces/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/my_2f85gripper_py/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/grpr2f85_ifaces/local/lib/python3.10/dist-packages",
+        "/home/jason9308/robot_ws/install/face_recognition/lib/python3.10/site-packages",
+        "/home/jason9308/robot_ws/install/calibration_cross/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}
