@@ -260,7 +260,9 @@ namespace lslidar_driver {
         int layer_num_local = scan_num;
         RCLCPP_INFO_ONCE(this->get_logger(), "default channel is %d", layer_num_local);
 
-        scan_msg->header.stamp = rclcpp::Time(sweep_end_time);
+	// adjust here jason!!
+        //scan_msg->header.stamp = rclcpp::Time(sweep_end_time);
+        scan_msg->header.stamp = rclcpp::Time(static_cast<uint64_t>(sweep_end_time * 1e9));
         scan_msg->angle_min = 0.0;
         scan_msg->angle_max = 2.0 * M_PI;
         scan_msg->angle_increment = (scan_msg->angle_max - scan_msg->angle_min) / point_num;
