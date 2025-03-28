@@ -16,6 +16,7 @@
   </include>
   <node pkg="tf2_ros" exec="static_transform_publisher" name="baselink_to_camera" args="0.25 0 0.69 0 0 0 /base_link /camera_link"/>
   <!-- <node pkg="tf2_ros" exec="static_transform_publisher" name="baselink_to_velodyne" args="0.0 0.0 0.71 -3.14 0.0 0.0 /base_link /velodyne"/> -->
+
   <node pkg="tf2_ros" exec="static_transform_publisher"
       name="baselink_to_lslidar"
       args="0.0 0.0 0.02 -3.14 0.0 0.0 /base_link /laser_link"/>

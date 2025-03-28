@@ -1,5 +1,6 @@
 <launch>
   <include file="$(find-pkg-share rtabmap_launch)/launch/rtabmap.launch.py">
+    <arg name="cfg" value="/home/jason9308/robot_ws/src/tracer_ros2/rtabmap_config.yaml"/>
     <arg name="odom_frame_id" value="odom"/>
     <arg name="approx_sync" value="true"/>
     <arg name="rgb_topic" value="/camera/camera/color/image_raw"/>
@@ -22,4 +23,5 @@
     <arg name="wait_imu_to_init" value="true"/>
     <arg name="imu_topic" value="/camera/camera/imu"/>
   </include>
+
 </launch>
