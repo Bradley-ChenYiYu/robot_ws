@@ -3,5 +3,6 @@
 /build/
 /install/
 src/voice_control/config.ini
+src/chatbot/config.ini
 
 Map/rtabmap.db
