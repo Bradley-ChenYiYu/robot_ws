@@ -24,6 +24,7 @@
 #include "xarm_msgs/msg/robot_msg.hpp"
 #include "xarm_msgs/srv/move_cartesian.hpp"
 #include "xarm_msgs/srv/call.hpp"
+#include "std_msgs/msg/float32_multi_array.hpp"
 
 
 class BoxHoleXArmControl : public rclcpp::Node {
@@ -84,6 +85,10 @@ private:
     cv::Mat distCoeffs_;
     cv::Mat handEyeRotation_;
     cv::Mat handEyeTranslation_;
+
+    // 訂閱手部偵測結果
+    rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr hand_sub_;
+
     std::vector<std::vector<cv::Point2f>> detected_marker_corners_;  // 存放 ArUco 角點
     std::vector<int> detected_marker_ids_;  // 存放 ArUco ID
 
@@ -103,6 +108,14 @@ private:
 
     float hole_width = 82.0;
     float hole_height = 82.0;
+
+    cv::Point3f last_hand_pos_;
+    rclcpp::Time last_hand_time_;
+    int hand_stable_counter_ = 0;
+    bool hand_delivery_triggered_ = false;
+    const double hand_stability_threshold_ = 20.0; // mm
+    void handCallback(const std_msgs::msg::Float32MultiArray::SharedPtr msg);
+    void performHandDelivery(const cv::Point3f& hand_pos);
 };
 
 // **訂閱相機影像 & 機械手臂回饋**
@@ -121,6 +134,11 @@ void BoxHoleXArmControl::setupSubscriptions() {
     xarm_feedback_subscription_ = this->create_subscription<xarm_msgs::msg::RobotMsg>(
         "/ufactory/robot_states", 10,
         std::bind(&BoxHoleXArmControl::xarmFeedbackCallback, this, std::placeholders::_1));
+
+        hand_sub_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
+            "/hand_detection", 10,
+            std::bind(&BoxHoleXArmControl::handCallback, this, std::placeholders::_1));
+    // 訂閱手部偵測結果        
 }
 
 // **初始化手臂控制**
@@ -241,7 +259,7 @@ void BoxHoleXArmControl::imageCallback(const sensor_msgs::msg::Image::SharedPtr 
     cv::aruco::detectMarkers(gray, dictionary, markerCorners, markerIds);
 
     if (markerIds.empty()) {
-        RCLCPP_WARN(this->get_logger(), "No ArUco markers detected!");
+        // RCLCPP_WARN(this->get_logger(), "No ArUco markers detected!");
         return;
     }
 
@@ -250,9 +268,40 @@ void BoxHoleXArmControl::imageCallback(const sensor_msgs::msg::Image::SharedPtr 
     detected_marker_ids_ = markerIds;
 }
 
+void BoxHoleXArmControl::handCallback(const std_msgs::msg::Float32MultiArray::SharedPtr msg) {
+    if (msg->data.size() < 3 || hand_delivery_triggered_) return;
 
+    float x = msg->data[0];
+    float y = msg->data[1];
+    float z = msg->data[2];
+    cv::Point3f current(x, y, z);
 
-// **控制機械手臂移動**
+    if (hand_stable_counter_ == 0) {
+        last_hand_pos_ = current;
+        last_hand_time_ = this->now();
+        hand_stable_counter_ = 1;
+        return;
+    }
+
+    float dist = cv::norm(current - last_hand_pos_);
+
+    if (dist < hand_stability_threshold_) {
+        hand_stable_counter_++;
+        RCLCPP_INFO(this->get_logger(), "🟢 Hand stable count: %d / 20", hand_stable_counter_);
+    } else {
+        RCLCPP_INFO(this->get_logger(), "🔄 Hand moved too much, reset stability counter.");
+        hand_stable_counter_ = 0;
+    }
+
+    if (hand_stable_counter_ >= 20) {  // 約 2 秒穩定
+        RCLCPP_INFO(this->get_logger(), "🖐️ 手部穩定，開始放藥...");
+        hand_delivery_triggered_ = true;
+        last_hand_pos_ = current;
+        // performHandDelivery(current);
+    }
+}
+
+// 控制機械手臂移動
 bool BoxHoleXArmControl::moveXArmToPose(const std::array<double, 6>& pose) {
     if (!xarm_move_cartesian_client_->wait_for_service(std::chrono::seconds(3))) {
         RCLCPP_ERROR(this->get_logger(), "Service /xarm/set_position is not available!");
@@ -314,16 +363,16 @@ void BoxHoleXArmControl::performGrasping() {
 
     cv::Mat aruco_camera_pos = (cv::Mat_<double>(3, 1) << x, y, z);
 
-    // **1. 轉換到手臂末端 (End-Effector) 座標系**
+    // 1. 轉換到手臂末端 (End-Effector) 座標系
     cv::Mat aruco_ee_pos = handEyeRotation_ * aruco_camera_pos + handEyeTranslation_;
 
-    // **2. 取得手臂當前的變換矩陣 (手臂回饋資訊)**
+    // 2. 取得手臂當前的變換矩陣 (手臂回饋資訊)
     cv::Mat T_EE2Base = computeEEtoBaseTransform(xarm_current_pose_);
 
-    // **3. 轉換到機械手臂基座座標系**
+    // 3. 轉換到機械手臂基座座標系
     cv::Mat aruco_base_pos = T_EE2Base(cv::Rect(0, 0, 3, 3)) * aruco_ee_pos + T_EE2Base(cv::Rect(3, 0, 1, 3));
 
-    // **取得基座座標系下的 x, y, z**
+    // 取得基座座標系下的 x, y, z
     double base_x = aruco_base_pos.at<double>(0);
     double base_y = aruco_base_pos.at<double>(1);
     double base_z = aruco_base_pos.at<double>(2);
@@ -351,6 +400,7 @@ void BoxHoleXArmControl::performGrasping() {
     }
     hole_x -= hole_height / 2;
 
+    // 移動到目標上方
     std::array<double, 6> target_pose = {hole_x, hole_y, 400.0 , 3.14, 0, 0};
     if (moveXArmToPose(target_pose)) 
     {
@@ -366,7 +416,7 @@ void BoxHoleXArmControl::performGrasping() {
         RCLCPP_ERROR(this->get_logger(), "Failed to move to target position.");
     }
 
-    // **控制機械手臂移動到該點**
+    // 控制機械手臂移動到該點
     // std::array<double, 6> target_pose = {base_x, base_y, base_z , 3.14, 0, 0};
     target_pose = {hole_x, hole_y, hole_z , 3.14, 0, 0};
 
@@ -391,7 +441,7 @@ void BoxHoleXArmControl::performGrasping() {
     stopGripper();
     rclcpp::sleep_for(std::chrono::seconds(1));
 
-    // 移動到放置位置
+    // 先往上移動 避免碰撞到其他藥包
     target_pose = {hole_x, hole_y, hole_z + 100.0 , 3.14, 0, 0};
     if (moveXArmToPose(target_pose)) 
     {
@@ -408,7 +458,84 @@ void BoxHoleXArmControl::performGrasping() {
     }
     rclcpp::sleep_for(std::chrono::seconds(1));
 
-    target_pose = {350, 0, 350, 3.14, 0, 0};
+    // 移動到觀察手掌出現的觀察點
+    target_pose = {230.0, 0.3499999940395355, 420.0, 3.140000104904175, -0.25, 0.0};
+    if (moveXArmToPose(target_pose)) 
+    {
+        // RCLCPP_INFO(this->get_logger(), "Successfully moved to ArUco marker position.");
+        if (wait_for_xarm_arrival(target_pose, 1.0)) {
+            RCLCPP_INFO(this->get_logger(), "Hand reached target position.");
+        } else {
+            RCLCPP_ERROR(this->get_logger(), "Hand failed to reach target position in time.");
+        }
+    } 
+    else 
+    {
+        RCLCPP_ERROR(this->get_logger(), "Failed to move to target position.");
+    }
+
+    // 啟動手部偵測節點
+    // 這裡使用 system() 函式來啟動手部偵測節點
+    hand_delivery_triggered_ = false;
+    hand_stable_counter_ = 0;
+    RCLCPP_INFO(this->get_logger(), "🔄 啟動 hand_detection node...");
+    std::string command = "nohup /bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run hand_detection yolo_hand_detector' > /dev/null 2>&1 &";
+    int ret = std::system(command.c_str());
+    if (ret == 0) {
+        RCLCPP_INFO(this->get_logger(), "✅ hand_detection node 啟動成功");
+    } else {
+        RCLCPP_ERROR(this->get_logger(), "❌ hand_detection node 啟動失敗");
+    }
+
+    // 等待手部穩定
+    while(!hand_delivery_triggered_)
+    {
+        // 讓 ROS 2 執行 callback，確保訂閱的回調函式能夠執行
+        rclcpp::spin_some(this->get_node_base_interface());
+        rclcpp::sleep_for(std::chrono::milliseconds(100));  // 每 100ms 等待一次
+    }
+    // std::system("pkill -f hand_detection_node");
+    std::system("pkill -f yolo_hand_detector");
+
+    // 1. 將手部點從 camera → EE
+    cv::Mat hand_camera_pos = (cv::Mat_<double>(3, 1) << last_hand_pos_.x, last_hand_pos_.y, last_hand_pos_.z);
+    cv::Mat hand_ee_pos = handEyeRotation_ * hand_camera_pos + handEyeTranslation_;
+
+    // 2. 取得當前 EE → Base 轉換
+    cv::Mat hand_T_EE2Base = computeEEtoBaseTransform(xarm_current_pose_);
+
+    // 3. 計算手部在 Base frame 下的座標
+    cv::Mat hand_base_pos = hand_T_EE2Base(cv::Rect(0, 0, 3, 3)) * hand_ee_pos + hand_T_EE2Base(cv::Rect(3, 0, 1, 3));
+
+    double hand_base_x = hand_base_pos.at<double>(0);
+    double hand_base_y = hand_base_pos.at<double>(1);
+    double hand_base_z = hand_base_pos.at<double>(2);
+
+    // 4. 設定目標位姿
+    target_pose = { hand_base_x, hand_base_y, hand_base_z + 50.0, 3.14, 0, 0 };
+
+    if (moveXArmToPose(target_pose)) 
+    {
+        // RCLCPP_INFO(this->get_logger(), "Successfully moved to ArUco marker position.");
+        if (wait_for_xarm_arrival(target_pose, 1.0)) {
+            RCLCPP_INFO(this->get_logger(), "Hand reached target position.");
+        } else {
+            RCLCPP_ERROR(this->get_logger(), "Hand failed to reach target position in time.");
+        }
+    } 
+    else 
+    {
+        RCLCPP_ERROR(this->get_logger(), "Failed to move to target position.");
+    }
+
+    // 放下物品
+    openGripper();
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    stopGripper();
+    rclcpp::sleep_for(std::chrono::seconds(1));
+
+    // back to initial position
+    target_pose = {200, 0, 250.0 , 3.14, 0, 0};
     if (moveXArmToPose(target_pose)) 
     {
         //RCLCPP_INFO(this->get_logger(), "Successfully moved to ArUco marker position.");
@@ -422,10 +549,6 @@ void BoxHoleXArmControl::performGrasping() {
     {
         RCLCPP_ERROR(this->get_logger(), "Failed to move to target position.");
     }
-    openGripper();
-    rclcpp::sleep_for(std::chrono::seconds(1));
-    stopGripper();
-    rclcpp::sleep_for(std::chrono::seconds(1));
 
 }
 

@@ -45,9 +45,9 @@ class FaceRecognitionNode(Node):
         self.reference_embedding = self.load_reference_image('/home/jason9308/robot_ws/src/face_recognition/me.jpeg')
 
         # 設定辨識參數
-        self.threshold = 0.75  # 相似度閾值
+        self.threshold = 0.70  # 相似度閾值
         self.pass_count = 0
-        self.pass_required = 70  # 需要累積 20 次高於閾值才通過
+        self.pass_required = 50  # 需要累積 20 次高於閾值才通過
 
     def load_reference_image(self, img_path):
         """載入參考影像，提取特徵向量"""

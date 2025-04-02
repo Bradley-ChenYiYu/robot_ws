@@ -14,9 +14,9 @@
     <arg name="rtabmap_viz" value="false"/>
     <arg name="rviz" value="true"/>
     <!-- <arg name="scan_topic" value="/velodyne_points"/> -->
-    <!-- <arg name="scan_cloud_topic" value="/velodyne_points"/> -->
-    <arg name="scan_topic" value="/c32/scan"/>
-    <arg name="scan_cloud_topic" value="/c32/lslidar_point_cloud"/>
+    <arg name="scan_cloud_topic" value="/velodyne_points"/>
+    <!-- <arg name="scan_topic" value="/c32/scan"/> -->
+    <!-- <arg name="scan_cloud_topic" value="/c32/lslidar_point_cloud"/> -->
     <arg name="queue_size" value="10"/>
     <arg name="sync_queue_size" value="20"/>
     <arg name="topic_queue_size" value="5"/>

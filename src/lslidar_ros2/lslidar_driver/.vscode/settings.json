@@ -1,9 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/jason9308/robot_ws/src/tracer_ros2/tracer_base",
-    "files.associations": {
-        "condition_variable": "cpp",
-        "__mutex_base": "cpp"
-    },
     "python.autoComplete.extraPaths": [
         "/home/jason9308/robot_ws/install/xarm_simulation/lib/python3.10/site-packages",
         "/home/jason9308/robot_ws/install/xarm_msgs/local/lib/python3.10/dist-packages",

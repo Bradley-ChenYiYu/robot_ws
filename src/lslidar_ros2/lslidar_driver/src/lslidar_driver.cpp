@@ -251,41 +251,90 @@ namespace lslidar_driver {
         return;
     }
 
-    void lslidarDriver::publishScan() {
+    // void lslidarDriver::publishScan() {
+    //     if (sweep_data->points.size() < 32) {
+    //         return;
+    //     }
+    //     sensor_msgs::msg::LaserScan::UniquePtr scan_msg(new sensor_msgs::msg::LaserScan());
+    //     scan_msg->header.frame_id = frame_id;
+    //     int layer_num_local = scan_num;
+    //     RCLCPP_INFO_ONCE(this->get_logger(), "default channel is %d", layer_num_local);
+
+	// // adjust here jason!!
+    //     //scan_msg->header.stamp = rclcpp::Time(sweep_end_time);
+    //     scan_msg->header.stamp = rclcpp::Time(static_cast<uint64_t>(sweep_end_time * 1e9));
+    //     scan_msg->angle_min = 0.0;
+    //     scan_msg->angle_max = 2.0 * M_PI;
+    //     scan_msg->angle_increment = (scan_msg->angle_max - scan_msg->angle_min) / point_num;
+    //     scan_msg->range_min = min_range;
+    //     scan_msg->range_max = max_range;
+
+    //     uint point_size = ceil((scan_msg->angle_max - scan_msg->angle_min) / scan_msg->angle_increment);
+    //     scan_msg->ranges.assign(point_size, std::numeric_limits<float>::quiet_NaN());
+    //     scan_msg->intensities.assign(point_size, std::numeric_limits<float>::quiet_NaN());
+    //     if (sweep_data->points.size() > 0) {
+    //         for (size_t j = 0; j < sweep_data->points.size(); ++j) {
+    //             if (layer_num_local == sweep_data->points[j].ring) {
+    //                 float horizontal_angle = sweep_data->points[j].azimuth * 0.01 * DEG_TO_RAD;
+    //                 uint point_index = (int) ((horizontal_angle - scan_msg->angle_min) / scan_msg->angle_increment);
+    //                 point_index = (point_index <= point_size) ? point_index : (point_index % point_size);
+    //                 scan_msg->ranges[point_index] = sweep_data->points[j].distance;
+    //                 scan_msg->intensities[point_index] = sweep_data->points[j].intensity;
+    //             }
+
+    //         }
+    //         scan_pub->publish(std::move(scan_msg));
+    //     }
+    // }
+
+    void lslidarDriver::publishScan() 
+    {
         if (sweep_data->points.size() < 32) {
             return;
         }
+    
         sensor_msgs::msg::LaserScan::UniquePtr scan_msg(new sensor_msgs::msg::LaserScan());
         scan_msg->header.frame_id = frame_id;
+    
         int layer_num_local = scan_num;
         RCLCPP_INFO_ONCE(this->get_logger(), "default channel is %d", layer_num_local);
-
-	// adjust here jason!!
-        //scan_msg->header.stamp = rclcpp::Time(sweep_end_time);
+    
         scan_msg->header.stamp = rclcpp::Time(static_cast<uint64_t>(sweep_end_time * 1e9));
         scan_msg->angle_min = 0.0;
         scan_msg->angle_max = 2.0 * M_PI;
         scan_msg->angle_increment = (scan_msg->angle_max - scan_msg->angle_min) / point_num;
         scan_msg->range_min = min_range;
         scan_msg->range_max = max_range;
-
+    
         uint point_size = ceil((scan_msg->angle_max - scan_msg->angle_min) / scan_msg->angle_increment);
         scan_msg->ranges.assign(point_size, std::numeric_limits<float>::quiet_NaN());
         scan_msg->intensities.assign(point_size, std::numeric_limits<float>::quiet_NaN());
+    
         if (sweep_data->points.size() > 0) {
             for (size_t j = 0; j < sweep_data->points.size(); ++j) {
-                if (layer_num_local == sweep_data->points[j].ring) {
-                    float horizontal_angle = sweep_data->points[j].azimuth * 0.01 * DEG_TO_RAD;
-                    uint point_index = (int) ((horizontal_angle - scan_msg->angle_min) / scan_msg->angle_increment);
+                const auto& pt = sweep_data->points[j];
+    
+                // ➤ 僅處理指定的 ring（layer）
+                if (layer_num_local == pt.ring) {
+    
+                    // ✅ 加入過濾條件：如果該點 xy 距離太近，就略過
+                    float xy_distance = std::sqrt(pt.x * pt.x + pt.y * pt.y);
+                    if (xy_distance < 0.35) {
+                        continue;  // 距離太近 → 略過
+                    }
+    
+                    float horizontal_angle = pt.azimuth * 0.01 * DEG_TO_RAD;
+                    uint point_index = static_cast<int>((horizontal_angle - scan_msg->angle_min) / scan_msg->angle_increment);
                     point_index = (point_index <= point_size) ? point_index : (point_index % point_size);
-                    scan_msg->ranges[point_index] = sweep_data->points[j].distance;
-                    scan_msg->intensities[point_index] = sweep_data->points[j].intensity;
+    
+                    scan_msg->ranges[point_index] = pt.distance;
+                    scan_msg->intensities[point_index] = pt.intensity;
                 }
-
             }
             scan_pub->publish(std::move(scan_msg));
         }
     }
+    
 
     bool lslidarDriver::lslidarControl(lslidar_msgs::srv::Lslidarcontrol::Request &req,
                                        lslidar_msgs::srv::Lslidarcontrol::Response &res) {
