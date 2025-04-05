@@ -8,14 +8,21 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
 add_executable(system_test src/system_test.cpp)
+add_executable(control_system_node src/control_system.cpp)
+
 ament_target_dependencies(system_test rclcpp)
+ament_target_dependencies(control_system_node rclcpp nlohmann_json)
 
 install(TARGETS system_test
     DESTINATION lib/${PROJECT_NAME}
 )
 
+install(TARGETS control_system_node
+    DESTINATION lib/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

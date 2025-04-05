@@ -1,0 +1,12 @@
+[
+    {
+      "command": "chat",
+      "target": "none",
+      "time": "none"
+    },
+    {
+      "command": "send medicine",
+      "target": "grandma",
+      "time": "17:53"
+    }
+]
