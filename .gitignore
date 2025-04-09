@@ -4,5 +4,7 @@
 /install/
 src/voice_control/config.ini
 src/chatbot/config.ini
+src/speech_recognition_pkg/speech_recognition_pkg/config.ini
 
 Map/rtabmap.db
+src/speech_recognition_pkg/speech_recognition_pkg/config.ini

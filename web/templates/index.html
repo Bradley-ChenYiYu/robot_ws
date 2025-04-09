@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>修改 JSON 命令</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 30px;
+    }
+
+    label {
+      display: inline-block;
+      width: 100px;
+    }
+
+    select, input {
+      width: 200px;
+      padding: 5px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+
+    #error {
+      margin-top: 10px;
+      color: red;
+    }
+  </style>
+
+  <script>
+    async function fetchJSON() {
+      try {
+        const response = await fetch('/json');
+        const data = await response.json();
+
+        document.getElementById('command').value = data.command || '';
+        document.getElementById('target').value = data.target || '';
+        document.getElementById('time').value = data.time || '';
+      } catch (err) {
+        document.getElementById('error').innerText = '載入 JSON 失敗：' + err;
+      }
+    }
+
+    async function updateJSON() {
+      const jsonData = {
+        command: document.getElementById('command').value,
+        target: document.getElementById('target').value,
+        time: document.getElementById('time').value  // 24小時制 hh:mm
+      };
+
+      try {
+        const response = await fetch('/json', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        });
+
+        const result = await response.json();
+        document.getElementById('status').innerText = result.message || '儲存成功！';
+        document.getElementById('error').innerText = '';
+      } catch (error) {
+        document.getElementById('error').innerText = '儲存錯誤：' + error;
+        document.getElementById('status').innerText = '';
+      }
+    }
+
+    window.onload = fetchJSON;
+  </script>
+</head>
+<body>
+  <h1>修改命令 JSON</h1>
+
+  <label for="command">Command:</label>
+  <select id="command">
+    <option value="send medicine">send medicine</option>
+    <option value="go home">go home</option>
+    <option value="chat">chat</option>
+    <option value="video call">video call</option>
+  </select>
+  <br><br>
+
+  <label for="target">Target:</label>
+  <select id="target">
+    <option value="dad">dad</option>
+    <option value="mom">mom</option>
+    <option value="child">child</option>
+    <option value="grandpa">grandpa</option>
+    <option value="grandma">grandma</option>
+  </select>
+  <br><br>
+
+  <label for="time">Time:</label>
+  <input type="time" id="time"> <!-- 24小時制 -->
+  <br><br>
+
+  <button onclick="updateJSON()">儲存 JSON</button>
+
+  <div id="status"></div>
+  <div id="error"></div>
+</body>
+</html>
