@@ -56,6 +56,18 @@ void kill_python_node(const std::string& keyword) {
 }
 
 int main() {
+
+    std::string command = "/bin/bash -c 'source ~/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition' &";
+    int ret = std::system(command.c_str());
+    if (ret == 0) {
+        std::cout << "speech_recognition node 啟動成功\n";
+        std::this_thread::sleep_for(std::chrono::seconds(3)); // 等待節點啟動
+
+    } else {
+        std::cout << "speech_recognition node 啟動失敗\n";
+    }
+
+
     std::cout << "[JSON Watcher] 開始監控 JSON 檔案...\n";
 
     while (true) {
@@ -75,8 +87,9 @@ int main() {
             std::cout << "[JSON Watcher] 偵測到 JSON 不一致，複製並結束節點...\n";
 
             if (copy_file(output_path, origin_path)) {
-                kill_python_node("speech_recognition_node.py");  // 關掉語音節點
-                kill_python_node("json_file_watcher");            // 關掉自己
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                // kill_python_node("speech_recognition");  // 關掉語音節點
+                // kill_python_node("json_file_watcher");            // 關掉自己
                 break;
             }
         } else {

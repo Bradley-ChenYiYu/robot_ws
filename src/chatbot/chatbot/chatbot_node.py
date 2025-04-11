@@ -88,9 +88,9 @@ class ChatbotNode(Node):
 
             """為何灰姑娘的車不易刮傷？ 因為她的車是難刮馬車""",
 
-            """開什麼品牌車子的人最有禮貌？【Nissan】因為他們常常Nissan往來""",
+            """開什麼品牌車子的人最有禮貌?【Nissan】因為他們常常Nissan往來""",
 
-            """富士山到底在哪裡？【在負42與負44之間】""",
+            """富士山到底在哪裡?【在負42與負44之間】""",
 
             """茶最怕什麼東西？【沙茶醬】""",
 
@@ -116,8 +116,14 @@ class ChatbotNode(Node):
             self.get_logger().info(f"你說：{text}")
 
             if any(keyword in text for keyword in self.exit_keywords):
-                self.get_logger().info("🛑 偵測到結束關鍵詞，結束聊天")
+                self.get_logger().info("🛑 偵測到結束關鍵詞，準備結束聊天")
+
+                # 溫柔回應後再關閉
+                goodbye_text = "好的，掰掰～祝您今天愉快，有空再來跟我聊聊天喔！"
+                self.speak_response(goodbye_text)
+
                 break
+
 
             if any(keyword in text for keyword in self.blacklist_keywords):
                 self.get_logger().warn(f"⚠️ 偵測到背景誤辨識內容，略過：{text}")
@@ -132,7 +138,7 @@ class ChatbotNode(Node):
 
     def listen_and_transcribe(self):
         recognizer = sr.Recognizer()
-        recognizer.pause_threshold = 1.2
+        recognizer.pause_threshold = 1.5
         # recognizer.energy_threshold = 600
         with sr.Microphone() as source:
             self.get_logger().info("🎙️ 等待你說話...")

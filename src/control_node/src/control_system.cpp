@@ -34,7 +34,7 @@ private:
     void main_loop() {
         while (rclcpp::ok()) {
             command_list_.clear();
-            load_json("/home/jason9308/robot_ws/src/control_node/test.json");
+            load_json("/home/jason9308/robot_ws/command_jason/origin.json");
 
             for (const auto& task : command_list_) {
                 execute_command(task.command, task.target, task.time);
@@ -45,6 +45,15 @@ private:
     }
 
     void load_json(const std::string &path) {
+        // open json_file_watcher to modify
+        std::string prefix = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ";
+        std::string cmd;
+        cmd = prefix + "ros2 run json_file_watcher json_file_watcher'";
+
+        std::system(cmd.c_str());
+        RCLCPP_INFO(this->get_logger(), "Executing command: %s", cmd.c_str());
+        rclcpp::sleep_for(std::chrono::seconds(3));
+
         std::ifstream file(path);
         if (!file.is_open()) {
             RCLCPP_ERROR(this->get_logger(), "無法開啟 JSON 檔案");
@@ -73,8 +82,9 @@ private:
     void init_medicine_map() {
         medicine_map_["dad"] = {{"morning", 1}, {"noon", 2}, {"night", 3}};
         medicine_map_["mom"] = {{"morning", 4}, {"noon", 5}, {"night", 6}};
+        medicine_map_["grandma"] = {{"morning", 7}, {"noon", 8}, {"night", 9}};
         medicine_map_["grandpa"] = {{"morning", 10}, {"noon", 11}, {"night", 12}};
-        medicine_map_["grandma"] = {{"morning", 1}, {"noon", 2}, {"night", 3}};
+        
     }
 
     std::string get_time_period_from_string(const std::string &time_str) {

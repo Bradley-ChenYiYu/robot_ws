@@ -47,7 +47,8 @@ class SpeechRecognitionNode(Node):
             with sr.Microphone() as source:
                 self.get_logger().info("請說話...")
                 self.recognizer.adjust_for_ambient_noise(source)
-                self.recognizer.pause_threshold = 2.0
+                self.recognizer.pause_threshold = 1.5
+                # self.recognizer.energy_threshold = 3000
                 audio_data = self.recognizer.listen(source)
 
                 try:
@@ -60,6 +61,8 @@ class SpeechRecognitionNode(Node):
 
                         if self.extract_and_dump_json(response, self.json_file_path):
                             self.get_logger().info("JSON 存檔成功")
+                            self.destroy_node()  # 關閉節點
+                            rclpy.shutdown()
                         else:
                             self.get_logger().error("JSON 無效，請重新輸入")
                     else:

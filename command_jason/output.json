@@ -1,7 +1,7 @@
 [
     {
-        "command": "chat",
-        "target": "child",
-        "time": "20:50"
+        "command": "go home",
+        "target": "NULL",
+        "time": "17:45:32"
     }
 ]

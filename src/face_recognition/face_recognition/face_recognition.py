@@ -10,9 +10,10 @@ from std_msgs.msg import String
 import dlib
 from imutils.face_utils import FaceAligner
 from facenet_pytorch import InceptionResnetV1
+import sys
 
 class FaceRecognitionNode(Node):
-    def __init__(self):
+    def __init__(self, identity_name):
         super().__init__('face_recognition_node')
 
         self.bridge = CvBridge()
@@ -32,7 +33,10 @@ class FaceRecognitionNode(Node):
         # Face recognition model (FaceNet)
         self.face_recognizer = InceptionResnetV1(pretrained='vggface2').eval().to('cuda')
 
-        self.reference_embedding = self.load_reference_image('/home/jason9308/robot_ws/src/face_recognition/me.jpeg')
+        reference_path = f"/home/jason9308/robot_ws/src/face_recognition/{identity_name}.jpeg"
+        self.get_logger().info(f"使用參考圖檔：{reference_path}")
+        self.reference_embedding = self.load_reference_image(reference_path)
+        
 
         self.threshold = 0.70
         self.pass_count = 0
@@ -206,7 +210,8 @@ class FaceRecognitionNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = FaceRecognitionNode()
+    identity_name = sys.argv[1] if len(sys.argv) > 1 else "me"
+    node = FaceRecognitionNode(identity_name)
     if rclpy.ok():
         rclpy.spin(node)
 
