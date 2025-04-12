@@ -1,3 +1,5 @@
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
@@ -14,7 +16,6 @@ namespace fs = std::filesystem;
 const std::string output_path = "/home/jason9308/robot_ws/command_jason/output.json";
 const std::string origin_path = "/home/jason9308/robot_ws/command_jason/origin.json";
 
-// 比較兩個 JSON 檔案是否一致
 bool compare_json_files(const std::string& path1, const std::string& path2) {
     std::ifstream f1(path1);
     std::ifstream f2(path2);
@@ -27,7 +28,6 @@ bool compare_json_files(const std::string& path1, const std::string& path2) {
     return json1 == json2;
 }
 
-// 複製 output.json -> origin.json
 bool copy_file(const std::string& from, const std::string& to) {
     try {
         fs::copy_file(from, to, fs::copy_options::overwrite_existing);
@@ -38,44 +38,38 @@ bool copy_file(const std::string& from, const std::string& to) {
     }
 }
 
-// 嘗試以 flock 鎖住檔案
 bool try_lock_file(const std::string& path, int& fd) {
     fd = open(path.c_str(), O_RDONLY);
     if (fd == -1) return false;
     if (flock(fd, LOCK_SH | LOCK_NB) == -1) {
         close(fd);
-        return false;  // 被其他程式鎖住了
+        return false;
     }
     return true;
 }
 
-// 關閉指定的 Python 節點（例如 speech_recognition_node.py）
-void kill_python_node(const std::string& keyword) {
-    std::string cmd = "pkill -f " + keyword;
-    std::system(cmd.c_str());
-}
-
-int main() {
+int main(int argc, char* argv[]) {
+    rclcpp::init(argc, argv);
+    auto node = rclcpp::Node::make_shared("json_file_watcher_node");
+    auto publisher = node->create_publisher<std_msgs::msg::String>("/json_modified", 10);
 
     std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)' &";
     int ret = std::system(command.c_str());
     if (ret == 0) {
-        std::cout << "speech_recognition node 啟動成功\n";
-        std::this_thread::sleep_for(std::chrono::seconds(3)); // 等待節點啟動
-
+        RCLCPP_INFO(node->get_logger(), "speech_recognition node 啟動成功");
+        std::this_thread::sleep_for(std::chrono::seconds(3));
     } else {
-        std::cout << "speech_recognition node 啟動失敗\n";
+        RCLCPP_WARN(node->get_logger(), "speech_recognition node 啟動失敗");
     }
 
+    RCLCPP_INFO(node->get_logger(), "[JSON Watcher] 開始監控 JSON 檔案...");
 
-    std::cout << "[JSON Watcher] 開始監控 JSON 檔案...\n";
-
-    while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // 每秒檢查一次
+    while (rclcpp::ok()) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
         int fd;
         if (!try_lock_file(output_path, fd)) {
-            std::cout << "[JSON Watcher] output.json 正在被寫入，稍後再試...\n";
+            RCLCPP_INFO(node->get_logger(), "[JSON Watcher] output.json 正在被寫入，稍後再試...");
             continue;
         }
 
@@ -84,18 +78,20 @@ int main() {
         close(fd);
 
         if (!is_same) {
-            std::cout << "[JSON Watcher] 偵測到 JSON 不一致，複製並結束節點...\n";
+            RCLCPP_INFO(node->get_logger(), "[JSON Watcher] 偵測到 JSON 不一致，複製並發送 topic ...");
 
             if (copy_file(output_path, origin_path)) {
+                std_msgs::msg::String msg;
+                msg.data = "true";
+                publisher->publish(msg);
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-                // kill_python_node("speech_recognition");  // 關掉語音節點
-                // kill_python_node("json_file_watcher");            // 關掉自己
                 break;
             }
         } else {
-            std::cout << "[JSON Watcher] JSON 檔案一致，繼續監控...\n";
+            RCLCPP_INFO(node->get_logger(), "[JSON Watcher] JSON 檔案一致，繼續監控...");
         }
     }
 
+    rclcpp::shutdown();
     return 0;
-}
+} 

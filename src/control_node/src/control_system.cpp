@@ -9,6 +9,8 @@
 #include <thread>
 #include <ctime>
 #include <cstdlib>
+#include <std_msgs/msg/string.hpp>
+#include <algorithm>
 
 using json = nlohmann::json;
 
@@ -17,6 +19,17 @@ public:
     ControlNode() : Node("control_node") {
         init_location_map();
         init_medicine_map();
+
+        json_sub_ = this->create_subscription<std_msgs::msg::String>(
+            "/json_modified", 10,
+            [this](const std_msgs::msg::String::SharedPtr msg) {
+                if (msg->data == "true") {
+                    RCLCPP_INFO(this->get_logger(), "✅ 收到 JSON 修改通知！");
+                    json_ready_ = true;
+                }
+            }
+        );
+
         main_loop();
     }
 
@@ -33,6 +46,9 @@ private:
 
     std::unordered_map<std::string, std::tuple<float, float, float, float>> location_map_; // x, y, z, w
     std::unordered_map<std::string, std::unordered_map<std::string, int>> medicine_map_;
+
+    bool json_ready_ = false;
+    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr json_sub_;
 
     void main_loop() {
         while (rclcpp::ok()) {  
@@ -83,10 +99,29 @@ private:
         // open json_file_watcher to modify
         std::string prefix = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ";
         std::string cmd;
-        cmd = prefix + "ros2 run json_file_watcher json_file_watcher'";
+        cmd = prefix + "ros2 run json_file_watcher json_file_watcher' &";
         std::system(cmd.c_str());
-        RCLCPP_INFO(this->get_logger(), "Executing command: %s", cmd.c_str());
-        rclcpp::sleep_for(std::chrono::seconds(3));
+
+        while (!json_ready_) {
+            RCLCPP_INFO(this->get_logger(), "JSON 尚未準備好，等待中...");
+            rclcpp::spin_some(this->get_node_base_interface());  // 處理 callback
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+
+            if (!scheduled_tasks_.empty() && !enough_time_before_next_medicine(5)) {
+                RCLCPP_WARN(this->get_logger(), "⚠️ 距離送藥時間太近，中止等待語音輸入！");
+                
+                // 終止語音辨識
+                std::system("pkill -f speech_recognition");
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                // 終止 json_file_watcher
+                std::system("pkill -f json_file_watcher");
+                return;  // 直接 return，主 loop 會去處理送藥
+            }
+        }
+        json_ready_ = false;
+
+        RCLCPP_INFO(this->get_logger(), "開始讀取 JSON 檔案...");
+        rclcpp::sleep_for(std::chrono::seconds(1));
 
         // 讀取 JSON 檔案
         std::ifstream file(path);
