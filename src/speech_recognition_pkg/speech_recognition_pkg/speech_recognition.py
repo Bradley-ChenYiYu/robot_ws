@@ -100,7 +100,7 @@ class SpeechRecognitionNode(Node):
     def generate_json(self, instruction):
         extracted_time = self.extract_time_from_text(instruction)
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        time_to_use = extracted_time if extracted_time else current_time.split()[1]
+        time_to_use = extracted_time if extracted_time else datetime.now().strftime("%H:%M")
 
         prompt = f"""instruction : {instruction}
             
@@ -178,8 +178,12 @@ Please understand the command, and the target in this instruction, and convert t
 def main(args=None):
     rclpy.init(args=args)
     node = SpeechRecognitionNode()
+    
     if rclpy.ok():
         rclpy.spin(node)
+
+    # for i, name in enumerate(sr.Microphone.list_microphone_names()):
+    #     print(f"{i}: {name}")
 
 if __name__ == "__main__":
     main()

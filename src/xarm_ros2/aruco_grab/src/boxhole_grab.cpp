@@ -134,11 +134,11 @@ void BoxHoleXArmControl::setupSubscriptions() {
     xarm_feedback_subscription_ = this->create_subscription<xarm_msgs::msg::RobotMsg>(
         "/ufactory/robot_states", 10,
         std::bind(&BoxHoleXArmControl::xarmFeedbackCallback, this, std::placeholders::_1));
-
-        hand_sub_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
-            "/hand_detection", 10,
-            std::bind(&BoxHoleXArmControl::handCallback, this, std::placeholders::_1));
-    // 訂閱手部偵測結果        
+   
+    // 訂閱手部偵測結果 
+    hand_sub_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
+        "/hand_detection", 10,
+        std::bind(&BoxHoleXArmControl::handCallback, this, std::placeholders::_1));       
 }
 
 // **初始化手臂控制**
@@ -535,7 +535,7 @@ void BoxHoleXArmControl::performGrasping() {
     rclcpp::sleep_for(std::chrono::seconds(1));
 
     // back to initial position
-    target_pose = {200, 0, 250.0 , 3.14, 0, 0};
+    target_pose = {200, 0, 250, 3.14, 0, 0};
     if (moveXArmToPose(target_pose)) 
     {
         //RCLCPP_INFO(this->get_logger(), "Successfully moved to ArUco marker position.");

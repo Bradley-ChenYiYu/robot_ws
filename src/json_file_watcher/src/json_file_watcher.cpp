@@ -57,7 +57,7 @@ void kill_python_node(const std::string& keyword) {
 
 int main() {
 
-    std::string command = "/bin/bash -c 'source ~/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition' &";
+    std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)' &";
     int ret = std::system(command.c_str());
     if (ret == 0) {
         std::cout << "speech_recognition node 啟動成功\n";

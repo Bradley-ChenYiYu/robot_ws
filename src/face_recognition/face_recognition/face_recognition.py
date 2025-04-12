@@ -11,6 +11,7 @@ import dlib
 from imutils.face_utils import FaceAligner
 from facenet_pytorch import InceptionResnetV1
 import sys
+import subprocess
 
 class FaceRecognitionNode(Node):
     def __init__(self, identity_name):
@@ -41,6 +42,11 @@ class FaceRecognitionNode(Node):
         self.threshold = 0.70
         self.pass_count = 0
         self.pass_required = 50
+
+        self.view_pose = [300, 0, 350, 3.14, 0, 0]      # 看臉位置
+        self.idle_pose = [200, 0, 250, 3.14, 0, 0]      # 待機位置
+        self.move_arm_to(self.view_pose)
+
 
     def load_reference_image(self, img_path):
         reference_image = cv2.imread(img_path)
@@ -104,6 +110,15 @@ class FaceRecognitionNode(Node):
         with torch.no_grad():
             embedding = self.face_recognizer(face_tensor)
         return embedding.squeeze().cpu().numpy()
+    
+    def move_arm_to(self, pose):
+        pose_str = " ".join([str(v) for v in pose])
+        command = f"bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run move_arm move_arm_node {pose_str}'"
+        ret = os.system(command)
+        if ret == 0:
+            self.get_logger().info(f"✅ 移動到位置：{pose_str}")
+        else:
+            self.get_logger().error(f"❌ 無法移動到位置：{pose_str}")
 
     def image_callback(self, msg):
         try:
@@ -188,6 +203,7 @@ class FaceRecognitionNode(Node):
             cv2.waitKey(3000)  # 等待 3 秒
 
             # ✅ 清理：關閉畫面 + 訂閱、發布器、節點
+            self.move_arm_to(self.idle_pose) # 移動robot arm到待機位置
             cv2.destroyAllWindows()
             self.image_sub = None
             self.result_pub = None

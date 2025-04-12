@@ -27,49 +27,104 @@ private:
         std::string time;
     };
 
-    std::vector<Task> command_list_;
+    // std::vector<Task> command_list_;
+    std::vector<Task> scheduled_tasks_;     // 排程中的送藥任務（已排序）
+    std::vector<Task> executable_tasks_;    // 可立即執行的非送藥任務
+
     std::unordered_map<std::string, std::tuple<float, float, float, float>> location_map_; // x, y, z, w
     std::unordered_map<std::string, std::unordered_map<std::string, int>> medicine_map_;
 
     void main_loop() {
-        while (rclcpp::ok()) {
-            command_list_.clear();
-            load_json("/home/jason9308/robot_ws/command_jason/origin.json");
+        while (rclcpp::ok()) {  
 
-            for (const auto& task : command_list_) {
-                execute_command(task.command, task.target, task.time);
+            RCLCPP_INFO(this->get_logger(), "目前排程中的送藥任務：");
+            for (const auto& task : scheduled_tasks_) {
+                RCLCPP_INFO(this->get_logger(), "- Target: %s | Time: %s", task.target.c_str(), task.time.c_str());
             }
 
+
+            executable_tasks_.clear();  // 每輪重設非送藥任務
+            load_json("/home/jason9308/robot_ws/command_jason/origin.json");
+    
+            if (scheduled_tasks_.empty()) {
+                // 沒有送藥任務，執行其他任務
+                for (const auto& task : executable_tasks_) {
+                    execute_command(task.command, task.target, task.time);
+                }
+    
+            } else if (enough_time_before_next_medicine(5)) {
+                // 如果離送藥還有 5 分鐘以上，就先執行其他任務
+                for (const auto& task : executable_tasks_) {
+                    execute_command(task.command, task.target, task.time);
+                }
+    
+            } else {
+                // 時間快到了 → 等到時間到再執行第一個送藥任務
+                const Task& next_task = scheduled_tasks_.front();
+                RCLCPP_INFO(this->get_logger(), "距離最近送藥任務 %s 的時間 %s 過近，等待中...", next_task.target.c_str(), next_task.time.c_str());
+    
+                while (!check_time(next_task.time)) {
+                    RCLCPP_INFO(this->get_logger(), "等待送藥時間 %s 到達...", next_task.time.c_str());
+                    std::this_thread::sleep_for(std::chrono::seconds(10));
+                }
+    
+                send_medicine_flow(next_task.target, next_task.time);
+                scheduled_tasks_.erase(scheduled_tasks_.begin());  // 執行後移除
+            }
+    
             std::this_thread::sleep_for(std::chrono::seconds(5));
         }
     }
+    
+    
 
     void load_json(const std::string &path) {
+
         // open json_file_watcher to modify
         std::string prefix = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ";
         std::string cmd;
         cmd = prefix + "ros2 run json_file_watcher json_file_watcher'";
-
         std::system(cmd.c_str());
         RCLCPP_INFO(this->get_logger(), "Executing command: %s", cmd.c_str());
         rclcpp::sleep_for(std::chrono::seconds(3));
 
+        // 讀取 JSON 檔案
         std::ifstream file(path);
         if (!file.is_open()) {
             RCLCPP_ERROR(this->get_logger(), "無法開啟 JSON 檔案");
             return;
         }
+    
         json j;
         file >> j;
-
+    
         for (const auto& item : j) {
-            command_list_.push_back({
+            Task task = {
                 item["command"],
                 item.value("target", ""),
                 item["time"]
-            });
+            };
+    
+            if (task.command == "send medicine") {
+                if (is_past_time(task.time)) {
+                    RCLCPP_WARN(this->get_logger(), "時間 %s 已過，略過送藥任務 %s", task.time.c_str(), task.target.c_str());
+                    continue;
+                }
+    
+                // 插入排序（時間由小到大）
+                auto insert_pos = std::find_if(scheduled_tasks_.begin(), scheduled_tasks_.end(),
+                    [&](const Task& t) {
+                        return compare_time_str(task.time, t.time);
+                    });
+                scheduled_tasks_.insert(insert_pos, task);
+    
+                RCLCPP_INFO(this->get_logger(), "新增送藥任務：%s %s", task.target.c_str(), task.time.c_str());
+            } else {
+                executable_tasks_.push_back(task);
+            }
         }
     }
+
 
     void init_location_map() {
         location_map_["dad"] = {1.0, 2.0, 0.0, 1.0};
@@ -102,6 +157,47 @@ private:
         std::strftime(buffer, sizeof(buffer), "%H:%M", ltm);
         return task_time == std::string(buffer);
     }
+
+    bool enough_time_before_next_medicine(int buffer_minutes) {
+        if (scheduled_tasks_.empty()) return true;
+    
+        std::string next_time = scheduled_tasks_.front().time; // 因為有排序，取第一個就好
+    
+        int task_hour = std::stoi(next_time.substr(0, 2));
+        int task_min = std::stoi(next_time.substr(3, 2));
+        int task_total = task_hour * 60 + task_min;
+    
+        auto now = std::chrono::system_clock::now();
+        std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+        std::tm *ltm = std::localtime(&now_c);
+        int now_total = ltm->tm_hour * 60 + ltm->tm_min;
+    
+        return (task_total - now_total) > buffer_minutes;
+    }
+
+    
+    bool is_past_time(const std::string& time_str) {
+        int hour = std::stoi(time_str.substr(0, 2));
+        int min = std::stoi(time_str.substr(3, 2));
+        int total = hour * 60 + min;
+    
+        auto now = std::chrono::system_clock::now();
+        std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+        std::tm *ltm = std::localtime(&now_c);
+        int now_total = ltm->tm_hour * 60 + ltm->tm_min;
+    
+        return total < now_total;
+    }
+
+    bool compare_time_str(const std::string& t1, const std::string& t2) {
+        int h1 = std::stoi(t1.substr(0, 2));
+        int m1 = std::stoi(t1.substr(3, 2));
+        int h2 = std::stoi(t2.substr(0, 2));
+        int m2 = std::stoi(t2.substr(3, 2));
+    
+        return (h1 < h2) || (h1 == h2 && m1 < m2);
+    }
+    
 
     void execute_command(const std::string &command, const std::string &target, const std::string &time) {
         if (command == "send medicine") {
@@ -192,7 +288,8 @@ private:
             return;
         }
 
-        std::system(cmd.c_str());
+        // Comment out this line to test without executing the command
+        // std::system(cmd.c_str());
         RCLCPP_INFO(this->get_logger(), "Executing command: %s", cmd.c_str());
         rclcpp::sleep_for(std::chrono::seconds(3));
 
