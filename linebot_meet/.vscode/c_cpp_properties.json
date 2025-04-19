@@ -1,0 +1,47 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/robotics/robot_ws/install/xarm_planner/include/**",
+        "/home/robotics/robot_ws/install/xarm_gazebo/include/**",
+        "/home/robotics/robot_ws/install/xarm_controller/include/**",
+        "/home/robotics/robot_ws/install/xarm_api/include/**",
+        "/home/robotics/robot_ws/install/xarm_msgs/include/**",
+        "/home/robotics/robot_ws/install/tracer_msgs/include/**",
+        "/home/robotics/robot_ws/install/tm_msgs/include/**",
+        "/home/robotics/robot_ws/install/techman_robot_msgs/include/**",
+        "/home/robotics/robot_ws/install/realsense_gazebo_plugin/include/**",
+        "/home/robotics/robot_ws/install/navigation_interfaces/include/**",
+        "/home/robotics/robot_ws/install/lslidar_msgs/include/**",
+        "/home/robotics/robot_ws/install/grpr2f85_ifaces/include/**",
+        "/home/robotics/robot_ws/install/cv_bridge/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/robotics/robot_ws/src/json_file_watcher/include/**",
+        "/home/robotics/robot_ws/src/jsoncpp/include/**",
+        "/home/robotics/robot_ws/src/lslidar_ros2/lslidar_driver/include/**",
+        "/home/robotics/robot_ws/src/tmr_ros2/tm_driver/include/**",
+        "/home/robotics/robot_ws/src/tracer_ros2/tracer_base/include/**",
+        "/home/robotics/robot_ws/src/ugv_sdk/include/**",
+        "/home/robotics/robot_ws/src/vision_opencv/cv_bridge/include/**",
+        "/home/robotics/robot_ws/src/vision_opencv/image_geometry/include/**",
+        "/home/robotics/robot_ws/src/xarm_ros2/thirdparty/realsense_gazebo_plugin/include/**",
+        "/home/robotics/robot_ws/src/xarm_ros2/xarm_api/include/**",
+        "/home/robotics/robot_ws/src/xarm_ros2/xarm_controller/include/**",
+        "/home/robotics/robot_ws/src/xarm_ros2/xarm_gazebo/include/**",
+        "/home/robotics/robot_ws/src/xarm_ros2/xarm_moveit_servo/include/**",
+        "/home/robotics/robot_ws/src/xarm_ros2/xarm_planner/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

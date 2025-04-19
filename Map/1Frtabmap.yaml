@@ -1,0 +1,7 @@
+image: 1Frtabmap.pgm
+resolution: 0.05
+origin: [-41.7809, -57.8455, 0.0]
+negate: 0
+occupied_thresh: 0.5
+free_thresh: 0.196
+

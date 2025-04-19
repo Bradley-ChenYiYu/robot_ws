@@ -134,6 +134,8 @@
         "__nullptr": "cpp",
         "filesystem": "cpp",
         "__functional_03": "cpp",
-        "target": "cpp"
+        "target": "cpp",
+        "eigen": "cpp",
+        "locale": "cpp"
     }
 }

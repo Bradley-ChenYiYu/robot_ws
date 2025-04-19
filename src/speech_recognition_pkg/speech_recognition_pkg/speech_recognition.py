@@ -10,6 +10,8 @@ import re
 import os
 from datetime import datetime
 import fcntl
+import os
+from playsound import playsound
 
 class SpeechRecognitionNode(Node):
     def __init__(self):
@@ -61,19 +63,36 @@ class SpeechRecognitionNode(Node):
 
                         if self.extract_and_dump_json(response, self.json_file_path):
                             self.get_logger().info("JSON 存檔成功")
+                            self.play_voice("json_received.mp3")
                             self.destroy_node()  # 關閉節點
                             rclpy.shutdown()
                         else:
                             self.get_logger().error("JSON 無效，請重新輸入")
+                            self.play_voice("json_invalid.mp3")
                     else:
                         self.get_logger().info("未偵測到『機器手臂』，繼續監聽中...")
 
                 except sr.UnknownValueError:
                     self.get_logger().error("無法識別語音，請再試一次")
+                    self.play_voice("speech_not_understood.mp3")
                 except sr.RequestError as e:
                     self.get_logger().error(f"語音請求失敗: {e}")
 
     def extract_time_from_text(self, text):
+
+        # 特別處理「點半」情況（例如「12點半」）
+        half_pattern = re.compile(r'(\d{1,2})點半')
+        match_half = half_pattern.search(text)
+
+        if match_half:
+            hour = int(match_half.group(1))
+            minute = 30
+            if "下午" in text or "晚上" in text:
+                if hour != 12:
+                    hour += 12
+            return f"{hour:02}:{minute:02}"
+    
+        # 處理「點」和「分」的情況（例如「12.30分」或「12點30分」）
         time_pattern = re.compile(r'(\d{1,2})(?:\.|點)(\d{1,2})分?')
         match = time_pattern.search(text)
 
@@ -85,6 +104,7 @@ class SpeechRecognitionNode(Node):
                     hour += 12
             return f"{hour:02}:{minute:02}"
 
+        # 處理「點」的情況（例如「12點」）
         time_pattern_hour_only = re.compile(r'(\d{1,2})(?:\.|點)')
         match_hour_only = time_pattern_hour_only.search(text)
 
@@ -104,34 +124,35 @@ class SpeechRecognitionNode(Node):
 
         prompt = f"""instruction : {instruction}
             
-Extracted time: {time_to_use}
+            Extracted time: {time_to_use}
 
-Please understand the command, and the target in this instruction, and convert them into the following JSON schema:
+            Please understand the command, and the target in this instruction, and convert them into the following JSON schema:
 
-[
-    {{
-        "command": "<one of the following only: send medicine, go home, chat, video call>",
-        "target" : "<one of the following only: dad, mom, child, grandpa, grandma, NULL>",
-        "time": "{time_to_use}"
-    }}
-]
+            [
+                {{
+                    "command": "<one of the following only: send medicine, go home, chat, video call>",
+                    "target" : "<one of the following only: dad, mom, child, grandpa, grandma, NULL>",
+                    "time": "{time_to_use}"
+                }}
+            ]
 
-- Only respond in valid JSON format.
-- The command must be one of the following (do not generate anything else):
-    - send medicine
-    - go home
-    - chat
-    - video call
-- The target must be one of the following (do not generate anything else):
-    - dad
-    - mom
-    - child
-    - grandpa
-    - grandma
-    - NULL
-- If `command` is "send medicine", target **must not** be NULL.
-- If `command` is "go home", "chat", or "video call", target **can** be NULL.
-"""
+            - Only respond in valid JSON format.
+            - The command must be one of the following (do not generate anything else):
+                - send medicine
+                - go home
+                - chat
+                - video call
+            - The target must be one of the following (do not generate anything else):
+                - dad
+                - mom
+                - child
+                - grandpa
+                - grandma
+                - NULL
+            - If `command` is "send medicine", target **must not** be NULL.
+            - If `command` is "go home", "chat", or "video call", target **can** be NULL.
+            - 注意：「送藥」這個詞在語音辨識中可能被誤聽為「重要」，如果 instruction 中出現「重要」，請將 command 判斷為 "send medicine"。
+            """
 
         response = openai.ChatCompletion.create(
             model="gpt-4",
@@ -151,7 +172,7 @@ Please understand the command, and the target in this instruction, and convert t
             json_part = re.search(pattern, sample_text, re.DOTALL)
             extracted_json = json_part.group(1).strip() if json_part else None
             if not extracted_json:
-                self.get_logger().error("無法提取 JSON！")
+                self.get_logger().error("無法提取 JSON !")
                 return False
             try:
                 parsed_json = json.loads(extracted_json)
@@ -174,6 +195,20 @@ Please understand the command, and the target in this instruction, and convert t
         except Exception as e:
             self.get_logger().error(f"寫入 JSON 時發生錯誤: {e}")
             return False
+        
+
+    def play_voice(self, filename):
+
+        base_path = "/home/jason9308/robot_ws/sound/"
+        full_path = os.path.join(base_path, filename)
+        try:
+            playsound(full_path)
+        except Exception as e:
+            self.get_logger().warn(f"語音播放失敗：{e}")
+
+        
+
+    
 
 def main(args=None):
     rclpy.init(args=args)

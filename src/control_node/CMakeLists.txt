@@ -8,14 +8,16 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(nav2_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
 add_executable(system_test src/system_test.cpp)
 add_executable(control_system_node src/control_system.cpp)
 
 ament_target_dependencies(system_test rclcpp)
-ament_target_dependencies(control_system_node rclcpp nlohmann_json std_msgs)
+ament_target_dependencies(control_system_node rclcpp nlohmann_json std_msgs rclcpp_action nav2_msgs)
 
 install(TARGETS system_test
     DESTINATION lib/${PROJECT_NAME}

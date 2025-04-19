@@ -9,13 +9,24 @@
 #include <thread>
 #include <ctime>
 #include <cstdlib>
+#include <memory>
+#include <iostream>
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp_action/rclcpp_action.hpp>
+#include "nav2_msgs/action/navigate_to_pose.hpp"
 #include <std_msgs/msg/string.hpp>
 #include <algorithm>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/file.h>
 
 using json = nlohmann::json;
 
 class ControlNode : public rclcpp::Node {
 public:
+    using NavigateToPose = nav2_msgs::action::NavigateToPose;
+    using GoalHandleNavigateToPose = rclcpp_action::ClientGoalHandle<NavigateToPose>;
+
     ControlNode() : Node("control_node") {
         init_location_map();
         init_medicine_map();
@@ -29,7 +40,8 @@ public:
                 }
             }
         );
-
+        nav_client_ = rclcpp_action::create_client<NavigateToPose>(this, "/navigate_to_pose");
+        write_status_to_json(); // 初始化狀態 JSON
         main_loop();
     }
 
@@ -49,6 +61,10 @@ private:
 
     bool json_ready_ = false;
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr json_sub_;
+    rclcpp_action::Client<NavigateToPose>::SharedPtr nav_client_;
+
+    std::mutex status_mutex_;
+    std::string status_ = "idle";
 
     void main_loop() {
         while (rclcpp::ok()) {  
@@ -61,7 +77,7 @@ private:
 
             executable_tasks_.clear();  // 每輪重設非送藥任務
             load_json("/home/jason9308/robot_ws/command_jason/origin.json");
-    
+            write_status_to_json();
             if (scheduled_tasks_.empty()) {
                 // 沒有送藥任務，執行其他任務
                 for (const auto& task : executable_tasks_) {
@@ -78,7 +94,9 @@ private:
                 // 時間快到了 → 等到時間到再執行第一個送藥任務
                 const Task& next_task = scheduled_tasks_.front();
                 RCLCPP_INFO(this->get_logger(), "距離最近送藥任務 %s 的時間 %s 過近，等待中...", next_task.target.c_str(), next_task.time.c_str());
-    
+                
+                status_ = "waiting to deliver medicine";
+                write_status_to_json();
                 while (!check_time(next_task.time)) {
                     RCLCPP_INFO(this->get_logger(), "等待送藥時間 %s 到達...", next_task.time.c_str());
                     std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -160,6 +178,59 @@ private:
         }
     }
 
+    void write_status_to_json() {
+        std::lock_guard<std::mutex> lock(status_mutex_);
+    
+        const std::string json_path = "/home/jason9308/robot_ws/status.json";
+    
+        // 嘗試開啟檔案並持續鎖定直到成功
+        int fd = -1;
+        while (rclcpp::ok()) {
+            fd = open(json_path.c_str(), O_WRONLY | O_CREAT, 0644);
+            if (fd == -1) {
+                RCLCPP_WARN(this->get_logger(), "⚠️ 無法開啟 JSON 檔案，稍後再試...");
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                continue;
+            }
+    
+            if (flock(fd, LOCK_EX | LOCK_NB) == -1) {
+                RCLCPP_INFO(this->get_logger(), "🕐 JSON 檔案鎖定中，等待釋放...");
+                close(fd);
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                continue;
+            }
+    
+            break;  // 鎖成功就離開 retry loop
+        }
+    
+        // 準備寫入 JSON
+        json j;
+        j["current_task"]["status"] = status_;
+        j["scheduled_tasks"] = json::array();
+        for (const auto& task : scheduled_tasks_) {
+            j["scheduled_tasks"].push_back({
+                {"target", task.target},
+                {"time", task.time}
+            });
+        }
+    
+        {
+            std::ofstream file(json_path);
+            if (file.is_open()) {
+                file << j.dump(4);
+                file.close();
+                RCLCPP_INFO(this->get_logger(), "✅ 狀態 JSON 已更新");
+            } else {
+                RCLCPP_WARN(this->get_logger(), "⚠️ 無法寫入 JSON 檔案！");
+            }
+        }
+    
+        // 解鎖並關閉
+        flock(fd, LOCK_UN);
+        close(fd);
+    }
+    
+    
 
     void init_location_map() {
         location_map_["dad"] = {1.0, 2.0, 0.0, 1.0};
@@ -233,6 +304,47 @@ private:
         return (h1 < h2) || (h1 == h2 && m1 < m2);
     }
     
+    void send_goal_and_wait(double x_, double y_, double z_, double w_) {
+        auto goal_msg = NavigateToPose::Goal();
+        goal_msg.pose.header.frame_id = "map";
+        goal_msg.pose.header.stamp = this->now();
+        goal_msg.pose.pose.position.x = x_;
+        goal_msg.pose.pose.position.y = y_;
+        goal_msg.pose.pose.orientation.z = z_;
+        goal_msg.pose.pose.orientation.w = w_;
+
+        RCLCPP_INFO(this->get_logger(), "📍 發送導航目標: x=%.2f, y=%.2f, z=%.2f, w=%.2f", x_, y_, z_, w_);
+        
+        // just test, not send goal
+        // return;
+
+        auto send_goal_future = nav_client_->async_send_goal(goal_msg);
+        if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), send_goal_future)
+            != rclcpp::FutureReturnCode::SUCCESS) {
+            RCLCPP_ERROR(this->get_logger(), "❌ 送出導航目標失敗");
+            return;
+        }
+
+        auto goal_handle = send_goal_future.get();
+        if (!goal_handle) {
+            RCLCPP_ERROR(this->get_logger(), "❌ 導航目標被拒絕");
+            return;
+        }
+
+        auto result_future = nav_client_->async_get_result(goal_handle);
+        if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), result_future)
+            != rclcpp::FutureReturnCode::SUCCESS) {
+            RCLCPP_ERROR(this->get_logger(), "❌ 等待導航結果失敗");
+            return;
+        }
+
+        auto result = result_future.get();
+        if (result.code == rclcpp_action::ResultCode::SUCCEEDED) {
+            RCLCPP_INFO(this->get_logger(), "✅ 導航成功！");
+        } else {
+            RCLCPP_WARN(this->get_logger(), "⚠️ 導航失敗，狀態碼：%d", static_cast<int>(result.code));
+        }
+    }
 
     void execute_command(const std::string &command, const std::string &target, const std::string &time) {
         if (command == "send medicine") {
@@ -249,6 +361,9 @@ private:
     }
 
     void send_medicine_flow(const std::string &target, const std::string &time) {
+
+        status_ = "delivering medicine";
+        write_status_to_json();
         while (!check_time(time)) {
             RCLCPP_INFO(this->get_logger(), "等待送藥時間 %s 到達...", time.c_str());
             std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -264,24 +379,39 @@ private:
         transition("navigation", target);
         transition("face_recognition", target);
         transition("arm_control", std::to_string(med_id));
+
+        status_ = "idle";
+        write_status_to_json();
     }
 
     void go_home_flow() {
+        status_ = "going home";
+        write_status_to_json();
         auto [x, y, z, w] = location_map_["home"];
         RCLCPP_INFO(this->get_logger(), "回家導航至座標位置 (%.2f, %.2f, %.2f, %.2f)", x, y, z, w);
         transition("navigation", "home");
+        status_ = "idle";
+        write_status_to_json();
     }
 
     void chat_flow(const std::string &target) {
         // transition("navigation", target);
         // transition("face_recognition", target);
+        status_ = "chatting";
+        write_status_to_json();
         transition("chatbot", target);
+        status_ = "idle";
+        write_status_to_json();
     }
 
     void video_call_flow(const std::string &target) {
         // transition("navigation", target);
         // transition("face_recognition", target);
+        status_ = "video calling";
+        write_status_to_json();
         transition("video_call", target);
+        status_ = "idle";
+        write_status_to_json();
     }
 
     void transition(const std::string &state, const std::string &target) {
@@ -292,15 +422,32 @@ private:
         if (state == "navigation") 
         {
             auto [x, y, z, w] = location_map_[target];
-            cmd = prefix + "ros2 run navigation_server navigate_node " +
-                  std::to_string(x) + " " + std::to_string(y) + " " +
-                  std::to_string(z) + " " + std::to_string(w) + "'";
+            // cmd = prefix + "ros2 run navigation_server navigate_node " +
+            //       std::to_string(x) + " " + std::to_string(y) + " " +
+            //       std::to_string(z) + " " + std::to_string(w) + "'";
+            
+            // use send_goal_and_wait instead of system call
+            send_goal_and_wait(x, y, z, w);
+            return;
         } 
+        
+        // else if (state == "face_recognition") 
+        // {
+        //     cmd = prefix + "ros2 run face_recognition face_recognition " + target + "'";
+        // }
         
         else if (state == "face_recognition") 
         {
-            cmd = prefix + "ros2 run face_recognition face_recognition " + target + "'";
-        } 
+            // 執行 face_recognition node
+            cmd = prefix + "ros2 run face_recognition face_recognition " + target + "' && ";
+
+            // 執行 heart rate 預測，透過 conda activate + cd 到 rPPG-Toolbox 執行
+            cmd += "source ~/miniconda3/etc/profile.d/conda.sh && ";  // conda 初始化
+            cmd += "conda activate rppg-toolbox && ";                         // 啟動你的 conda 環境
+            cmd += "cd /home/jason9308/rPPG-Toolbox && ";             // 切換到程式資料夾
+            cmd += "python3 predict_chrom.py --video /home/jason9308/robot_ws/heart_rate/video/" + target + ".avi'";
+        }
+
         
         else if (state == "arm_control") 
         {
@@ -329,6 +476,7 @@ private:
         rclcpp::sleep_for(std::chrono::seconds(3));
 
     }
+
 };
 
 int main(int argc, char* argv[]) {

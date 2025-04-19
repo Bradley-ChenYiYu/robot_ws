@@ -105,6 +105,7 @@ private:
     void openGripper();
     void closeGripper();
     void stopGripper();
+    void play_audio(const std::string& path);
 
     float hole_width = 82.0;
     float hole_height = 82.0;
@@ -294,6 +295,20 @@ void BoxHoleXArmControl::handCallback(const std_msgs::msg::Float32MultiArray::Sh
     }
 
     if (hand_stable_counter_ >= 20) {  // 約 2 秒穩定
+        
+        bool in_range = (x < 350.0f) && (y > -200.0f && y < 200.0f) && (z > 200.0f);
+        if (!in_range) {
+            RCLCPP_WARN(this->get_logger(),
+                "❌ [最終檢查] 手部座標超出安全範圍 (x=%.1f, y=%.1f, z=%.1f)，取消放藥。",
+                x, y, z);
+            hand_stable_counter_ = 0;
+
+            // 播放提示音
+            std::system("mpg123 /home/jason9308/robot_ws/sound/hand_out_of_range.mp3");
+
+            return;
+        }
+
         RCLCPP_INFO(this->get_logger(), "🖐️ 手部穩定，開始放藥...");
         hand_delivery_triggered_ = true;
         last_hand_pos_ = current;
@@ -474,6 +489,7 @@ void BoxHoleXArmControl::performGrasping() {
         RCLCPP_ERROR(this->get_logger(), "Failed to move to target position.");
     }
 
+    
     // 啟動手部偵測節點
     // 這裡使用 system() 函式來啟動手部偵測節點
     hand_delivery_triggered_ = false;
@@ -486,6 +502,11 @@ void BoxHoleXArmControl::performGrasping() {
     } else {
         RCLCPP_ERROR(this->get_logger(), "❌ hand_detection node 啟動失敗");
     }
+
+    // 等待 2 秒鐘，確保手部偵測節點啟動完成
+    rclcpp::sleep_for(std::chrono::seconds(2));
+    // 播放提示音
+    play_audio("/home/jason9308/robot_ws/sound/medicine_please_take.mp3");
 
     // 等待手部穩定
     while(!hand_delivery_triggered_)
@@ -575,6 +596,15 @@ bool BoxHoleXArmControl::wait_for_xarm_arrival(const std::array<double, 6>& targ
     }
     return false; // 逾時未到達
 }
+
+void BoxHoleXArmControl::play_audio(const std::string& path) {
+    std::string cmd = "mpg123 " + path;
+    int ret = std::system(cmd.c_str());
+    if (ret != 0) {
+        RCLCPP_WARN(this->get_logger(), "語音播放失敗！");
+    }
+}
+
 
 bool BoxHoleXArmControl::callGripperService(rclcpp::Client<xarm_msgs::srv::Call>::SharedPtr client) {
     if (!client->wait_for_service(std::chrono::seconds(3))) {

@@ -1,0 +1,19 @@
+{
+    "current_task": {
+        "status": "idle"
+    },
+    "scheduled_tasks": [
+        {
+            "target": "grandpa",
+            "time": "19:00"
+        },
+        {
+            "target": "grandma",
+            "time": "20:00"
+        },
+        {
+            "target": "dad",
+            "time": "23:00"
+        }
+    ]
+}

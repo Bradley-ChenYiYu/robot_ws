@@ -42,6 +42,14 @@ ament_target_dependencies(navigate_node
   std_msgs
 )
 
+add_executable(navigate_test_node src/navigate_test.cpp)
+ament_target_dependencies(navigate_test_node 
+  rclcpp 
+  rclcpp_action 
+  nav2_msgs 
+  std_msgs
+)
+
 # 安裝執行檔
 install(TARGETS
   navigate_to_pose_service
@@ -55,6 +63,11 @@ install(TARGETS
 
 install(TARGETS
   navigate_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(TARGETS
+  navigate_test_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

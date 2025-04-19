@@ -8,3 +8,5 @@ src/speech_recognition_pkg/speech_recognition_pkg/config.ini
 
 Map/rtabmap.db
 src/speech_recognition_pkg/speech_recognition_pkg/config.ini
+linebot_meet/token.json
+linebot_meet/credentials.json
