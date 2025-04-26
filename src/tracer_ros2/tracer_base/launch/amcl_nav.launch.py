@@ -111,4 +111,11 @@ def generate_launch_description():
                                         'waypoint_follower',
                                         'smoother_server',
                                         'velocity_smoother']}]),
+
+        Node(
+            package='write_pose',
+            executable='write_pose',
+            name='pose_writer',
+            output='screen'
+        ),
     ])

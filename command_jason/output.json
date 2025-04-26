@@ -1,7 +1,7 @@
 [
     {
-        "command": "send medicine",
-        "target": "dad",
-        "time": "23:00"
+        "command": "chat",
+        "target": "NULL",
+        "time": "16:56"
     }
 ]

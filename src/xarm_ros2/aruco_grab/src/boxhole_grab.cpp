@@ -117,6 +117,8 @@ private:
     const double hand_stability_threshold_ = 20.0; // mm
     void handCallback(const std_msgs::msg::Float32MultiArray::SharedPtr msg);
     void performHandDelivery(const cv::Point3f& hand_pos);
+
+    cv::Point3f last_hand_base_pos_;  // 儲存轉換後的 Base frame 座標
 };
 
 // **訂閱相機影像 & 機械手臂回饋**
@@ -294,26 +296,62 @@ void BoxHoleXArmControl::handCallback(const std_msgs::msg::Float32MultiArray::Sh
         hand_stable_counter_ = 0;
     }
 
-    if (hand_stable_counter_ >= 20) {  // 約 2 秒穩定
+    // if (hand_stable_counter_ >= 20) {  // 約 2 秒穩定
         
-        bool in_range = (x < 350.0f) && (y > -200.0f && y < 200.0f) && (z > 200.0f);
+    //     bool in_range = (x < 350.0f) && (y > -200.0f && y < 200.0f) && (z > 200.0f);
+    //     if (!in_range) {
+    //         RCLCPP_WARN(this->get_logger(),
+    //             "❌ [最終檢查] 手部座標超出安全範圍 (x=%.1f, y=%.1f, z=%.1f)，取消放藥。",
+    //             x, y, z);
+    //         hand_stable_counter_ = 0;
+
+    //         // 播放提示音
+    //         std::system("mpg123 /home/jason9308/robot_ws/sound/hand_out_of_range.mp3");
+
+    //         return;
+    //     }
+
+    //     RCLCPP_INFO(this->get_logger(), "🖐️ 手部穩定，開始放藥...");
+    //     hand_delivery_triggered_ = true;
+    //     last_hand_pos_ = current;
+    //     // performHandDelivery(current);
+    // }
+
+    if (hand_stable_counter_ >= 20) {  // 約 2 秒穩定
+        // ==== Camera → EE ====
+        cv::Mat hand_camera_pos = (cv::Mat_<double>(3, 1) << x, y, z);
+        cv::Mat hand_ee_pos = handEyeRotation_ * hand_camera_pos + handEyeTranslation_;
+    
+        // ==== EE → Base ====
+        cv::Mat T_EE2Base = computeEEtoBaseTransform(xarm_current_pose_);
+        cv::Mat hand_base_pos = T_EE2Base(cv::Rect(0, 0, 3, 3)) * hand_ee_pos + T_EE2Base(cv::Rect(3, 0, 1, 3));
+    
+        double base_x = hand_base_pos.at<double>(0);
+        double base_y = hand_base_pos.at<double>(1);
+        double base_z = hand_base_pos.at<double>(2);
+    
+        // ==== Base frame 座標限制 ====
+        bool in_range = (base_x > 150.0 && base_x < 385.0) &&
+                        (base_y > -200.0 && base_y < 200.0) &&
+                        (base_z > 200.0 && base_z < 600.0);
+    
         if (!in_range) {
             RCLCPP_WARN(this->get_logger(),
-                "❌ [最終檢查] 手部座標超出安全範圍 (x=%.1f, y=%.1f, z=%.1f)，取消放藥。",
-                x, y, z);
+                "❌ [最終檢查] 手部(base)座標超出安全範圍 (x=%.1f, y=%.1f, z=%.1f)，取消放藥。",
+                base_x, base_y, base_z);
             hand_stable_counter_ = 0;
-
+    
             // 播放提示音
             std::system("mpg123 /home/jason9308/robot_ws/sound/hand_out_of_range.mp3");
-
             return;
         }
-
+    
         RCLCPP_INFO(this->get_logger(), "🖐️ 手部穩定，開始放藥...");
+        last_hand_base_pos_ = cv::Point3f(base_x, base_y, base_z);
         hand_delivery_triggered_ = true;
         last_hand_pos_ = current;
-        // performHandDelivery(current);
     }
+    
 }
 
 // 控制機械手臂移動
@@ -518,19 +556,23 @@ void BoxHoleXArmControl::performGrasping() {
     // std::system("pkill -f hand_detection_node");
     std::system("pkill -f yolo_hand_detector");
 
-    // 1. 將手部點從 camera → EE
-    cv::Mat hand_camera_pos = (cv::Mat_<double>(3, 1) << last_hand_pos_.x, last_hand_pos_.y, last_hand_pos_.z);
-    cv::Mat hand_ee_pos = handEyeRotation_ * hand_camera_pos + handEyeTranslation_;
+    // // 1. 將手部點從 camera → EE
+    // cv::Mat hand_camera_pos = (cv::Mat_<double>(3, 1) << last_hand_pos_.x, last_hand_pos_.y, last_hand_pos_.z);
+    // cv::Mat hand_ee_pos = handEyeRotation_ * hand_camera_pos + handEyeTranslation_;
 
-    // 2. 取得當前 EE → Base 轉換
-    cv::Mat hand_T_EE2Base = computeEEtoBaseTransform(xarm_current_pose_);
+    // // 2. 取得當前 EE → Base 轉換
+    // cv::Mat hand_T_EE2Base = computeEEtoBaseTransform(xarm_current_pose_);
 
-    // 3. 計算手部在 Base frame 下的座標
-    cv::Mat hand_base_pos = hand_T_EE2Base(cv::Rect(0, 0, 3, 3)) * hand_ee_pos + hand_T_EE2Base(cv::Rect(3, 0, 1, 3));
+    // // 3. 計算手部在 Base frame 下的座標
+    // cv::Mat hand_base_pos = hand_T_EE2Base(cv::Rect(0, 0, 3, 3)) * hand_ee_pos + hand_T_EE2Base(cv::Rect(3, 0, 1, 3));
 
-    double hand_base_x = hand_base_pos.at<double>(0);
-    double hand_base_y = hand_base_pos.at<double>(1);
-    double hand_base_z = hand_base_pos.at<double>(2);
+    // double hand_base_x = hand_base_pos.at<double>(0);
+    // double hand_base_y = hand_base_pos.at<double>(1);
+    // double hand_base_z = hand_base_pos.at<double>(2);
+
+    double hand_base_x = last_hand_base_pos_.x;
+    double hand_base_y = last_hand_base_pos_.y;
+    double hand_base_z = last_hand_base_pos_.z;
 
     // 4. 設定目標位姿
     target_pose = { hand_base_x, hand_base_y, hand_base_z + 50.0, 3.14, 0, 0 };

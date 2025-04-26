@@ -54,6 +54,7 @@ int main(int argc, char* argv[]) {
     auto publisher = node->create_publisher<std_msgs::msg::String>("/json_modified", 10);
 
     std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)' &";
+    // std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition' &";
     int ret = std::system(command.c_str());
     if (ret == 0) {
         RCLCPP_INFO(node->get_logger(), "speech_recognition node 啟動成功");
@@ -80,11 +81,12 @@ int main(int argc, char* argv[]) {
         if (!is_same) {
             RCLCPP_INFO(node->get_logger(), "[JSON Watcher] 偵測到 JSON 不一致，複製並發送 topic ...");
 
+            // std::system("pkill -f 'speech_recognition'");  // 終止語音辨識
             if (copy_file(output_path, origin_path)) {
                 std_msgs::msg::String msg;
                 msg.data = "true";
                 publisher->publish(msg);
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                std::this_thread::sleep_for(std::chrono::seconds(2)); 
                 break;
             }
         } else {

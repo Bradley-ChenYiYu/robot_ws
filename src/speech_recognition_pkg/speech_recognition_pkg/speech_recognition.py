@@ -12,6 +12,8 @@ from datetime import datetime
 import fcntl
 import os
 from playsound import playsound
+import sys
+from std_msgs.msg import String
 
 class SpeechRecognitionNode(Node):
     def __init__(self):
@@ -31,6 +33,14 @@ class SpeechRecognitionNode(Node):
         # JSON 存放路徑
         self.json_file_path = "/home/jason9308/robot_ws/command_jason/output.json"
 
+        # JSON modified topic 訂閱
+        self.modified_sub = self.create_subscription(
+            String,
+            '/json_modified',
+            self.modified_callback,
+            10
+        )
+
         # 確保 JSON 檔案擁有所有的權限
         self.set_file_permissions(self.json_file_path)
 
@@ -46,18 +56,21 @@ class SpeechRecognitionNode(Node):
 
     def listen_and_process(self):
         while rclpy.ok():
+            rclpy.spin_once(self, timeout_sec=0.1)
             with sr.Microphone() as source:
+                
                 self.get_logger().info("請說話...")
+                self.recognizer.dynamic_energy_threshold = True
                 self.recognizer.adjust_for_ambient_noise(source)
                 self.recognizer.pause_threshold = 1.5
-                # self.recognizer.energy_threshold = 3000
+                # self.recognizer.energy_threshold = 6000
                 audio_data = self.recognizer.listen(source)
 
                 try:
                     text = self.recognizer.recognize_google(audio_data, language="zh-TW")
                     self.get_logger().info(f"你說了: {text}")
 
-                    if "機器手臂" in text:
+                    if "機器人" in text or "鐵柱" in text:
                         response = self.generate_json(text)
                         self.get_logger().info(f"生成的 JSON: {response}")
 
@@ -66,11 +79,12 @@ class SpeechRecognitionNode(Node):
                             self.play_voice("json_received.mp3")
                             self.destroy_node()  # 關閉節點
                             rclpy.shutdown()
+                            # sys.exit(0)
                         else:
                             self.get_logger().error("JSON 無效，請重新輸入")
                             self.play_voice("json_invalid.mp3")
                     else:
-                        self.get_logger().info("未偵測到『機器手臂』，繼續監聽中...")
+                        self.get_logger().info("未偵測到『機器人 or 鐵柱』，繼續監聽中...")
 
                 except sr.UnknownValueError:
                     self.get_logger().error("無法識別語音，請再試一次")
@@ -206,7 +220,12 @@ class SpeechRecognitionNode(Node):
         except Exception as e:
             self.get_logger().warn(f"語音播放失敗：{e}")
 
-        
+    def modified_callback(self, msg):
+        self.get_logger().info(f"收到 JSON 修改通知: {msg.data}")
+        if msg.data == "true":
+            self.destroy_node()  # 關閉節點
+            rclpy.shutdown()
+            # sys.exit(0)
 
     
 
@@ -216,6 +235,8 @@ def main(args=None):
     
     if rclpy.ok():
         rclpy.spin(node)
+
+    # rclpy.shutdown()
 
     # for i, name in enumerate(sr.Microphone.list_microphone_names()):
     #     print(f"{i}: {name}")

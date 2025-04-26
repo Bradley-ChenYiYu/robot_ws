@@ -74,7 +74,6 @@ private:
                 RCLCPP_INFO(this->get_logger(), "- Target: %s | Time: %s", task.target.c_str(), task.time.c_str());
             }
 
-
             executable_tasks_.clear();  // 每輪重設非送藥任務
             load_json("/home/jason9308/robot_ws/command_jason/origin.json");
             write_status_to_json();
@@ -181,7 +180,7 @@ private:
     void write_status_to_json() {
         std::lock_guard<std::mutex> lock(status_mutex_);
     
-        const std::string json_path = "/home/jason9308/robot_ws/status.json";
+        const std::string json_path = "/home/jason9308/robot_ws/command_jason/status.json";
     
         // 嘗試開啟檔案並持續鎖定直到成功
         int fd = -1;
@@ -235,7 +234,7 @@ private:
     void init_location_map() {
         location_map_["dad"] = {1.0, 2.0, 0.0, 1.0};
         location_map_["mom"] = {2.0, 3.0, 0.0, 1.0};
-        location_map_["grandpa"] = {4.0, 5.0, 0.0, 1.0};
+        location_map_["grandpa"] = {2.998, 2.708, 0.331, 0.944};
         location_map_["grandma"] = {5.0, 6.0, 0.0, 1.0};
         location_map_["home"] = {0.0, 0.0, 0.0, 1.0};
     }
@@ -362,8 +361,9 @@ private:
 
     void send_medicine_flow(const std::string &target, const std::string &time) {
 
-        status_ = "delivering medicine";
-        write_status_to_json();
+        // status_ = "delivering medicine";
+        // write_status_to_json();
+
         while (!check_time(time)) {
             RCLCPP_INFO(this->get_logger(), "等待送藥時間 %s 到達...", time.c_str());
             std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -375,9 +375,16 @@ private:
 
         auto [x, y, z, w] = location_map_[target];
         RCLCPP_INFO(this->get_logger(), "導航至 %s 的座標位置 (%.2f, %.2f, %.2f, %.2f)", target.c_str(), x, y, z, w);
-
+        
+        status_ = "delivering medicine(moving to destination)";
+        write_status_to_json();
         transition("navigation", target);
+
+        status_ = "delivering medicine(face recognition)";
+        write_status_to_json();
         transition("face_recognition", target);
+
+        status_ = "delivering medicine(handing over the medication)";
         transition("arm_control", std::to_string(med_id));
 
         status_ = "idle";
@@ -439,13 +446,14 @@ private:
         else if (state == "face_recognition") 
         {
             // 執行 face_recognition node
-            cmd = prefix + "ros2 run face_recognition face_recognition " + target + "' && ";
+            cmd = prefix + "ros2 run face_recognition face_recognition " + target + "'";
+            // cmd = prefix + "ros2 run face_recognition face_recognition " + target + "' && ";
 
             // 執行 heart rate 預測，透過 conda activate + cd 到 rPPG-Toolbox 執行
-            cmd += "source ~/miniconda3/etc/profile.d/conda.sh && ";  // conda 初始化
-            cmd += "conda activate rppg-toolbox && ";                         // 啟動你的 conda 環境
-            cmd += "cd /home/jason9308/rPPG-Toolbox && ";             // 切換到程式資料夾
-            cmd += "python3 predict_chrom.py --video /home/jason9308/robot_ws/heart_rate/video/" + target + ".avi'";
+            // cmd += "source ~/miniconda3/etc/profile.d/conda.sh && ";  // conda 初始化
+            // cmd += "conda activate rppg-toolbox && ";                         // 啟動你的 conda 環境
+            // cmd += "cd /home/jason9308/rPPG-Toolbox && ";             // 切換到程式資料夾
+            // cmd += "python3 predict_chrom.py --video /home/jason9308/robot_ws/heart_rate/video/" + target + ".avi'";
         }
 
         
@@ -456,7 +464,8 @@ private:
         
         else if (state == "chatbot") 
         {
-            cmd = prefix + "ros2 run chatbot chatbot_node'";
+            // cmd = prefix + "ros2 run chatbot chatbot_node'";
+            cmd = prefix + "ros2 run chatbot chatbot_node 2> >(grep -v ALSA >&2)'";
         } 
         
         else if (state == "video_call") 
@@ -471,9 +480,9 @@ private:
         }
 
         // Comment out this line to test without executing the command
-        // std::system(cmd.c_str());
         RCLCPP_INFO(this->get_logger(), "Executing command: %s", cmd.c_str());
-        rclcpp::sleep_for(std::chrono::seconds(3));
+        std::system(cmd.c_str());
+        // rclcpp::sleep_for(std::chrono::seconds(3));
 
     }
 

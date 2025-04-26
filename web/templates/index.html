@@ -2,111 +2,248 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>修改 JSON 命令</title>
+  <title>送藥機器人 鐵柱</title>
+  <link rel="stylesheet" href="/static/style.css">
   <style>
-    body {
-      font-family: sans-serif;
-      padding: 30px;
-    }
-
-    label {
-      display: inline-block;
-      width: 100px;
-    }
-
-    select, input {
-      width: 200px;
-      padding: 5px;
-    }
-
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-    }
-
-    #status {
-      margin-top: 20px;
-      font-weight: bold;
-      color: green;
-    }
-
-    #error {
-      margin-top: 10px;
-      color: red;
+    .hidden {
+      display: none !important;
     }
   </style>
+</head>
+<body>
+  <header>
+    <h1>送藥機器人 鐵柱</h1>
+  </header>
+  
+  <div style="display: flex; gap: 30px;">
+    <!-- 左側：輸入表單 -->
+    <div style="flex: 1;">
+      <div id="button-group">
+        <div class="command-item">
+          <button class="command-btn" onclick="selectCommand('send medicine')">
+            <div class="btn-content">
+              <img src="/static/images/send_medicine.png" alt="send medicine">
+              <span>send medicine</span>
+            </div>
+          </button>
+        </div>
+        <div class="command-item">
+          <button class="command-btn" onclick="submitCommand('go home')">
+            <div class="btn-content">
+              <img src="/static/images/go_home.png" alt="go home">
+              <span>go home</span>
+            </div>
+          </button>
+        </div>
+        <div class="command-item">
+          <button class="command-btn" onclick="submitCommand('chat')">
+            <div class="btn-content">
+              <img src="/static/images/chat.png" alt="chat">
+              <span>chat</span>
+            </div>
+          </button>
+        </div>
+        <div class="command-item">
+          <button class="command-btn" onclick="submitCommand('video call')">
+            <div class="btn-content">
+              <img src="/static/images/video_call.png" alt="video call">
+              <span>video call</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div id="form-group" class="hidden">
+        <label for="target">Target:</label>
+        <select id="target">
+          <option value="dad">dad</option>
+          <option value="mom">mom</option>
+          <option value="child">child</option>
+          <option value="grandpa">grandpa</option>
+          <option value="grandma">grandma</option>
+        </select>
+        <br><br>
+
+        <label for="time">Time:</label>
+        <input type="time" id="time">
+        <br><br>
+
+        <button onclick="submitSendMedicine()">儲存 send medicine</button>
+      </div>
+
+      <div id="error"></div>
+      <div id="current-task">
+        <p id="task-text">目前任務狀態：載入中...</p>
+        <img id="task-image" src="" alt="狀態圖片" />
+      </div>
+    </div>
+
+    <!-- 右側：排程任務 -->
+    <div style="flex: 1;">
+      <h2>排程任務</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>目標對象</th>
+            <th>時間</th>
+          </tr>
+        </thead>
+        <tbody id="task-table-body"></tbody>
+      </table>
+    </div>
+  </div>
 
   <script>
-    async function fetchJSON() {
-      try {
-        const response = await fetch('/json');
-        const data = await response.json();
+    const imageMap = {
+      "idle": "idle.gif",
+      "waiting to deliver medicine": "waiting.gif",
+      "delivering medicine(moving to destination)": "moving.gif",
+      "delivering medicine(handing over the medication)": "handover.gif",
+      "delivering medicine(face recognition)": "face_recognition.gif",
+      "going home": "gohome.gif",
+      "chatting": "chat.gif",
+      "video calling": "video.gif"
+    };
 
-        document.getElementById('command').value = data.command || '';
-        document.getElementById('target').value = data.target || '';
-        document.getElementById('time').value = data.time || '';
-      } catch (err) {
-        document.getElementById('error').innerText = '載入 JSON 失敗：' + err;
+    function selectCommand(cmd) {
+      if (cmd === 'send medicine') {
+        document.getElementById('button-group').classList.add('hidden');
+        document.getElementById('form-group').classList.remove('hidden');
       }
     }
 
-    async function updateJSON() {
-      const jsonData = {
-        command: document.getElementById('command').value,
+    async function submitSendMedicine() {
+      const data = {
+        command: 'send medicine',
         target: document.getElementById('target').value,
-        time: document.getElementById('time').value  // 24小時制 hh:mm
+        time: document.getElementById('time').value
       };
 
+      await postJSON(data);
+      document.getElementById('form-group').classList.add('hidden');
+      document.getElementById('button-group').classList.remove('hidden');
+    }
+
+    async function submitCommand(cmd) {
+    const now = new Date();
+    const formattedTime = now.toTimeString().slice(0, 8); // "HH:MM:SS"
+
+    const data = {
+      command: cmd,
+      target: 'NULL',
+      time: formattedTime
+    };
+    await postJSON(data);
+  }
+
+
+
+    async function postJSON(jsonData) {
       try {
-        const response = await fetch('/json', {
+        await fetch('/json', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(jsonData)
         });
-
-        const result = await response.json();
-        document.getElementById('status').innerText = result.message || '儲存成功！';
         document.getElementById('error').innerText = '';
       } catch (error) {
         document.getElementById('error').innerText = '儲存錯誤：' + error;
-        document.getElementById('status').innerText = '';
       }
     }
 
-    window.onload = fetchJSON;
+    async function fetchStatus() {
+      try {
+        const response = await fetch('/status');
+        const data = await response.json();
+        const tasks = (data.scheduled_tasks || []).sort((a, b) => a.time.localeCompare(b.time));
+        const currentTask = data.current_task?.status || '未知';
+
+        const tbody = document.getElementById('task-table-body');
+        tbody.innerHTML = '';
+        tasks.forEach((task, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${index + 1}</td><td>${task.target}</td><td>${task.time}</td>`;
+          tbody.appendChild(row);
+        });
+
+        document.getElementById('task-text').innerText = `目前任務狀態：${currentTask}`;
+
+        if (currentTask.startsWith('delivering medicine(moving')) {
+          document.getElementById('task-image').style.display = 'none';
+
+          let canvas = document.getElementById('map-canvas');
+          if (!canvas) {
+            canvas = document.createElement('canvas');
+            canvas.id = 'map-canvas';
+            canvas.width = 983;
+            canvas.height = 493;
+            canvas.style.border = '1px solid #ccc';
+            document.getElementById('current-task').appendChild(canvas);
+          }
+
+          const ctx = canvas.getContext('2d');
+          const img = new Image();
+          img.src = '/static/images/rtabmap_map.png';
+          img.onload = async () => {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            try {
+              const poseRes = await fetch('/pose');
+              const pose = await poseRes.json();
+
+              // 地圖參數
+              const scale = 20;
+              const offsetX = -(-11.3097 * scale);
+              const offsetY = canvas.height - (-(-4.75905) * scale);
+
+              const x = offsetX + pose.x * scale;
+              const y = offsetY - pose.y * scale;
+
+              ctx.beginPath();
+              ctx.arc(x, y, 10, 0, 2 * Math.PI);
+              ctx.fillStyle = 'red';
+              ctx.fill();
+
+              const qx = pose.qx;
+              const qy = pose.qy;
+              const qz = pose.qz;
+              const qw = pose.qw;
+
+              const siny_cosp = 2 * (qw * qz + qx * qy);
+              const cosy_cosp = 1 - 2 * (qy * qy + qz * qz);
+              const yaw = Math.atan2(siny_cosp, cosy_cosp);
+
+              const arrowLength = 25;
+              const arrowX = x + arrowLength * Math.cos(yaw);
+              const arrowY = y - arrowLength * Math.sin(yaw);
+
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(arrowX, arrowY);
+              ctx.strokeStyle = 'blue';
+              ctx.lineWidth = 3;
+              ctx.stroke();
+
+            } catch (e) {
+              console.error('pose 讀取失敗', e);
+            }
+          };
+        } else {
+          document.getElementById('task-image').style.display = 'block';
+          document.getElementById('task-image').src = `/static/images/${imageMap[currentTask] || 'idle.gif'}`;
+          const existingCanvas = document.getElementById('map-canvas');
+          if (existingCanvas) existingCanvas.remove();
+        }
+      } catch (err) {
+        console.error('載入 status.json 失敗：', err);
+      }
+    }
+
+    window.onload = () => {
+      fetchStatus();
+      setInterval(fetchStatus, 5000);
+    };
   </script>
-</head>
-<body>
-  <h1>修改命令 JSON</h1>
-
-  <label for="command">Command:</label>
-  <select id="command">
-    <option value="send medicine">send medicine</option>
-    <option value="go home">go home</option>
-    <option value="chat">chat</option>
-    <option value="video call">video call</option>
-  </select>
-  <br><br>
-
-  <label for="target">Target:</label>
-  <select id="target">
-    <option value="dad">dad</option>
-    <option value="mom">mom</option>
-    <option value="child">child</option>
-    <option value="grandpa">grandpa</option>
-    <option value="grandma">grandma</option>
-  </select>
-  <br><br>
-
-  <label for="time">Time:</label>
-  <input type="time" id="time"> <!-- 24小時制 -->
-  <br><br>
-
-  <button onclick="updateJSON()">儲存 JSON</button>
-
-  <div id="status"></div>
-  <div id="error"></div>
 </body>
 </html>
