@@ -1,0 +1,35 @@
+running egg_info
+creating ../build/hand_detection/hand_detection.egg-info
+writing ../build/hand_detection/hand_detection.egg-info/PKG-INFO
+writing dependency_links to ../build/hand_detection/hand_detection.egg-info/dependency_links.txt
+writing entry points to ../build/hand_detection/hand_detection.egg-info/entry_points.txt
+writing requirements to ../build/hand_detection/hand_detection.egg-info/requires.txt
+writing top-level names to ../build/hand_detection/hand_detection.egg-info/top_level.txt
+writing manifest file '../build/hand_detection/hand_detection.egg-info/SOURCES.txt'
+reading manifest file '../build/hand_detection/hand_detection.egg-info/SOURCES.txt'
+writing manifest file '../build/hand_detection/hand_detection.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/jason9308/robot_ws/src/build/hand_detection/build
+creating /home/jason9308/robot_ws/src/build/hand_detection/build/lib
+creating /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection
+copying hand_detection/__init__.py -> /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection
+copying hand_detection/hand_detection.py -> /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection
+running install
+running install_lib
+creating /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection
+copying /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection/__init__.py -> /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection
+copying /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection/hand_detection.py -> /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection
+byte-compiling /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection/hand_detection.py to hand_detection.cpython-310.pyc
+running install_data
+creating /home/jason9308/robot_ws/src/install/hand_detection/share/ament_index
+creating /home/jason9308/robot_ws/src/install/hand_detection/share/ament_index/resource_index
+creating /home/jason9308/robot_ws/src/install/hand_detection/share/ament_index/resource_index/packages
+copying resource/hand_detection -> /home/jason9308/robot_ws/src/install/hand_detection/share/ament_index/resource_index/packages
+copying package.xml -> /home/jason9308/robot_ws/src/install/hand_detection/share/hand_detection
+running install_egg_info
+Copying ../build/hand_detection/hand_detection.egg-info to /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection-0.0.0-py3.10.egg-info
+running install_scripts
+Installing yolo_hand_detector script to /home/jason9308/robot_ws/src/install/hand_detection/lib/hand_detection
+writing list of installed files to '/home/jason9308/robot_ws/src/build/hand_detection/install.log'

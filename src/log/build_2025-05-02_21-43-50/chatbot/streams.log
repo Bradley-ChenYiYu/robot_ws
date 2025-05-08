@@ -1,0 +1,37 @@
+[8.096s] Invoking command in '/home/jason9308/robot_ws/src/chatbot': PYTHONPATH=/home/jason9308/robot_ws/src/build/chatbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/chatbot build --build-base /home/jason9308/robot_ws/src/build/chatbot/build install --record /home/jason9308/robot_ws/src/build/chatbot/install.log --single-version-externally-managed install_data
+[11.470s] running egg_info
+[11.477s] creating ../build/chatbot/chatbot.egg-info
+[11.478s] writing ../build/chatbot/chatbot.egg-info/PKG-INFO
+[11.478s] writing dependency_links to ../build/chatbot/chatbot.egg-info/dependency_links.txt
+[11.478s] writing entry points to ../build/chatbot/chatbot.egg-info/entry_points.txt
+[11.478s] writing requirements to ../build/chatbot/chatbot.egg-info/requires.txt
+[11.478s] writing top-level names to ../build/chatbot/chatbot.egg-info/top_level.txt
+[11.481s] writing manifest file '../build/chatbot/chatbot.egg-info/SOURCES.txt'
+[11.487s] reading manifest file '../build/chatbot/chatbot.egg-info/SOURCES.txt'
+[11.492s] writing manifest file '../build/chatbot/chatbot.egg-info/SOURCES.txt'
+[11.492s] running build
+[11.492s] running build_py
+[11.492s] creating /home/jason9308/robot_ws/src/build/chatbot/build
+[11.492s] creating /home/jason9308/robot_ws/src/build/chatbot/build/lib
+[11.493s] creating /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot
+[11.493s] copying chatbot/__init__.py -> /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot
+[11.493s] copying chatbot/chatbot_node.py -> /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot
+[11.500s] running install
+[11.505s] running install_lib
+[11.511s] creating /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot
+[11.511s] copying /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot/__init__.py -> /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot
+[11.511s] copying /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot/chatbot_node.py -> /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot
+[11.513s] byte-compiling /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot/__init__.py to __init__.cpython-310.pyc
+[11.514s] byte-compiling /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot/chatbot_node.py to chatbot_node.cpython-310.pyc
+[11.518s] running install_data
+[11.525s] creating /home/jason9308/robot_ws/src/install/chatbot/share/ament_index
+[11.528s] creating /home/jason9308/robot_ws/src/install/chatbot/share/ament_index/resource_index
+[11.528s] creating /home/jason9308/robot_ws/src/install/chatbot/share/ament_index/resource_index/packages
+[11.529s] copying resource/chatbot -> /home/jason9308/robot_ws/src/install/chatbot/share/ament_index/resource_index/packages
+[11.530s] copying package.xml -> /home/jason9308/robot_ws/src/install/chatbot/share/chatbot
+[11.530s] running install_egg_info
+[11.549s] Copying ../build/chatbot/chatbot.egg-info to /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot-0.0.0-py3.10.egg-info
+[11.550s] running install_scripts
+[11.597s] Installing chatbot_node script to /home/jason9308/robot_ws/src/install/chatbot/lib/chatbot
+[11.597s] writing list of installed files to '/home/jason9308/robot_ws/src/build/chatbot/install.log'
+[12.380s] Invoked command in '/home/jason9308/robot_ws/src/chatbot' returned '0': PYTHONPATH=/home/jason9308/robot_ws/src/build/chatbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/chatbot build --build-base /home/jason9308/robot_ws/src/build/chatbot/build install --record /home/jason9308/robot_ws/src/build/chatbot/install.log --single-version-externally-managed install_data

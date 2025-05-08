@@ -1,0 +1,348 @@
+[0.352s] Invoking command in '/home/jason9308/robot_ws/src/build/tracer_msgs': CMAKE_PREFIX_PATH=/home/jason9308/robot_ws/install/xarm_planner:/home/jason9308/robot_ws/install/xarm_moveit_servo:/home/jason9308/robot_ws/install/xarm_moveit_config:/home/jason9308/robot_ws/install/xarm_gazebo:/home/jason9308/robot_ws/install/xarm_controller:/home/jason9308/robot_ws/install/xarm_api:/home/jason9308/robot_ws/install/xarm_sdk:/home/jason9308/robot_ws/install/move_arm:/home/jason9308/robot_ws/install/medicine_grabber:/home/jason9308/robot_ws/install/lite6_handeye:/home/jason9308/robot_ws/install/json_file_watcher:/home/jason9308/robot_ws/install/aruco_grab:/home/jason9308/robot_ws/install/xarm_msgs:/home/jason9308/robot_ws/install/xarm_description:/home/jason9308/robot_ws/install/ui_for_debug_and_demo:/home/jason9308/robot_ws/install/tracer_base:/home/jason9308/robot_ws/install/xarm_simulation:/home/jason9308/robot_ws/install/write_pose:/home/jason9308/robot_ws/install/voice_control:/home/jason9308/robot_ws/install/uf_ros_lib:/home/jason9308/robot_ws/install/tm_simulation_node:/home/jason9308/robot_ws/install/tm_mod_urdf:/home/jason9308/robot_ws/install/tm_get_status:/home/jason9308/robot_ws/install/speech_recognition_pkg:/home/jason9308/robot_ws/install/my_2f85gripper_py:/home/jason9308/robot_ws/install/hand_detection:/home/jason9308/robot_ws/install/face_recognition:/home/jason9308/robot_ws/install/chatbot:/home/jason9308/robot_ws/install/calibration_cross:/opt/ros/humble:/home/jason9308/robot_ws/install/ugv_sdk:/home/jason9308/robot_ws/install/tracer_msgs:/home/jason9308/robot_ws/install/tm_driver:/home/jason9308/robot_ws/install/demo:/home/jason9308/robot_ws/install/tm_msgs:/home/jason9308/robot_ws/install/tm_description:/home/jason9308/robot_ws/install/custom_package:/home/jason9308/robot_ws/install/techman_robot_msgs:/home/jason9308/robot_ws/install/realsense_gazebo_plugin:/home/jason9308/robot_ws/install/navigation_server:/home/jason9308/robot_ws/install/navigation_interfaces:/home/jason9308/robot_ws/install/mbot_demo:/home/jason9308/robot_ws/install/lslidar_driver:/home/jason9308/robot_ws/install/lslidar_msgs:/home/jason9308/robot_ws/install/grpr2f85_ifaces:/home/jason9308/robot_ws/install/control_node /usr/local/cuda-11.5/bin/cmake /home/jason9308/robot_ws/src/tracer_ros2/tracer_msgs -DCMAKE_INSTALL_PREFIX=/home/jason9308/robot_ws/src/install/tracer_msgs
+[2.685s] -- The C compiler identification is GNU 11.4.0
+[2.685s] -- The CXX compiler identification is GNU 11.4.0
+[2.686s] -- Detecting C compiler ABI info
+[2.686s] -- Detecting C compiler ABI info - done
+[2.686s] -- Check for working C compiler: /usr/local/cuda-11.5/bin/cc - skipped
+[2.686s] -- Detecting C compile features
+[2.686s] -- Detecting C compile features - done
+[2.686s] -- Detecting CXX compiler ABI info
+[2.686s] -- Detecting CXX compiler ABI info - done
+[2.686s] -- Check for working CXX compiler: /usr/local/cuda-11.5/bin/c++ - skipped
+[2.686s] -- Detecting CXX compile features
+[2.686s] -- Detecting CXX compile features - done
+[2.687s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[2.687s] -- Found Python3: /usr/local/cuda-11.5/bin/python3 (found version "3.10.12") found components: Interpreter 
+[2.687s] -- Found builtin_interfaces: 1.2.1 (/opt/ros/humble/share/builtin_interfaces/cmake)
+[2.687s] -- Found rosidl_generator_c: 3.1.6 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[2.687s] -- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[2.687s] -- Found rosidl_generator_cpp: 3.1.6 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[2.691s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[2.691s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[2.691s] -- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+[2.691s] -- Found std_msgs: 4.2.4 (/opt/ros/humble/share/std_msgs/cmake)
+[2.691s] -- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+[2.691s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[2.691s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[2.781s] -- Found PythonInterp: /usr/local/cuda-11.5/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+[2.781s] -- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+[2.783s] -- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+[2.783s] -- Using PYTHON_EXECUTABLE: /usr/local/cuda-11.5/bin/python3
+[2.783s] -- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+[2.784s] -- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+[2.827s] -- Found PythonExtra: .so  
+[3.037s] -- Found ament_lint_auto: 0.12.11 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[3.165s] -- Added test 'copyright' to check source files copyright and LICENSE
+[3.175s] -- Added test 'lint_cmake' to check CMake code style
+[3.176s] -- Added test 'xmllint' to check XML markup files
+[3.176s] -- Configuring done
+[3.262s] -- Generating done
+[3.285s] -- Build files have been written to: /home/jason9308/robot_ws/src/build/tracer_msgs
+[3.343s] Invoked command in '/home/jason9308/robot_ws/src/build/tracer_msgs' returned '0': CMAKE_PREFIX_PATH=/home/jason9308/robot_ws/install/xarm_planner:/home/jason9308/robot_ws/install/xarm_moveit_servo:/home/jason9308/robot_ws/install/xarm_moveit_config:/home/jason9308/robot_ws/install/xarm_gazebo:/home/jason9308/robot_ws/install/xarm_controller:/home/jason9308/robot_ws/install/xarm_api:/home/jason9308/robot_ws/install/xarm_sdk:/home/jason9308/robot_ws/install/move_arm:/home/jason9308/robot_ws/install/medicine_grabber:/home/jason9308/robot_ws/install/lite6_handeye:/home/jason9308/robot_ws/install/json_file_watcher:/home/jason9308/robot_ws/install/aruco_grab:/home/jason9308/robot_ws/install/xarm_msgs:/home/jason9308/robot_ws/install/xarm_description:/home/jason9308/robot_ws/install/ui_for_debug_and_demo:/home/jason9308/robot_ws/install/tracer_base:/home/jason9308/robot_ws/install/xarm_simulation:/home/jason9308/robot_ws/install/write_pose:/home/jason9308/robot_ws/install/voice_control:/home/jason9308/robot_ws/install/uf_ros_lib:/home/jason9308/robot_ws/install/tm_simulation_node:/home/jason9308/robot_ws/install/tm_mod_urdf:/home/jason9308/robot_ws/install/tm_get_status:/home/jason9308/robot_ws/install/speech_recognition_pkg:/home/jason9308/robot_ws/install/my_2f85gripper_py:/home/jason9308/robot_ws/install/hand_detection:/home/jason9308/robot_ws/install/face_recognition:/home/jason9308/robot_ws/install/chatbot:/home/jason9308/robot_ws/install/calibration_cross:/opt/ros/humble:/home/jason9308/robot_ws/install/ugv_sdk:/home/jason9308/robot_ws/install/tracer_msgs:/home/jason9308/robot_ws/install/tm_driver:/home/jason9308/robot_ws/install/demo:/home/jason9308/robot_ws/install/tm_msgs:/home/jason9308/robot_ws/install/tm_description:/home/jason9308/robot_ws/install/custom_package:/home/jason9308/robot_ws/install/techman_robot_msgs:/home/jason9308/robot_ws/install/realsense_gazebo_plugin:/home/jason9308/robot_ws/install/navigation_server:/home/jason9308/robot_ws/install/navigation_interfaces:/home/jason9308/robot_ws/install/mbot_demo:/home/jason9308/robot_ws/install/lslidar_driver:/home/jason9308/robot_ws/install/lslidar_msgs:/home/jason9308/robot_ws/install/grpr2f85_ifaces:/home/jason9308/robot_ws/install/control_node /usr/local/cuda-11.5/bin/cmake /home/jason9308/robot_ws/src/tracer_ros2/tracer_msgs -DCMAKE_INSTALL_PREFIX=/home/jason9308/robot_ws/src/install/tracer_msgs
+[3.344s] Invoking command in '/home/jason9308/robot_ws/src/build/tracer_msgs': CMAKE_PREFIX_PATH=/home/jason9308/robot_ws/install/xarm_planner:/home/jason9308/robot_ws/install/xarm_moveit_servo:/home/jason9308/robot_ws/install/xarm_moveit_config:/home/jason9308/robot_ws/install/xarm_gazebo:/home/jason9308/robot_ws/install/xarm_controller:/home/jason9308/robot_ws/install/xarm_api:/home/jason9308/robot_ws/install/xarm_sdk:/home/jason9308/robot_ws/install/move_arm:/home/jason9308/robot_ws/install/medicine_grabber:/home/jason9308/robot_ws/install/lite6_handeye:/home/jason9308/robot_ws/install/json_file_watcher:/home/jason9308/robot_ws/install/aruco_grab:/home/jason9308/robot_ws/install/xarm_msgs:/home/jason9308/robot_ws/install/xarm_description:/home/jason9308/robot_ws/install/ui_for_debug_and_demo:/home/jason9308/robot_ws/install/tracer_base:/home/jason9308/robot_ws/install/xarm_simulation:/home/jason9308/robot_ws/install/write_pose:/home/jason9308/robot_ws/install/voice_control:/home/jason9308/robot_ws/install/uf_ros_lib:/home/jason9308/robot_ws/install/tm_simulation_node:/home/jason9308/robot_ws/install/tm_mod_urdf:/home/jason9308/robot_ws/install/tm_get_status:/home/jason9308/robot_ws/install/speech_recognition_pkg:/home/jason9308/robot_ws/install/my_2f85gripper_py:/home/jason9308/robot_ws/install/hand_detection:/home/jason9308/robot_ws/install/face_recognition:/home/jason9308/robot_ws/install/chatbot:/home/jason9308/robot_ws/install/calibration_cross:/opt/ros/humble:/home/jason9308/robot_ws/install/ugv_sdk:/home/jason9308/robot_ws/install/tracer_msgs:/home/jason9308/robot_ws/install/tm_driver:/home/jason9308/robot_ws/install/demo:/home/jason9308/robot_ws/install/tm_msgs:/home/jason9308/robot_ws/install/tm_description:/home/jason9308/robot_ws/install/custom_package:/home/jason9308/robot_ws/install/techman_robot_msgs:/home/jason9308/robot_ws/install/realsense_gazebo_plugin:/home/jason9308/robot_ws/install/navigation_server:/home/jason9308/robot_ws/install/navigation_interfaces:/home/jason9308/robot_ws/install/mbot_demo:/home/jason9308/robot_ws/install/lslidar_driver:/home/jason9308/robot_ws/install/lslidar_msgs:/home/jason9308/robot_ws/install/grpr2f85_ifaces:/home/jason9308/robot_ws/install/control_node /usr/local/cuda-11.5/bin/cmake --build /home/jason9308/robot_ws/src/build/tracer_msgs -- -j20 -l20
+[3.519s] [  1%] [34m[1mGenerating C code for ROS interfaces[0m
+[3.609s] [  1%] Built target ament_cmake_python_copy_tracer_msgs
+[3.687s] [  3%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[4.371s] running egg_info
+[4.372s] creating tracer_msgs.egg-info
+[4.372s] writing tracer_msgs.egg-info/PKG-INFO
+[4.372s] writing dependency_links to tracer_msgs.egg-info/dependency_links.txt
+[4.372s] writing top-level names to tracer_msgs.egg-info/top_level.txt
+[4.372s] writing manifest file 'tracer_msgs.egg-info/SOURCES.txt'
+[4.377s] reading manifest file 'tracer_msgs.egg-info/SOURCES.txt'
+[4.377s] writing manifest file 'tracer_msgs.egg-info/SOURCES.txt'
+[4.450s] [  3%] Built target ament_cmake_python_build_tracer_msgs_egg
+[7.083s] [  3%] Built target tracer_msgs__cpp
+[7.129s] [  4%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[7.138s] [  6%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_c.dir/rosidl_generator_c/tracer_msgs/msg/detail/tracer_status__functions.c.o[0m
+[7.138s] [  7%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[7.142s] [ 11%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_c.dir/rosidl_generator_c/tracer_msgs/msg/detail/tracer_light_state__functions.c.o[0m
+[7.142s] [ 11%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_c.dir/rosidl_generator_c/tracer_msgs/msg/detail/tracer_light_cmd__functions.c.o[0m
+[7.150s] [ 12%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[7.154s] [ 14%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_c.dir/rosidl_generator_c/tracer_msgs/msg/detail/tracer_rc_state__functions.c.o[0m
+[7.165s] [ 15%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_c.dir/rosidl_generator_c/tracer_msgs/msg/detail/tracer_actuator_state__functions.c.o[0m
+[7.558s] [ 17%] [32m[1mLinking C shared library libtracer_msgs__rosidl_generator_c.so[0m
+[7.731s] [ 17%] Built target tracer_msgs__rosidl_generator_c
+[7.776s] [ 19%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[7.793s] [ 20%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[7.796s] [ 22%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[8.780s] [ 23%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/tracer_msgs/msg/tracer_light_cmd__type_support.cpp.o[0m
+[8.781s] [ 25%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/tracer_msgs/msg/tracer_status__type_support.cpp.o[0m
+[8.795s] [ 26%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/tracer_msgs/msg/tracer_rc_state__type_support.cpp.o[0m
+[8.819s] [ 28%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/tracer_msgs/msg/tracer_light_state__type_support.cpp.o[0m
+[8.835s] [ 30%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/tracer_msgs/msg/tracer_actuator_state__type_support.cpp.o[0m
+[9.811s] [ 31%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/tracer_msgs/msg/detail/dds_fastrtps/tracer_light_cmd__type_support.cpp.o[0m
+[9.824s] [ 33%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/tracer_msgs/msg/detail/dds_fastrtps/tracer_light_state__type_support.cpp.o[0m
+[9.860s] [ 34%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/tracer_msgs/msg/detail/dds_fastrtps/tracer_status__type_support.cpp.o[0m
+[9.884s] [ 36%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/tracer_msgs/msg/detail/dds_fastrtps/tracer_rc_state__type_support.cpp.o[0m
+[9.905s] [ 38%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/tracer_msgs/msg/detail/dds_fastrtps/tracer_actuator_state__type_support.cpp.o[0m
+[10.125s] [ 39%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/tracer_msgs/msg/detail/tracer_light_cmd__type_support.c.o[0m
+[10.126s] [ 41%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/tracer_msgs/msg/detail/tracer_actuator_state__type_support.c.o[0m
+[10.131s] [ 42%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/tracer_msgs/msg/detail/tracer_status__type_support.c.o[0m
+[10.152s] [ 44%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/tracer_msgs/msg/detail/tracer_light_state__type_support.c.o[0m
+[10.186s] [ 46%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/tracer_msgs/msg/detail/tracer_rc_state__type_support_c.cpp.o[0m
+[10.186s] [ 49%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/tracer_msgs/msg/detail/tracer_actuator_state__type_support_c.cpp.o[0m
+[10.187s] [ 49%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/tracer_msgs/msg/detail/tracer_light_cmd__type_support_c.cpp.o[0m
+[10.198s] [ 50%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/tracer_msgs/msg/detail/tracer_rc_state__type_support.c.o[0m
+[10.218s] [ 52%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/tracer_msgs/msg/detail/tracer_light_state__type_support_c.cpp.o[0m
+[10.273s] [ 53%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/tracer_msgs/msg/detail/tracer_status__type_support_c.cpp.o[0m
+[10.407s] [ 55%] [32m[1mLinking C shared library libtracer_msgs__rosidl_typesupport_introspection_c.so[0m
+[10.561s] [ 55%] Built target tracer_msgs__rosidl_typesupport_introspection_c
+[11.128s] [ 57%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/tracer_msgs/msg/detail/tracer_actuator_state__type_support.cpp.o[0m
+[11.143s] [ 58%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/tracer_msgs/msg/detail/tracer_light_state__type_support.cpp.o[0m
+[11.143s] [ 60%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/tracer_msgs/msg/detail/tracer_light_cmd__type_support.cpp.o[0m
+[11.163s] [ 61%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/tracer_msgs/msg/detail/tracer_rc_state__type_support.cpp.o[0m
+[11.167s] [ 63%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/tracer_msgs/msg/detail/tracer_status__type_support.cpp.o[0m
+[11.228s] [ 65%] [32m[1mLinking CXX shared library libtracer_msgs__rosidl_typesupport_cpp.so[0m
+[11.347s] [ 65%] Built target tracer_msgs__rosidl_typesupport_cpp
+[11.717s] [ 66%] [32m[1mLinking CXX shared library libtracer_msgs__rosidl_typesupport_fastrtps_c.so[0m
+[11.814s] [ 68%] [32m[1mLinking CXX shared library libtracer_msgs__rosidl_typesupport_fastrtps_cpp.so[0m
+[12.042s] [ 68%] Built target tracer_msgs__rosidl_typesupport_fastrtps_c
+[12.092s] [ 69%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/tracer_msgs/msg/tracer_light_cmd__type_support.cpp.o[0m
+[12.119s] [ 71%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/tracer_msgs/msg/tracer_light_state__type_support.cpp.o[0m
+[12.120s] [ 73%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/tracer_msgs/msg/tracer_status__type_support.cpp.o[0m
+[12.124s] [ 74%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/tracer_msgs/msg/tracer_rc_state__type_support.cpp.o[0m
+[12.168s] [ 76%] [32mBuilding CXX object CMakeFiles/tracer_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/tracer_msgs/msg/tracer_actuator_state__type_support.cpp.o[0m
+[12.196s] [ 76%] Built target tracer_msgs__rosidl_typesupport_fastrtps_cpp
+[12.286s] [ 77%] [32m[1mLinking CXX shared library libtracer_msgs__rosidl_typesupport_c.so[0m
+[12.461s] [ 77%] Built target tracer_msgs__rosidl_typesupport_c
+[13.290s] [ 79%] [32m[1mLinking CXX shared library libtracer_msgs__rosidl_typesupport_introspection_cpp.so[0m
+[13.630s] [ 79%] Built target tracer_msgs__rosidl_typesupport_introspection_cpp
+[13.682s] [ 79%] Built target tracer_msgs
+[13.752s] [ 80%] [34m[1mGenerating Python code for ROS interfaces[0m
+[16.719s] [ 80%] Built target tracer_msgs__py
+[16.783s] [ 82%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_py.dir/rosidl_generator_py/tracer_msgs/msg/_tracer_light_state_s.c.o[0m
+[16.784s] [ 85%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_py.dir/rosidl_generator_py/tracer_msgs/msg/_tracer_light_cmd_s.c.o[0m
+[16.785s] [ 85%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_py.dir/rosidl_generator_py/tracer_msgs/msg/_tracer_rc_state_s.c.o[0m
+[16.785s] [ 87%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_py.dir/rosidl_generator_py/tracer_msgs/msg/_tracer_status_s.c.o[0m
+[16.785s] [ 88%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_generator_py.dir/rosidl_generator_py/tracer_msgs/msg/_tracer_actuator_state_s.c.o[0m
+[17.150s] [ 90%] [32m[1mLinking C shared library rosidl_generator_py/tracer_msgs/libtracer_msgs__rosidl_generator_py.so[0m
+[17.268s] [ 90%] Built target tracer_msgs__rosidl_generator_py
+[17.349s] [ 92%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/tracer_msgs/_tracer_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[17.349s] [ 93%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/tracer_msgs/_tracer_msgs_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[17.367s] [ 95%] [32mBuilding C object CMakeFiles/tracer_msgs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/tracer_msgs/_tracer_msgs_s.ep.rosidl_typesupport_c.c.o[0m
+[17.724s] [ 96%] [32m[1mLinking C shared library rosidl_generator_py/tracer_msgs/tracer_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[17.736s] [ 98%] [32m[1mLinking C shared library rosidl_generator_py/tracer_msgs/tracer_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[17.781s] [100%] [32m[1mLinking C shared library rosidl_generator_py/tracer_msgs/tracer_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[17.866s] [100%] Built target tracer_msgs__rosidl_typesupport_c__pyext
+[17.910s] [100%] Built target tracer_msgs__rosidl_typesupport_introspection_c__pyext
+[17.910s] [100%] Built target tracer_msgs__rosidl_typesupport_fastrtps_c__pyext
+[17.942s] Invoked command in '/home/jason9308/robot_ws/src/build/tracer_msgs' returned '0': CMAKE_PREFIX_PATH=/home/jason9308/robot_ws/install/xarm_planner:/home/jason9308/robot_ws/install/xarm_moveit_servo:/home/jason9308/robot_ws/install/xarm_moveit_config:/home/jason9308/robot_ws/install/xarm_gazebo:/home/jason9308/robot_ws/install/xarm_controller:/home/jason9308/robot_ws/install/xarm_api:/home/jason9308/robot_ws/install/xarm_sdk:/home/jason9308/robot_ws/install/move_arm:/home/jason9308/robot_ws/install/medicine_grabber:/home/jason9308/robot_ws/install/lite6_handeye:/home/jason9308/robot_ws/install/json_file_watcher:/home/jason9308/robot_ws/install/aruco_grab:/home/jason9308/robot_ws/install/xarm_msgs:/home/jason9308/robot_ws/install/xarm_description:/home/jason9308/robot_ws/install/ui_for_debug_and_demo:/home/jason9308/robot_ws/install/tracer_base:/home/jason9308/robot_ws/install/xarm_simulation:/home/jason9308/robot_ws/install/write_pose:/home/jason9308/robot_ws/install/voice_control:/home/jason9308/robot_ws/install/uf_ros_lib:/home/jason9308/robot_ws/install/tm_simulation_node:/home/jason9308/robot_ws/install/tm_mod_urdf:/home/jason9308/robot_ws/install/tm_get_status:/home/jason9308/robot_ws/install/speech_recognition_pkg:/home/jason9308/robot_ws/install/my_2f85gripper_py:/home/jason9308/robot_ws/install/hand_detection:/home/jason9308/robot_ws/install/face_recognition:/home/jason9308/robot_ws/install/chatbot:/home/jason9308/robot_ws/install/calibration_cross:/opt/ros/humble:/home/jason9308/robot_ws/install/ugv_sdk:/home/jason9308/robot_ws/install/tracer_msgs:/home/jason9308/robot_ws/install/tm_driver:/home/jason9308/robot_ws/install/demo:/home/jason9308/robot_ws/install/tm_msgs:/home/jason9308/robot_ws/install/tm_description:/home/jason9308/robot_ws/install/custom_package:/home/jason9308/robot_ws/install/techman_robot_msgs:/home/jason9308/robot_ws/install/realsense_gazebo_plugin:/home/jason9308/robot_ws/install/navigation_server:/home/jason9308/robot_ws/install/navigation_interfaces:/home/jason9308/robot_ws/install/mbot_demo:/home/jason9308/robot_ws/install/lslidar_driver:/home/jason9308/robot_ws/install/lslidar_msgs:/home/jason9308/robot_ws/install/grpr2f85_ifaces:/home/jason9308/robot_ws/install/control_node /usr/local/cuda-11.5/bin/cmake --build /home/jason9308/robot_ws/src/build/tracer_msgs -- -j20 -l20
+[17.960s] Invoking command in '/home/jason9308/robot_ws/src/build/tracer_msgs': CMAKE_PREFIX_PATH=/home/jason9308/robot_ws/install/xarm_planner:/home/jason9308/robot_ws/install/xarm_moveit_servo:/home/jason9308/robot_ws/install/xarm_moveit_config:/home/jason9308/robot_ws/install/xarm_gazebo:/home/jason9308/robot_ws/install/xarm_controller:/home/jason9308/robot_ws/install/xarm_api:/home/jason9308/robot_ws/install/xarm_sdk:/home/jason9308/robot_ws/install/move_arm:/home/jason9308/robot_ws/install/medicine_grabber:/home/jason9308/robot_ws/install/lite6_handeye:/home/jason9308/robot_ws/install/json_file_watcher:/home/jason9308/robot_ws/install/aruco_grab:/home/jason9308/robot_ws/install/xarm_msgs:/home/jason9308/robot_ws/install/xarm_description:/home/jason9308/robot_ws/install/ui_for_debug_and_demo:/home/jason9308/robot_ws/install/tracer_base:/home/jason9308/robot_ws/install/xarm_simulation:/home/jason9308/robot_ws/install/write_pose:/home/jason9308/robot_ws/install/voice_control:/home/jason9308/robot_ws/install/uf_ros_lib:/home/jason9308/robot_ws/install/tm_simulation_node:/home/jason9308/robot_ws/install/tm_mod_urdf:/home/jason9308/robot_ws/install/tm_get_status:/home/jason9308/robot_ws/install/speech_recognition_pkg:/home/jason9308/robot_ws/install/my_2f85gripper_py:/home/jason9308/robot_ws/install/hand_detection:/home/jason9308/robot_ws/install/face_recognition:/home/jason9308/robot_ws/install/chatbot:/home/jason9308/robot_ws/install/calibration_cross:/opt/ros/humble:/home/jason9308/robot_ws/install/ugv_sdk:/home/jason9308/robot_ws/install/tracer_msgs:/home/jason9308/robot_ws/install/tm_driver:/home/jason9308/robot_ws/install/demo:/home/jason9308/robot_ws/install/tm_msgs:/home/jason9308/robot_ws/install/tm_description:/home/jason9308/robot_ws/install/custom_package:/home/jason9308/robot_ws/install/techman_robot_msgs:/home/jason9308/robot_ws/install/realsense_gazebo_plugin:/home/jason9308/robot_ws/install/navigation_server:/home/jason9308/robot_ws/install/navigation_interfaces:/home/jason9308/robot_ws/install/mbot_demo:/home/jason9308/robot_ws/install/lslidar_driver:/home/jason9308/robot_ws/install/lslidar_msgs:/home/jason9308/robot_ws/install/grpr2f85_ifaces:/home/jason9308/robot_ws/install/control_node /usr/local/cuda-11.5/bin/cmake --install /home/jason9308/robot_ws/src/build/tracer_msgs
+[18.015s] -- Install configuration: ""
+[18.015s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/ament_index/resource_index/rosidl_interfaces/tracer_msgs
+[18.015s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs
+[18.015s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg
+[18.015s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_light_state.h
+[18.015s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail
+[18.015s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__functions.h
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__functions.h
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__functions.c
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__functions.h
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__functions.c
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__functions.c
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__functions.h
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__type_support.h
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__struct.h
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__struct.h
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__type_support.h
+[18.016s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__struct.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__struct.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__type_support.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__type_support.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__struct.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__functions.c
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__type_support.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__functions.c
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__functions.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/rosidl_generator_c__visibility_control.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_status.h
+[18.023s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_rc_state.h
+[18.024s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_light_cmd.h
+[18.034s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_actuator_state.h
+[18.034s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/environment/library_path.sh
+[18.034s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/environment/library_path.dsv
+[18.034s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_generator_c.so
+[18.034s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_generator_c.so" to ""
+[18.034s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs
+[18.034s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg
+[18.034s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail
+[18.034s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__rosidl_typesupport_fastrtps_c.h
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__rosidl_typesupport_fastrtps_c.h
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__rosidl_typesupport_fastrtps_c.h
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__rosidl_typesupport_fastrtps_c.h
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__rosidl_typesupport_fastrtps_c.h
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_fastrtps_c.so
+[18.035s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_fastrtps_c.so" to ""
+[18.035s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs
+[18.035s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_actuator_state.hpp
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_rc_state.hpp
+[18.035s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__struct.hpp
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__traits.hpp
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__traits.hpp
+[18.035s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__struct.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__builder.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__type_support.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__traits.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__struct.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__traits.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__struct.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__builder.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__traits.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__type_support.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__builder.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__struct.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__type_support.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__type_support.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__builder.hpp
+[18.036s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__builder.hpp
+[18.037s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__type_support.hpp
+[18.037s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_status.hpp
+[18.037s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_light_state.hpp
+[18.037s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/tracer_light_cmd.hpp
+[18.037s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/rosidl_generator_cpp__visibility_control.hpp
+[18.037s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs
+[18.037s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg
+[18.037s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[18.037s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail
+[18.037s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__rosidl_typesupport_fastrtps_cpp.hpp
+[18.041s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__rosidl_typesupport_fastrtps_cpp.hpp
+[18.041s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/dds_fastrtps
+[18.041s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__rosidl_typesupport_fastrtps_cpp.hpp
+[18.041s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__rosidl_typesupport_fastrtps_cpp.hpp
+[18.041s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__rosidl_typesupport_fastrtps_cpp.hpp
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_fastrtps_cpp.so
+[18.042s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_fastrtps_cpp.so" to ""
+[18.042s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs
+[18.042s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[18.042s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__rosidl_typesupport_introspection_c.h
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__rosidl_typesupport_introspection_c.h
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__type_support.c
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__type_support.c
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__rosidl_typesupport_introspection_c.h
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__type_support.c
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__type_support.c
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__type_support.c
+[18.042s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__rosidl_typesupport_introspection_c.h
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__rosidl_typesupport_introspection_c.h
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_introspection_c.so
+[18.043s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_introspection_c.so" to ""
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_c.so
+[18.043s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_c.so" to ""
+[18.043s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs
+[18.043s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg
+[18.043s] -- Up-to-date: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__rosidl_typesupport_introspection_cpp.hpp
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__type_support.cpp
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_state__rosidl_typesupport_introspection_cpp.hpp
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__type_support.cpp
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__rosidl_typesupport_introspection_cpp.hpp
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_status__type_support.cpp
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__rosidl_typesupport_introspection_cpp.hpp
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_rc_state__rosidl_typesupport_introspection_cpp.hpp
+[18.043s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_actuator_state__type_support.cpp
+[18.044s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/include/tracer_msgs/tracer_msgs/msg/detail/tracer_light_cmd__type_support.cpp
+[18.044s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_introspection_cpp.so
+[18.044s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_introspection_cpp.so" to ""
+[18.044s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_cpp.so
+[18.044s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_typesupport_cpp.so" to ""
+[18.044s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/environment/pythonpath.sh
+[18.044s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/environment/pythonpath.dsv
+[18.044s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs-0.1.0-py3.10.egg-info
+[18.044s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs-0.1.0-py3.10.egg-info/dependency_links.txt
+[18.044s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs-0.1.0-py3.10.egg-info/PKG-INFO
+[18.047s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs-0.1.0-py3.10.egg-info/top_level.txt
+[18.048s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs-0.1.0-py3.10.egg-info/SOURCES.txt
+[18.048s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs
+[18.048s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[18.048s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/libtracer_msgs__rosidl_generator_py.so
+[18.048s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/__init__.py
+[18.048s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg
+[18.048s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_rc_state.py
+[18.049s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_actuator_state.py
+[18.049s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/__init__.py
+[18.049s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_light_cmd.py
+[18.049s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_actuator_state_s.c
+[18.049s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_light_state.py
+[18.049s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_status_s.c
+[18.049s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_status.py
+[18.049s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_light_state_s.c
+[18.050s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_light_cmd_s.c
+[18.050s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_rc_state_s.c
+[18.050s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[18.050s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/_tracer_msgs_s.ep.rosidl_typesupport_introspection_c.c
+[18.050s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[18.053s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/_tracer_msgs_s.ep.rosidl_typesupport_c.c
+[18.054s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/_tracer_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+[18.154s] Listing '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs'...
+[18.154s] Compiling '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/__init__.py'...
+[18.154s] Listing '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg'...
+[18.154s] Compiling '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/__init__.py'...
+[18.154s] Compiling '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_actuator_state.py'...
+[18.155s] Compiling '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_light_cmd.py'...
+[18.155s] Compiling '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_light_state.py'...
+[18.155s] Compiling '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_rc_state.py'...
+[18.155s] Compiling '/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/msg/_tracer_status.py'...
+[18.176s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[18.177s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so" to ""
+[18.177s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[18.182s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so" to ""
+[18.183s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[18.183s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/local/lib/python3.10/dist-packages/tracer_msgs/tracer_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so" to ""
+[18.183s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_generator_py.so
+[18.183s] -- Set runtime path of "/home/jason9308/robot_ws/src/install/tracer_msgs/lib/libtracer_msgs__rosidl_generator_py.so" to ""
+[18.183s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerActuatorState.idl
+[18.183s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerLightCmd.idl
+[18.184s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerLightState.idl
+[18.184s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerRCState.idl
+[18.184s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerStatus.idl
+[18.188s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerActuatorState.msg
+[18.188s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerLightCmd.msg
+[18.189s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerLightState.msg
+[18.189s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerRCState.msg
+[18.189s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/msg/TracerStatus.msg
+[18.190s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/ament_index/resource_index/package_run_dependencies/tracer_msgs
+[18.190s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/ament_index/resource_index/parent_prefix_path/tracer_msgs
+[18.190s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/environment/ament_prefix_path.sh
+[18.190s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/environment/ament_prefix_path.dsv
+[18.190s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/environment/path.sh
+[18.192s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/environment/path.dsv
+[18.197s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/local_setup.bash
+[18.198s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/local_setup.sh
+[18.198s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/local_setup.zsh
+[18.198s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/local_setup.dsv
+[18.198s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/package.dsv
+[18.199s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/ament_index/resource_index/packages/tracer_msgs
+[18.200s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_generator_cExport.cmake
+[18.201s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_generator_cExport-noconfig.cmake
+[18.202s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_typesupport_fastrtps_cExport.cmake
+[18.203s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[18.204s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_generator_cppExport.cmake
+[18.206s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_typesupport_fastrtps_cppExport.cmake
+[18.208s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[18.214s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgs__rosidl_typesupport_introspection_cExport.cmake
+[18.219s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[18.219s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgs__rosidl_typesupport_cExport.cmake
+[18.225s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgs__rosidl_typesupport_cExport-noconfig.cmake
+[18.226s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgs__rosidl_typesupport_introspection_cppExport.cmake
+[18.226s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[18.226s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgs__rosidl_typesupport_cppExport.cmake
+[18.234s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+[18.235s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_generator_pyExport.cmake
+[18.235s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/export_tracer_msgs__rosidl_generator_pyExport-noconfig.cmake
+[18.236s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/rosidl_cmake-extras.cmake
+[18.236s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/ament_cmake_export_dependencies-extras.cmake
+[18.248s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/ament_cmake_export_include_directories-extras.cmake
+[18.248s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/ament_cmake_export_libraries-extras.cmake
+[18.262s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/ament_cmake_export_targets-extras.cmake
+[18.265s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[18.267s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[18.271s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgsConfig.cmake
+[18.271s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/cmake/tracer_msgsConfig-version.cmake
+[18.272s] -- Installing: /home/jason9308/robot_ws/src/install/tracer_msgs/share/tracer_msgs/package.xml
+[18.294s] Invoked command in '/home/jason9308/robot_ws/src/build/tracer_msgs' returned '0': CMAKE_PREFIX_PATH=/home/jason9308/robot_ws/install/xarm_planner:/home/jason9308/robot_ws/install/xarm_moveit_servo:/home/jason9308/robot_ws/install/xarm_moveit_config:/home/jason9308/robot_ws/install/xarm_gazebo:/home/jason9308/robot_ws/install/xarm_controller:/home/jason9308/robot_ws/install/xarm_api:/home/jason9308/robot_ws/install/xarm_sdk:/home/jason9308/robot_ws/install/move_arm:/home/jason9308/robot_ws/install/medicine_grabber:/home/jason9308/robot_ws/install/lite6_handeye:/home/jason9308/robot_ws/install/json_file_watcher:/home/jason9308/robot_ws/install/aruco_grab:/home/jason9308/robot_ws/install/xarm_msgs:/home/jason9308/robot_ws/install/xarm_description:/home/jason9308/robot_ws/install/ui_for_debug_and_demo:/home/jason9308/robot_ws/install/tracer_base:/home/jason9308/robot_ws/install/xarm_simulation:/home/jason9308/robot_ws/install/write_pose:/home/jason9308/robot_ws/install/voice_control:/home/jason9308/robot_ws/install/uf_ros_lib:/home/jason9308/robot_ws/install/tm_simulation_node:/home/jason9308/robot_ws/install/tm_mod_urdf:/home/jason9308/robot_ws/install/tm_get_status:/home/jason9308/robot_ws/install/speech_recognition_pkg:/home/jason9308/robot_ws/install/my_2f85gripper_py:/home/jason9308/robot_ws/install/hand_detection:/home/jason9308/robot_ws/install/face_recognition:/home/jason9308/robot_ws/install/chatbot:/home/jason9308/robot_ws/install/calibration_cross:/opt/ros/humble:/home/jason9308/robot_ws/install/ugv_sdk:/home/jason9308/robot_ws/install/tracer_msgs:/home/jason9308/robot_ws/install/tm_driver:/home/jason9308/robot_ws/install/demo:/home/jason9308/robot_ws/install/tm_msgs:/home/jason9308/robot_ws/install/tm_description:/home/jason9308/robot_ws/install/custom_package:/home/jason9308/robot_ws/install/techman_robot_msgs:/home/jason9308/robot_ws/install/realsense_gazebo_plugin:/home/jason9308/robot_ws/install/navigation_server:/home/jason9308/robot_ws/install/navigation_interfaces:/home/jason9308/robot_ws/install/mbot_demo:/home/jason9308/robot_ws/install/lslidar_driver:/home/jason9308/robot_ws/install/lslidar_msgs:/home/jason9308/robot_ws/install/grpr2f85_ifaces:/home/jason9308/robot_ws/install/control_node /usr/local/cuda-11.5/bin/cmake --install /home/jason9308/robot_ws/src/build/tracer_msgs

@@ -1,0 +1,41 @@
+[8.128s] Invoking command in '/home/jason9308/robot_ws/src/face_recognition': PYTHONPATH=/home/jason9308/robot_ws/src/build/face_recognition/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/face_recognition build --build-base /home/jason9308/robot_ws/src/build/face_recognition/build install --record /home/jason9308/robot_ws/src/build/face_recognition/install.log --single-version-externally-managed install_data
+[12.514s] running egg_info
+[12.519s] creating ../build/face_recognition/face_recognition.egg-info
+[12.519s] writing ../build/face_recognition/face_recognition.egg-info/PKG-INFO
+[12.522s] writing dependency_links to ../build/face_recognition/face_recognition.egg-info/dependency_links.txt
+[12.522s] writing entry points to ../build/face_recognition/face_recognition.egg-info/entry_points.txt
+[12.545s] writing requirements to ../build/face_recognition/face_recognition.egg-info/requires.txt
+[12.545s] writing top-level names to ../build/face_recognition/face_recognition.egg-info/top_level.txt
+[12.546s] writing manifest file '../build/face_recognition/face_recognition.egg-info/SOURCES.txt'
+[12.556s] reading manifest file '../build/face_recognition/face_recognition.egg-info/SOURCES.txt'
+[12.567s] writing manifest file '../build/face_recognition/face_recognition.egg-info/SOURCES.txt'
+[12.567s] running build
+[12.567s] running build_py
+[12.567s] creating /home/jason9308/robot_ws/src/build/face_recognition/build
+[12.567s] creating /home/jason9308/robot_ws/src/build/face_recognition/build/lib
+[12.567s] creating /home/jason9308/robot_ws/src/build/face_recognition/build/lib/face_recognition
+[12.567s] copying face_recognition/__init__.py -> /home/jason9308/robot_ws/src/build/face_recognition/build/lib/face_recognition
+[12.567s] copying face_recognition/face_recognition.py -> /home/jason9308/robot_ws/src/build/face_recognition/build/lib/face_recognition
+[12.574s] copying face_recognition/camera.py -> /home/jason9308/robot_ws/src/build/face_recognition/build/lib/face_recognition
+[12.581s] running install
+[12.581s] running install_lib
+[12.583s] creating /home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages/face_recognition
+[12.583s] copying /home/jason9308/robot_ws/src/build/face_recognition/build/lib/face_recognition/__init__.py -> /home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages/face_recognition
+[12.583s] copying /home/jason9308/robot_ws/src/build/face_recognition/build/lib/face_recognition/face_recognition.py -> /home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages/face_recognition
+[12.591s] copying /home/jason9308/robot_ws/src/build/face_recognition/build/lib/face_recognition/camera.py -> /home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages/face_recognition
+[12.597s] byte-compiling /home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages/face_recognition/__init__.py to __init__.cpython-310.pyc
+[12.598s] byte-compiling /home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages/face_recognition/face_recognition.py to face_recognition.cpython-310.pyc
+[12.600s] byte-compiling /home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages/face_recognition/camera.py to camera.cpython-310.pyc
+[12.611s] running install_data
+[12.611s] creating /home/jason9308/robot_ws/src/install/face_recognition/share/ament_index
+[12.611s] creating /home/jason9308/robot_ws/src/install/face_recognition/share/ament_index/resource_index
+[12.611s] creating /home/jason9308/robot_ws/src/install/face_recognition/share/ament_index/resource_index/packages
+[12.612s] copying resource/face_recognition -> /home/jason9308/robot_ws/src/install/face_recognition/share/ament_index/resource_index/packages
+[12.612s] copying package.xml -> /home/jason9308/robot_ws/src/install/face_recognition/share/face_recognition
+[12.612s] running install_egg_info
+[12.616s] Copying ../build/face_recognition/face_recognition.egg-info to /home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages/face_recognition-0.0.0-py3.10.egg-info
+[12.626s] running install_scripts
+[12.725s] Installing camera script to /home/jason9308/robot_ws/src/install/face_recognition/lib/face_recognition
+[12.726s] Installing face_recognition script to /home/jason9308/robot_ws/src/install/face_recognition/lib/face_recognition
+[12.726s] writing list of installed files to '/home/jason9308/robot_ws/src/build/face_recognition/install.log'
+[16.582s] Invoked command in '/home/jason9308/robot_ws/src/face_recognition' returned '0': PYTHONPATH=/home/jason9308/robot_ws/src/build/face_recognition/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/face_recognition/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/face_recognition build --build-base /home/jason9308/robot_ws/src/build/face_recognition/build install --record /home/jason9308/robot_ws/src/build/face_recognition/install.log --single-version-externally-managed install_data

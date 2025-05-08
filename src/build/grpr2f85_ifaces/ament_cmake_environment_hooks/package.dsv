@@ -1,0 +1,4 @@
+source;share/grpr2f85_ifaces/local_setup.bash
+source;share/grpr2f85_ifaces/local_setup.dsv
+source;share/grpr2f85_ifaces/local_setup.sh
+source;share/grpr2f85_ifaces/local_setup.zsh

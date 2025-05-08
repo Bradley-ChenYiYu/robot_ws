@@ -41,6 +41,7 @@ public:
             }
         );
         nav_client_ = rclcpp_action::create_client<NavigateToPose>(this, "/navigate_to_pose");
+        shutdown_pub_ = this->create_publisher<std_msgs::msg::String>("shutdown_signal", 10);
         write_status_to_json(); // 初始化狀態 JSON
         main_loop();
     }
@@ -66,8 +67,19 @@ private:
     std::mutex status_mutex_;
     std::string status_ = "idle";
 
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr shutdown_pub_;
+    int shutdown_signal_ = 0;
+
     void main_loop() {
-        while (rclcpp::ok()) {  
+
+        if(shutdown_signal_ == 1)
+            return;
+
+        while (rclcpp::ok()) {
+            
+            if (shutdown_signal_ == 1) {
+                break;
+            }
 
             RCLCPP_INFO(this->get_logger(), "目前排程中的送藥任務：");
             for (const auto& task : scheduled_tasks_) {
@@ -103,9 +115,10 @@ private:
     
                 send_medicine_flow(next_task.target, next_task.time);
                 scheduled_tasks_.erase(scheduled_tasks_.begin());  // 執行後移除
+                write_status_to_json();
             }
     
-            std::this_thread::sleep_for(std::chrono::seconds(5));
+            // std::this_thread::sleep_for(std::chrono::seconds(2));
         }
     }
     
@@ -122,16 +135,23 @@ private:
         while (!json_ready_) {
             RCLCPP_INFO(this->get_logger(), "JSON 尚未準備好，等待中...");
             rclcpp::spin_some(this->get_node_base_interface());  // 處理 callback
-            std::this_thread::sleep_for(std::chrono::seconds(3));
+            std::this_thread::sleep_for(std::chrono::seconds(2));
 
             if (!scheduled_tasks_.empty() && !enough_time_before_next_medicine(5)) {
                 RCLCPP_WARN(this->get_logger(), "⚠️ 距離送藥時間太近，中止等待語音輸入！");
                 
-                // 終止語音辨識
-                std::system("pkill -f speech_recognition");
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-                // 終止 json_file_watcher
-                std::system("pkill -f json_file_watcher");
+                // // 終止語音辨識
+                // std::system("pkill -f speech_recognition");
+                // std::this_thread::sleep_for(std::chrono::seconds(1));
+                // // 終止 json_file_watcher
+                // std::system("pkill -f json_file_watcher");
+
+                // 發送關閉訊號
+                std_msgs::msg::String shutdown_msg;
+                shutdown_msg.data = "shutdown";
+                shutdown_pub_->publish(shutdown_msg);
+                RCLCPP_INFO(this->get_logger(), "發送關閉訊號給 json_file_watcher and speech_recognition");
+
                 return;  // 直接 return，主 loop 會去處理送藥
             }
         }
@@ -161,7 +181,7 @@ private:
                 if (is_past_time(task.time)) {
                     RCLCPP_WARN(this->get_logger(), "時間 %s 已過，略過送藥任務 %s", task.time.c_str(), task.target.c_str());
                     continue;
-                }
+                } 
     
                 // 插入排序（時間由小到大）
                 auto insert_pos = std::find_if(scheduled_tasks_.begin(), scheduled_tasks_.end(),
@@ -237,6 +257,8 @@ private:
         location_map_["grandpa"] = {2.998, 2.708, 0.331, 0.944};
         location_map_["grandma"] = {5.0, 6.0, 0.0, 1.0};
         location_map_["home"] = {0.0, 0.0, 0.0, 1.0};
+        location_map_["Jason"] = {11.902, 5.695, 0.209, 0.978};
+        location_map_["Charlie"] = {11.902, 5.695, 0.209, 0.978};
     }
 
     void init_medicine_map() {
@@ -244,6 +266,8 @@ private:
         medicine_map_["mom"] = {{"morning", 4}, {"noon", 5}, {"night", 6}};
         medicine_map_["grandma"] = {{"morning", 7}, {"noon", 8}, {"night", 9}};
         medicine_map_["grandpa"] = {{"morning", 10}, {"noon", 11}, {"night", 12}};
+        medicine_map_["Jason"] = {{"morning", 4}, {"noon", 7}, {"night", 12}};
+        medicine_map_["Charlie"] = {{"morning", 1}, {"noon", 5}, {"night", 10}};
         
     }
 
@@ -354,6 +378,15 @@ private:
             chat_flow(target);
         } else if (command == "video call") {
             video_call_flow(target);
+        } else if(command == "shutdown") {
+            std_msgs::msg::String shutdown_msg;
+            shutdown_msg.data = "shutdown";
+            shutdown_pub_->publish(shutdown_msg);
+            RCLCPP_INFO(this->get_logger(), "發送關閉訊號");
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            shutdown_signal_ = 1;
+            RCLCPP_INFO(this->get_logger(), "關閉系統");
+
         } else {
             RCLCPP_WARN(this->get_logger(), "未知的指令：%s", command.c_str());
         }
@@ -385,6 +418,7 @@ private:
         transition("face_recognition", target);
 
         status_ = "delivering medicine(handing over the medication)";
+        write_status_to_json();
         transition("arm_control", std::to_string(med_id));
 
         status_ = "idle";
@@ -438,11 +472,6 @@ private:
             return;
         } 
         
-        // else if (state == "face_recognition") 
-        // {
-        //     cmd = prefix + "ros2 run face_recognition face_recognition " + target + "'";
-        // }
-        
         else if (state == "face_recognition") 
         {
             // 執行 face_recognition node
@@ -459,7 +488,7 @@ private:
         
         else if (state == "arm_control") 
         {
-            cmd = prefix + "ros2 run aruco_grab boxhole_grab_node " + target + "'";
+            cmd = prefix + "ros2 run medicine_grabber medicine_grabber_node " + target + "'";
         } 
         
         else if (state == "chatbot") 
@@ -470,7 +499,43 @@ private:
         
         else if (state == "video_call") 
         {
-            cmd = prefix + "ros2 run videocall_pkg call_node'";
+            // 1. 關閉 Realsense Driver（安全 SIGINT）
+            std::system("pkill -2 -f rs_launch.py");
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+
+            // 2. 
+            RCLCPP_INFO(this->get_logger(), "移動手臂至視訊位置");
+            cmd = prefix + "ros2 run move_arm move_arm_node 401.1 -2.7 509.2 3.0364 -1.3345 0.0646'";
+            std::system(cmd.c_str());
+            // std::this_thread::sleep_for(std::chrono::seconds(1));
+
+            // 3. 執行 videocall 並「阻塞等待」Python 程式結束
+            std::string call_cmd = "cd ~/robot_ws && python3 linebot_meet/app2.py";
+            int result = std::system(call_cmd.c_str());
+
+            if (result != 0) {
+                RCLCPP_WARN(this->get_logger(), "Video call 程式異常結束, return code = %d", result);
+            }
+            
+            // 4. video call 結束後，重啟 Realsense Driver
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            std::string relaunch_cmd = 
+            "gnome-terminal --title=\"Realsense Driver\" -- bash -c '"
+            "sleep 0.1; "
+            "wmctrl -r \"Realsense Driver\" -e 0,0,0,966,1108; "
+            "source ~/robot_ws/install/setup.bash && "
+            "ros2 launch realsense2_camera rs_launch.py "
+            "'";
+            std::system(relaunch_cmd.c_str());
+
+            // 5.
+            RCLCPP_INFO(this->get_logger(), "移動手臂至預設位置");
+            cmd = prefix + "ros2 run move_arm move_arm_node 200 0 250 3.14 0 0'";
+            std::system(cmd.c_str());
+            // std::this_thread::sleep_for(std::chrono::seconds(1));
+
+            return; // 直接 return，因為這個流程不需要再執行其他命令
+            
         } 
         
         else 
@@ -491,7 +556,7 @@ private:
 int main(int argc, char* argv[]) {
     rclcpp::init(argc, argv);
     auto node = std::make_shared<ControlNode>();
-    rclcpp::spin(node);
+    // rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
 }

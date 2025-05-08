@@ -1,0 +1,10 @@
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/uninstall.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/json_file_watcher_uninstall.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/json_file_watcher.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/test.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/edit_cache.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/rebuild_cache.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/list_install_components.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/install.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/install/local.dir
+/home/jason9308/robot_ws/src/build/json_file_watcher/CMakeFiles/install/strip.dir

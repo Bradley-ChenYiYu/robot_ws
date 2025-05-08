@@ -13,11 +13,18 @@
 <body>
   <header>
     <h1>送藥機器人 鐵柱</h1>
-  </header>
+    <div>
+      <button onclick="submitShutdown()" style="background: none; border: none;">
+          <img src="/static/images/shutdown.png" alt="Shutdown" width="40" height="40">
+      </button>
+      <!-- <button onclick="submitShutdown()">Shutdown</button> -->
+    </div>
   
-  <div style="display: flex; gap: 30px;">
+  </header>
+  <!-- display: flex;  style="flex: 1;"-->
+  <div class="flex-container" >
     <!-- 左側：輸入表單 -->
-    <div style="flex: 1;">
+    <div class="left">
       <div id="button-group">
         <div class="command-item">
           <button class="command-btn" onclick="selectCommand('send medicine')">
@@ -51,6 +58,7 @@
             </div>
           </button>
         </div>
+        
       </div>
 
       <div id="form-group" class="hidden">
@@ -61,6 +69,8 @@
           <option value="child">child</option>
           <option value="grandpa">grandpa</option>
           <option value="grandma">grandma</option>
+          <option value="Charlie">Charlie</option>
+          <option value="Jason">Jason</option>
         </select>
         <br><br>
 
@@ -72,14 +82,11 @@
       </div>
 
       <div id="error"></div>
-      <div id="current-task">
-        <p id="task-text">目前任務狀態：載入中...</p>
-        <img id="task-image" src="" alt="狀態圖片" />
-      </div>
+      
     </div>
 
     <!-- 右側：排程任務 -->
-    <div style="flex: 1;">
+    <div class="right">
       <h2>排程任務</h2>
       <table>
         <thead>
@@ -94,7 +101,48 @@
     </div>
   </div>
 
+  <div id="current-task">
+    <div id="command-message" style="display:none; color:green; margin-top:10px;"></div>
+    <p id="task-text">目前任務狀態：載入中...</p>
+    <div id="video-call-controls" class="hidden">
+      <p>目前會議連結：<a id="meeting-link" href="#" target="_blank">載入中...</a></p>
+      <button onclick="endMeeting()">結束會議</button>
+    </div>
+    <img id="task-image" src="" alt="狀態圖片" />
+  </div>
+  
+  <div><canvas id="canvas" width="640" height="480"></canvas></div>
+  
   <script>
+    const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const ws = new WebSocket('wss://d37f-122-146-250-197.ngrok-free.app');  // WebSocket 伺服器 URL
+
+        ws.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onmessage = (event) => {
+            const image_data = event.data;
+
+            // 解碼 base64 編碼的影像並顯示
+            const img = new Image();
+            img.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);  // 清空畫布
+                ctx.drawImage(img, 0, 0);  // 顯示圖片
+            };
+            img.src = 'data:image/jpeg;base64,' + image_data;  // 轉換成圖片源
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket Error:', error);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
     const imageMap = {
       "idle": "idle.gif",
       "waiting to deliver medicine": "waiting.gif",
@@ -105,6 +153,42 @@
       "chatting": "chat.gif",
       "video calling": "video.gif"
     };
+
+    function showCommandMessage(cmd) {
+      const messageDiv = document.getElementById('command-message');
+      messageDiv.innerText = `指令 ${cmd} 設定完成`;
+      messageDiv.style.display = 'block';
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    function submitShutdown() {
+        const now = new Date();
+        const timeStr = now.toTimeString().split(" ")[0]; // "HH:MM:SS"
+
+        const commandData = {
+            command: "shutdown",
+            target: "null",  // 明確地設成字串
+            time: timeStr
+        };
+
+        fetch("/json", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(commandData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            showCommandMessage("shutdown");  // 顯示指令完成訊息
+            console.log(data);
+        })
+        .catch(error => {
+            console.error("錯誤:", error);
+        });
+    }
 
     function selectCommand(cmd) {
       if (cmd === 'send medicine') {
@@ -121,8 +205,10 @@
       };
 
       await postJSON(data);
+      showCommandMessage("send medicine");
       document.getElementById('form-group').classList.add('hidden');
       document.getElementById('button-group').classList.remove('hidden');
+
     }
 
     async function submitCommand(cmd) {
@@ -131,13 +217,12 @@
 
     const data = {
       command: cmd,
-      target: 'NULL',
+      target: "null",
       time: formattedTime
     };
     await postJSON(data);
+    showCommandMessage(cmd); 
   }
-
-
 
     async function postJSON(jsonData) {
       try {
@@ -151,7 +236,29 @@
         document.getElementById('error').innerText = '儲存錯誤：' + error;
       }
     }
+    async function endMeeting() {
+      try {
+        await fetch('/close_meeting', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ end_meeting: 1 })
+        });
+        document.getElementById('video-call-controls').classList.add('hidden');
+      } catch (error) {
+        console.error('無法送出結束會議請求', error);
+      }
+    }
 
+    async function fetchCloseMeetingData() {
+      try {
+        const res = await fetch('/close_meeting');
+        const data = await res.json();
+        return data;
+      } catch (e) {
+        console.error('讀取 close_meeting.json 失敗', e);
+        return { end_meeting: 0, meet_link: "" };
+      }
+    }
     async function fetchStatus() {
       try {
         const response = await fetch('/status');
@@ -168,6 +275,18 @@
         });
 
         document.getElementById('task-text').innerText = `目前任務狀態：${currentTask}`;
+
+        const videoControl = document.getElementById('video-call-controls');
+
+        if (currentTask === 'video calling') {
+          const closeMeetingData = await fetchCloseMeetingData();
+          const meetLink = document.getElementById('meeting-link'); // ✅ 修正 ID 名稱
+          meetLink.href = closeMeetingData.meet_link;
+          meetLink.innerText = closeMeetingData.meet_link || '（無會議連結）';
+          videoControl.classList.remove('hidden');
+        } else {
+          videoControl.classList.add('hidden');
+        }
 
         if (currentTask.startsWith('delivering medicine(moving')) {
           document.getElementById('task-image').style.display = 'none';

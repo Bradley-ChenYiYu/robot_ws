@@ -1,0 +1,37 @@
+[8.085s] Invoking command in '/home/jason9308/robot_ws/src/hand_detection': PYTHONPATH=/home/jason9308/robot_ws/src/build/hand_detection/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/hand_detection build --build-base /home/jason9308/robot_ws/src/build/hand_detection/build install --record /home/jason9308/robot_ws/src/build/hand_detection/install.log --single-version-externally-managed install_data
+[11.108s] running egg_info
+[11.109s] creating ../build/hand_detection/hand_detection.egg-info
+[11.109s] writing ../build/hand_detection/hand_detection.egg-info/PKG-INFO
+[11.109s] writing dependency_links to ../build/hand_detection/hand_detection.egg-info/dependency_links.txt
+[11.116s] writing entry points to ../build/hand_detection/hand_detection.egg-info/entry_points.txt
+[11.117s] writing requirements to ../build/hand_detection/hand_detection.egg-info/requires.txt
+[11.120s] writing top-level names to ../build/hand_detection/hand_detection.egg-info/top_level.txt
+[11.122s] writing manifest file '../build/hand_detection/hand_detection.egg-info/SOURCES.txt'
+[11.136s] reading manifest file '../build/hand_detection/hand_detection.egg-info/SOURCES.txt'
+[11.137s] writing manifest file '../build/hand_detection/hand_detection.egg-info/SOURCES.txt'
+[11.144s] running build
+[11.144s] running build_py
+[11.144s] creating /home/jason9308/robot_ws/src/build/hand_detection/build
+[11.144s] creating /home/jason9308/robot_ws/src/build/hand_detection/build/lib
+[11.144s] creating /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection
+[11.144s] copying hand_detection/__init__.py -> /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection
+[11.144s] copying hand_detection/hand_detection.py -> /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection
+[11.156s] running install
+[11.156s] running install_lib
+[11.157s] creating /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection
+[11.158s] copying /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection/__init__.py -> /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection
+[11.158s] copying /home/jason9308/robot_ws/src/build/hand_detection/build/lib/hand_detection/hand_detection.py -> /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection
+[11.158s] byte-compiling /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection/__init__.py to __init__.cpython-310.pyc
+[11.173s] byte-compiling /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection/hand_detection.py to hand_detection.cpython-310.pyc
+[11.175s] running install_data
+[11.176s] creating /home/jason9308/robot_ws/src/install/hand_detection/share/ament_index
+[11.176s] creating /home/jason9308/robot_ws/src/install/hand_detection/share/ament_index/resource_index
+[11.176s] creating /home/jason9308/robot_ws/src/install/hand_detection/share/ament_index/resource_index/packages
+[11.176s] copying resource/hand_detection -> /home/jason9308/robot_ws/src/install/hand_detection/share/ament_index/resource_index/packages
+[11.176s] copying package.xml -> /home/jason9308/robot_ws/src/install/hand_detection/share/hand_detection
+[11.176s] running install_egg_info
+[11.204s] Copying ../build/hand_detection/hand_detection.egg-info to /home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages/hand_detection-0.0.0-py3.10.egg-info
+[11.205s] running install_scripts
+[11.398s] Installing yolo_hand_detector script to /home/jason9308/robot_ws/src/install/hand_detection/lib/hand_detection
+[11.399s] writing list of installed files to '/home/jason9308/robot_ws/src/build/hand_detection/install.log'
+[12.335s] Invoked command in '/home/jason9308/robot_ws/src/hand_detection' returned '0': PYTHONPATH=/home/jason9308/robot_ws/src/build/hand_detection/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/hand_detection/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/hand_detection build --build-base /home/jason9308/robot_ws/src/build/hand_detection/build install --record /home/jason9308/robot_ws/src/build/hand_detection/install.log --single-version-externally-managed install_data

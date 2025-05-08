@@ -1,0 +1,3 @@
+/home/jason9308/robot_ws/src/build/grpr2f85_ifaces/rosidl_adapter/grpr2f85_ifaces:srv/Reset.idl
+/home/jason9308/robot_ws/src/build/grpr2f85_ifaces/rosidl_adapter/grpr2f85_ifaces:srv/GetGripperStatus.idl
+/home/jason9308/robot_ws/src/build/grpr2f85_ifaces/rosidl_adapter/grpr2f85_ifaces:srv/SetGripperState.idl

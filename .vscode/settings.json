@@ -129,6 +129,14 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "__nullptr": "cpp"
-    }
+        "__nullptr": "cpp",
+        "eigen": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "filesystem": "cpp"
+    },
+    "cmake.sourceDirectory": "/home/jason9308/robot_ws/src/control_node"
 }

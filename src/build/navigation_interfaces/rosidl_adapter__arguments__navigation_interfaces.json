@@ -1,0 +1,6 @@
+{
+  "package_name": "navigation_interfaces",
+  "non_idl_tuples": [
+    "/home/jason9308/robot_ws/src/tracer_ros2/navigation_interfaces:srv/NavigateToPose.srv"
+  ]
+}

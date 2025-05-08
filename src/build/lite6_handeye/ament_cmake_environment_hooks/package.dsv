@@ -1,0 +1,4 @@
+source;share/lite6_handeye/local_setup.bash
+source;share/lite6_handeye/local_setup.dsv
+source;share/lite6_handeye/local_setup.sh
+source;share/lite6_handeye/local_setup.zsh

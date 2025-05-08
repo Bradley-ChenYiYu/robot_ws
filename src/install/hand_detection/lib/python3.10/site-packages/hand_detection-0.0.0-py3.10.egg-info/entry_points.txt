@@ -1,0 +1,3 @@
+[console_scripts]
+yolo_hand_detector = hand_detection.hand_detection:main
+

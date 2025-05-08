@@ -51,9 +51,25 @@ bool try_lock_file(const std::string& path, int& fd) {
 int main(int argc, char* argv[]) {
     rclcpp::init(argc, argv);
     auto node = rclcpp::Node::make_shared("json_file_watcher_node");
+    
     auto publisher = node->create_publisher<std_msgs::msg::String>("/json_modified", 10);
+    
+    auto shutdown_sub = node->create_subscription<std_msgs::msg::String>(
+        "shutdown_signal",
+        10,
+        [node](const std_msgs::msg::String::SharedPtr msg) {
+            if (msg->data == "shutdown") {
+                RCLCPP_INFO(node->get_logger(), "🔴 收到 shutdown 訊號，準備關閉 json_file_watcher...");
+                rclcpp::shutdown();
+            }
+        }
+    );
 
-    std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)' &";
+    // open another terminal and run speech_recognition node
+    // std::string command = "gnome-terminal -- bash -c 'sleep 0.5; wmctrl -r :ACTIVE: -e 0,0,0,960,1080; source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)'";
+    std::string command = "gnome-terminal -- bash -c 'sleep 0.1; wmctrl -r :ACTIVE: -e 0,0,0,966,1108; source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)'";
+
+    // std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)' &";
     // std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition' &";
     int ret = std::system(command.c_str());
     if (ret == 0) {
@@ -66,6 +82,7 @@ int main(int argc, char* argv[]) {
     RCLCPP_INFO(node->get_logger(), "[JSON Watcher] 開始監控 JSON 檔案...");
 
     while (rclcpp::ok()) {
+
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
         int fd;
@@ -92,6 +109,8 @@ int main(int argc, char* argv[]) {
         } else {
             RCLCPP_INFO(node->get_logger(), "[JSON Watcher] JSON 檔案一致，繼續監控...");
         }
+
+        rclcpp::spin_some(node);
     }
 
     rclcpp::shutdown();

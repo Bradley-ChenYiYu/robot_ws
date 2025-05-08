@@ -1,0 +1,3 @@
+[console_scripts]
+lite6_simulation_node = xarm_simulation.lite6_simulation_node:main
+

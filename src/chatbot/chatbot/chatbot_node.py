@@ -142,8 +142,11 @@ class ChatbotNode(Node):
         # recognizer.energy_threshold = 600
         with sr.Microphone() as source:
             self.get_logger().info("🎙️ 等待你說話...")
+            recognizer.dynamic_energy_threshold = True
             recognizer.adjust_for_ambient_noise(source)
+            playsound("/home/jason9308/robot_ws/sound/start_lower.mp3")
             audio = recognizer.listen(source)
+            playsound("/home/jason9308/robot_ws/sound/finish_lower.mp3")
             self.get_logger().info("🛑 偵測到你講完話，開始辨識...")
 
             # 計算錄音長度
@@ -203,7 +206,7 @@ class ChatbotNode(Node):
         # 把 GPT 回應加入記憶
         self.chat_history.append({"role": "assistant", "content": reply})
 
-        self.get_logger().info(f"🧠 GPT 回覆：{reply}")
+        self.get_logger().info(f"🧠 Chatbot 回覆：{reply}")
         return reply
 
 

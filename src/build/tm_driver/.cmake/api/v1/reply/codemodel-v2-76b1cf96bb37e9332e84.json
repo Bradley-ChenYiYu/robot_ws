@@ -1,0 +1,97 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-6c78ffc0bc70f1151b71.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "tm_driver",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "keyboard_control::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-keyboard_control-3a6052c5f57e73abb71d.json",
+					"name" : "keyboard_control",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "keyboard_control_PTP_T::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-keyboard_control_PTP_T-a6b04f5a80fdd39f3609.json",
+					"name" : "keyboard_control_PTP_T",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tm_driver::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tm_driver-5b237d8a32d6fcb9cc2c.json",
+					"name" : "tm_driver",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tm_driver_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tm_driver_uninstall-6a9c26bf8bc3142b66ef.json",
+					"name" : "tm_driver_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-d472093459ec70945a75.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/jason9308/robot_ws/src/build/tm_driver",
+		"source" : "/home/jason9308/robot_ws/src/tmr_ros2/tm_driver"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

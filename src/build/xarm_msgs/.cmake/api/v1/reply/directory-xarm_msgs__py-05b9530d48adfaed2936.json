@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "xarm_msgs__py",
+		"source" : "/home/jason9308/robot_ws/src/build/xarm_msgs/xarm_msgs__py"
+	}
+}

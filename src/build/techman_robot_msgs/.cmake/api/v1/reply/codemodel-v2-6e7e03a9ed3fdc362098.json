@@ -1,0 +1,233 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-9feb11a301eb3eb2423d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				},
+				{
+					"build" : "techman_robot_msgs__py",
+					"jsonFile" : "directory-techman_robot_msgs__py-3d692a9f56721c776234.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/jason9308/robot_ws/src/build/techman_robot_msgs/techman_robot_msgs__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "techman_robot_msgs",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_techman_robot_msgs_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_techman_robot_msgs_egg-d3bbb3f7f24264df85a3.json",
+					"name" : "ament_cmake_python_build_techman_robot_msgs_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_techman_robot_msgs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_techman_robot_msgs-0a1e4c63984f4238e87f.json",
+					"name" : "ament_cmake_python_copy_techman_robot_msgs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs-3f5f4db3263d8e924f2b.json",
+					"name" : "techman_robot_msgs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__cpp-a3f1298bf45e309f37b9.json",
+					"name" : "techman_robot_msgs__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "techman_robot_msgs__py::@7bbb5d936f938851588a",
+					"jsonFile" : "target-techman_robot_msgs__py-9e1c3d8ae8837962e868.json",
+					"name" : "techman_robot_msgs__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_generator_c-662cdb9623dba2a9a8af.json",
+					"name" : "techman_robot_msgs__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_generator_py-a97a1da585d43e54cd1e.json",
+					"name" : "techman_robot_msgs__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_c-c323ffce7997136b20ea.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_c__pyext-da0ea3b0ef5db7f00c75.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_cpp-c47bc2a4e6525efc0536.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_fastrtps_c-2d97fe66e378386c85fd.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_fastrtps_c__pyext-643a91a5bb1ca0f38536.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_fastrtps_cpp-4c5021a8847374c78596.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_introspection_c-e4f78e2b995aa79463d9.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_introspection_c__pyext-02a27c273d1bc93f7e6b.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs__rosidl_typesupport_introspection_cpp-9d26c59599bf83c70a74.json",
+					"name" : "techman_robot_msgs__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "techman_robot_msgs_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-techman_robot_msgs_uninstall-f3fd19db20a1722db925.json",
+					"name" : "techman_robot_msgs_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-a0a9fbb4475962dd07dc.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/jason9308/robot_ws/src/build/techman_robot_msgs",
+		"source" : "/home/jason9308/robot_ws/src/tmr_ros2/techman_robot_msgs"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

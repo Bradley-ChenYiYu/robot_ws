@@ -1,0 +1,44 @@
+[8.396s] Invoking command in '/home/jason9308/robot_ws/src/tmr_ros2/techman_robot_get_status': PYTHONPATH=/home/jason9308/robot_ws/src/build/tm_get_status/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/tm_get_status build --build-base /home/jason9308/robot_ws/src/build/tm_get_status/build install --record /home/jason9308/robot_ws/src/build/tm_get_status/install.log --single-version-externally-managed install_data
+[12.473s] running egg_info
+[12.473s] creating ../../build/tm_get_status/tm_get_status.egg-info
+[12.473s] writing ../../build/tm_get_status/tm_get_status.egg-info/PKG-INFO
+[12.474s] writing dependency_links to ../../build/tm_get_status/tm_get_status.egg-info/dependency_links.txt
+[12.474s] writing entry points to ../../build/tm_get_status/tm_get_status.egg-info/entry_points.txt
+[12.474s] writing requirements to ../../build/tm_get_status/tm_get_status.egg-info/requires.txt
+[12.474s] writing top-level names to ../../build/tm_get_status/tm_get_status.egg-info/top_level.txt
+[12.474s] writing manifest file '../../build/tm_get_status/tm_get_status.egg-info/SOURCES.txt'
+[12.475s] reading manifest file '../../build/tm_get_status/tm_get_status.egg-info/SOURCES.txt'
+[12.475s] writing manifest file '../../build/tm_get_status/tm_get_status.egg-info/SOURCES.txt'
+[12.475s] running build
+[12.486s] running build_py
+[12.487s] creating /home/jason9308/robot_ws/src/build/tm_get_status/build
+[12.487s] creating /home/jason9308/robot_ws/src/build/tm_get_status/build/lib
+[12.487s] creating /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status
+[12.487s] copying tm_get_status/get_status.py -> /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status
+[12.487s] copying tm_get_status/__init__.py -> /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status
+[12.487s] copying tm_get_status/translate_jason_to_list.py -> /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status
+[12.487s] copying tm_get_status/image_pub.py -> /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status
+[12.488s] running install
+[12.488s] running install_lib
+[12.488s] creating /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status
+[12.489s] copying /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status/get_status.py -> /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status
+[12.489s] copying /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status/__init__.py -> /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status
+[12.491s] copying /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status/translate_jason_to_list.py -> /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status
+[12.491s] copying /home/jason9308/robot_ws/src/build/tm_get_status/build/lib/tm_get_status/image_pub.py -> /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status
+[12.492s] byte-compiling /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status/get_status.py to get_status.cpython-310.pyc
+[12.492s] byte-compiling /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status/__init__.py to __init__.cpython-310.pyc
+[12.492s] byte-compiling /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status/translate_jason_to_list.py to translate_jason_to_list.cpython-310.pyc
+[12.492s] byte-compiling /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status/image_pub.py to image_pub.cpython-310.pyc
+[12.492s] running install_data
+[12.492s] creating /home/jason9308/robot_ws/src/install/tm_get_status/share/ament_index
+[12.492s] creating /home/jason9308/robot_ws/src/install/tm_get_status/share/ament_index/resource_index
+[12.493s] creating /home/jason9308/robot_ws/src/install/tm_get_status/share/ament_index/resource_index/packages
+[12.493s] copying resource/tm_get_status -> /home/jason9308/robot_ws/src/install/tm_get_status/share/ament_index/resource_index/packages
+[12.493s] copying package.xml -> /home/jason9308/robot_ws/src/install/tm_get_status/share/tm_get_status
+[12.493s] running install_egg_info
+[12.493s] Copying ../../build/tm_get_status/tm_get_status.egg-info to /home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages/tm_get_status-1.0.1-py3.10.egg-info
+[12.493s] running install_scripts
+[12.493s] Installing image_talker script to /home/jason9308/robot_ws/src/install/tm_get_status/lib/tm_get_status
+[12.493s] Installing status_talker script to /home/jason9308/robot_ws/src/install/tm_get_status/lib/tm_get_status
+[12.494s] writing list of installed files to '/home/jason9308/robot_ws/src/build/tm_get_status/install.log'
+[12.543s] Invoked command in '/home/jason9308/robot_ws/src/tmr_ros2/techman_robot_get_status' returned '0': PYTHONPATH=/home/jason9308/robot_ws/src/build/tm_get_status/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/tm_get_status/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/tm_get_status build --build-base /home/jason9308/robot_ws/src/build/tm_get_status/build install --record /home/jason9308/robot_ws/src/build/tm_get_status/install.log --single-version-externally-managed install_data

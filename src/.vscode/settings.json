@@ -137,5 +137,6 @@
         "target": "cpp",
         "eigen": "cpp",
         "locale": "cpp"
-    }
+    },
+    "ros.distro": "humble"
 }

@@ -1,0 +1,37 @@
+[4.054s] Invoking command in '/home/jason9308/robot_ws/src/my_2f85gripper/my_2f85gripper_py': AMENT_PREFIX_PATH=/home/jason9308/robot_ws/src/install/grpr2f85_ifaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jason9308/robot_ws/src/install/grpr2f85_ifaces:${CMAKE_PREFIX_PATH} LD_LIBRARY_PATH=/home/jason9308/robot_ws/src/install/grpr2f85_ifaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jason9308/robot_ws/src/build/my_2f85gripper_py/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/python3.10/site-packages:/home/jason9308/robot_ws/src/install/grpr2f85_ifaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/my_2f85gripper_py build --build-base /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build install --record /home/jason9308/robot_ws/src/build/my_2f85gripper_py/install.log --single-version-externally-managed install_data
+[4.738s] running egg_info
+[4.739s] creating ../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info
+[4.739s] writing ../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info/PKG-INFO
+[4.739s] writing dependency_links to ../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info/dependency_links.txt
+[4.739s] writing entry points to ../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info/entry_points.txt
+[4.739s] writing requirements to ../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info/requires.txt
+[4.739s] writing top-level names to ../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info/top_level.txt
+[4.739s] writing manifest file '../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info/SOURCES.txt'
+[4.739s] reading manifest file '../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info/SOURCES.txt'
+[4.739s] writing manifest file '../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info/SOURCES.txt'
+[4.740s] running build
+[4.740s] running build_py
+[4.741s] creating /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build
+[4.742s] creating /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build/lib
+[4.742s] creating /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build/lib/my_2f85gripper_py
+[4.742s] copying my_2f85gripper_py/__init__.py -> /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build/lib/my_2f85gripper_py
+[4.742s] copying my_2f85gripper_py/my_2f85_gripper.py -> /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build/lib/my_2f85gripper_py
+[4.742s] running install
+[4.742s] running install_lib
+[4.742s] creating /home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/python3.10/site-packages/my_2f85gripper_py
+[4.742s] copying /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build/lib/my_2f85gripper_py/__init__.py -> /home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/python3.10/site-packages/my_2f85gripper_py
+[4.742s] copying /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build/lib/my_2f85gripper_py/my_2f85_gripper.py -> /home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/python3.10/site-packages/my_2f85gripper_py
+[4.743s] byte-compiling /home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/python3.10/site-packages/my_2f85gripper_py/__init__.py to __init__.cpython-310.pyc
+[4.743s] byte-compiling /home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/python3.10/site-packages/my_2f85gripper_py/my_2f85_gripper.py to my_2f85_gripper.cpython-310.pyc
+[4.755s] running install_data
+[4.756s] creating /home/jason9308/robot_ws/src/install/my_2f85gripper_py/share/ament_index
+[4.756s] creating /home/jason9308/robot_ws/src/install/my_2f85gripper_py/share/ament_index/resource_index
+[4.756s] creating /home/jason9308/robot_ws/src/install/my_2f85gripper_py/share/ament_index/resource_index/packages
+[4.756s] copying resource/my_2f85gripper_py -> /home/jason9308/robot_ws/src/install/my_2f85gripper_py/share/ament_index/resource_index/packages
+[4.756s] copying package.xml -> /home/jason9308/robot_ws/src/install/my_2f85gripper_py/share/my_2f85gripper_py
+[4.756s] running install_egg_info
+[4.756s] Copying ../../build/my_2f85gripper_py/my_2f85gripper_py.egg-info to /home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/python3.10/site-packages/my_2f85gripper_py-0.0.0-py3.10.egg-info
+[4.756s] running install_scripts
+[4.790s] Installing my_2f85gripper_py script to /home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/my_2f85gripper_py
+[4.791s] writing list of installed files to '/home/jason9308/robot_ws/src/build/my_2f85gripper_py/install.log'
+[4.861s] Invoked command in '/home/jason9308/robot_ws/src/my_2f85gripper/my_2f85gripper_py' returned '0': AMENT_PREFIX_PATH=/home/jason9308/robot_ws/src/install/grpr2f85_ifaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jason9308/robot_ws/src/install/grpr2f85_ifaces:${CMAKE_PREFIX_PATH} LD_LIBRARY_PATH=/home/jason9308/robot_ws/src/install/grpr2f85_ifaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/jason9308/robot_ws/src/build/my_2f85gripper_py/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/my_2f85gripper_py/lib/python3.10/site-packages:/home/jason9308/robot_ws/src/install/grpr2f85_ifaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/my_2f85gripper_py build --build-base /home/jason9308/robot_ws/src/build/my_2f85gripper_py/build install --record /home/jason9308/robot_ws/src/build/my_2f85gripper_py/install.log --single-version-externally-managed install_data

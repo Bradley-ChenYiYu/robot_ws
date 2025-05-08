@@ -1,10 +1,20 @@
+/* reset margin/padding, remove all default borders & outlines, use border‑box */
 * {
-        padding:0;
-        margin:0;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        border: none;
+        outline: none;
+      }
+html, body {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
 }
 
-
 header {
+margin: 0;
+padding: 0;
 background-color:rgba(35,28,26,0.8);
 height:80px;
 width:100%;  
@@ -123,3 +133,30 @@ font-size: 20px;
 color: #333;
 text-align: center;
 }
+
+/* --------- 新增以下樣式 --------- */
+/* 取代內嵌的 flex 佈局，讓 current‑task 脫離左右兩欄的 flex */
+.flex-container {
+display: flex;
+gap: 30px;
+}
+
+/* 左右兩欄 */
+.left, .right {
+flex: 1;
+}
+      
+/* 讓 current‑task 全寬並置中 */
+#current-task {
+width: 100%;
+text-align: center;
+margin: 20px auto;
+}
+
+/* 讓狀態圖片置中 */
+#task-image {
+        display: block;
+        margin: 10px auto 0 auto;   /* 上 10px，左右 auto */
+        max-width: 300px;
+        border-radius: 10px;
+    }

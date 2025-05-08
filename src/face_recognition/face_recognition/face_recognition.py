@@ -44,23 +44,12 @@ class FaceRecognitionNode(Node):
         self.pass_count = 0
         self.pass_required = 50
 
-        self.view_pose = [22.4, 0.8, 502.4, 3.1329, -1.0408, 0.0017] # 看臉位置
+        # self.view_pose = [22.4, 0.8, 502.4, 3.1329, -1.0408, 0.0017] # 看臉位置
+        self.view_pose = [401.1, -2.7, 509.2, 3.0364, -1.3345, 0.0646] # 看臉位置NEW
+
         self.idle_pose = [200, 0, 250, 3.14, 0, 0]      # 待機位置
         self.move_arm_to(self.view_pose)
         self.play_voice("face_please_look.mp3")
-
-        self.face_recognition_done = False
-        self.video_recording_done = False
-        self.video_path = f"/home/jason9308/robot_ws/heart_rate/video/{identity_name}.avi"
-        if os.path.exists(self.video_path):
-            os.remove(self.video_path) 
-        self.video_writer = cv2.VideoWriter(
-            self.video_path,
-            cv2.VideoWriter_fourcc(*'XVID'),
-            30,
-            (640, 480)
-        )
-        self.recording_frames = 0
 
 
     def load_reference_image(self, img_path):
@@ -111,11 +100,26 @@ class FaceRecognitionNode(Node):
 
 
 
+    # def preprocess_face(self, aligned_face):
+    #     face = aligned_face / 255.0
+    #     face = np.transpose(face, (2, 0, 1))
+    #     face = np.expand_dims(face, axis=0)
+    #     return torch.tensor(face).float().to('cuda')
+
     def preprocess_face(self, aligned_face):
-        face = aligned_face / 255.0
+        # 轉成 YCrCb，對 Y（亮度）做 Histogram Equalization
+        ycrcb = cv2.cvtColor(aligned_face, cv2.COLOR_BGR2YCrCb)
+        y_channel, cr, cb = cv2.split(ycrcb)
+        y_eq = cv2.equalizeHist(y_channel)
+        ycrcb_eq = cv2.merge([y_eq, cr, cb])
+        face_eq = cv2.cvtColor(ycrcb_eq, cv2.COLOR_YCrCb2BGR)
+
+        # 正規化到 0~1 範圍，轉為 (C, H, W)，最後轉 torch tensor
+        face = face_eq / 255.0
         face = np.transpose(face, (2, 0, 1))
         face = np.expand_dims(face, axis=0)
         return torch.tensor(face).float().to('cuda')
+
 
     def get_embedding(self, face_img):
         aligned = self.align_face(face_img, 0, 0, face_img.shape[1], face_img.shape[0])
@@ -153,104 +157,91 @@ class FaceRecognitionNode(Node):
             # ❌ 若轉換失敗，顯示錯誤訊息
             self.get_logger().error(f"影像轉換失敗: {e}")
             return
-        
-        if not self.video_recording_done:
-            # ✅ 將當前影格寫入影片檔案
-            self.video_writer.write(frame)
-            self.recording_frames += 1
-            if self.recording_frames >= 300:
-                self.video_recording_done = True
-                self.video_writer.release()
-                self.get_logger().info("錄影結束，影片已儲存！")
-                cv2.putText(frame, "Recording complete.", (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                cv2.imshow("Face Recognition", frame)
-                cv2.waitKey(1000)  # 等待 3 秒
 
-        if not self.face_recognition_done:
-            # ✅ 使用 YOLO 模型進行人臉偵測
-            results = self.face_detector(frame)
+        # ✅ 使用 YOLO 模型進行人臉偵測
+        results = self.face_detector(frame)
 
-            # ❌ 若沒偵測到人臉，直接跳出
-            if not results or not results[0].boxes:
-                return
+        # ❌ 若沒偵測到人臉，直接跳出
+        if not results or not results[0].boxes:
+            return
 
-            # ✅ 在多個偵測框中，挑選面積最大的框（也就是離鏡頭最近的人臉）
-            max_area = 0
-            selected_box = None
-            for box in results[0].boxes:
-                x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())  # 取得框的座標
-                area = (x2 - x1) * (y2 - y1)  # 計算面積
-                if area > max_area:
-                    max_area = area
-                    selected_box = box  # 記錄最大框
+        # ✅ 在多個偵測框中，挑選面積最大的框（也就是離鏡頭最近的人臉）
+        max_area = 0
+        selected_box = None
+        for box in results[0].boxes:
+            x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())  # 取得框的座標
+            area = (x2 - x1) * (y2 - y1)  # 計算面積
+            if area > max_area:
+                max_area = area
+                selected_box = box  # 記錄最大框
 
-            if selected_box is None:
-                return
+        if selected_box is None:
+            return
 
-            # ✅ 從選中的最大人臉框中擷取資訊
-            x1, y1, x2, y2 = map(int, selected_box.xyxy[0].tolist())
-            confidence = selected_box.conf[0]  # YOLO 預測信心分數（未使用，但可以印出來 debug）
-            face_img = frame[y1:y2, x1:x2]  # 擷取人臉區域（可視為備用）
+        # ✅ 從選中的最大人臉框中擷取資訊
+        x1, y1, x2, y2 = map(int, selected_box.xyxy[0].tolist())
+        confidence = selected_box.conf[0]  # YOLO 預測信心分數（未使用，但可以印出來 debug）
+        face_img = frame[y1:y2, x1:x2]  # 擷取人臉區域（可視為備用）
 
-            # ✅ 進行人臉對齊（根據框位置 + dlib 特徵點對齊）
-            aligned_face = self.align_face(frame, x1, y1, x2, y2)
-            if aligned_face is None:
-                return  # 若對齊失敗則跳過這幀
+        # ✅ 進行人臉對齊（根據框位置 + dlib 特徵點對齊）
+        aligned_face = self.align_face(frame, x1, y1, x2, y2)
+        if aligned_face is None:
+            return  # 若對齊失敗則跳過這幀
 
-            # ✅ 前處理 + 轉成張量後送進 FaceNet 模型取得特徵向量
-            face_tensor = self.preprocess_face(aligned_face)
-            detected_embedding = self.face_recognizer(face_tensor).squeeze().detach().cpu().numpy()
+        # ✅ 前處理 + 轉成張量後送進 FaceNet 模型取得特徵向量
+        face_tensor = self.preprocess_face(aligned_face)
+        detected_embedding = self.face_recognizer(face_tensor).squeeze().detach().cpu().numpy()
 
-            # ✅ 與參考圖片進行 cosine similarity 比對
-            if self.reference_embedding is not None:
-                cosine_similarity = np.dot(self.reference_embedding, detected_embedding) / (
-                    np.linalg.norm(self.reference_embedding) * np.linalg.norm(detected_embedding)
-                )
-            else:
-                cosine_similarity = 0.0
+        # ✅ 與參考圖片進行 cosine similarity 比對
+        if self.reference_embedding is not None:
+            cosine_similarity = np.dot(self.reference_embedding, detected_embedding) / (
+                np.linalg.norm(self.reference_embedding) * np.linalg.norm(detected_embedding)
+            )
+        else:
+            cosine_similarity = 0.0
 
-            # ✅ 積分系統：取代傳統「連續幾次通過」的機制
-            if not hasattr(self, 'pass_score'):
-                self.pass_score = 0  # 初始化 pass_score，只做一次
+        # ✅ 積分系統：取代傳統「連續幾次通過」的機制
+        if not hasattr(self, 'pass_score'):
+            self.pass_score = 0  # 初始化 pass_score，只做一次
 
-            # ✅ 根據相似度調整分數（類似加權累積判斷）
-            if cosine_similarity > 0.70:
-                self.pass_score += 1  # 相似度高，加 2 分
-            elif cosine_similarity < 0.65:
-                self.pass_score -= 1  # 相似度低，扣 1 分
-            # 若在 0.65~0.70 之間，則 pass_score 不變
+        # ✅ 根據相似度調整分數（類似加權累積判斷）
+        if cosine_similarity > 0.70:
+            self.pass_score += 1  # 相似度高，加 2 分
+        elif cosine_similarity < 0.65:
+            self.pass_score -= 1  # 相似度低，扣 1 分
+        # 若在 0.65~0.70 之間，則 pass_score 不變
 
-            # ✅ 限制積分區間在 0～20 之間，避免爆表或變負數
-            self.pass_score = max(0, min(self.pass_score, 70))
+        # ✅ 限制積分區間在 0～20 之間，避免爆表或變負數
+        self.pass_score = max(0, min(self.pass_score, 70))
 
-            # ✅ 在畫面上標示：相似度 + 當前積分
-            label = f"Sim: {cosine_similarity:.2f} Score: {self.pass_score}"
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+        # ✅ 在畫面上標示：相似度 + 當前積分
+        label = f"Sim: {cosine_similarity:.2f} Score: {self.pass_score}"
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
-            # ✅ 如果積分達到門檻（10 分），則視為通過身分辨識
-            if self.pass_score >= 50:
-                
-                self.face_recognition_done = True
-                # 顯示通過畫面文字提示
-                success_msg = String()
-                success_msg.data = "身份確認成功"
-                self.result_pub.publish(success_msg)  # 發布訊息通知其他 node
-                self.get_logger().info("身份確認成功！")
-                cv2.putText(frame, "Access Granted!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                cv2.imshow("Face Recognition", frame)
-                cv2.waitKey(1000)  # 等待 3 秒
+        # ✅ 如果積分達到門檻（10 分），則視為通過身分辨識
+        if self.pass_score >= 50:
+            success_msg = String()
+            success_msg.data = "身份確認成功"
+            self.result_pub.publish(success_msg)  # 發布訊息通知其他 node
+            self.get_logger().info("身份確認成功！即將關閉節點...")
 
+            # 顯示通過畫面文字提示
+            cv2.putText(frame, "Access Granted!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.imshow("Face Recognition", frame)
+            # cv2.waitKey(2000)  # 等待 3 秒
 
-        if self.face_recognition_done and self.video_recording_done: 
-            
+            # 播放語音提示
+            self.play_voice("identity_confirmed.mp3")
+
+            # ✅ 清理：關閉畫面 + 訂閱、發布器、節點
             self.move_arm_to(self.idle_pose) # 移動robot arm到待機位置
-            
             cv2.destroyAllWindows()
             self.image_sub = None
             self.result_pub = None
             self.destroy_node()
             exit(0)  # ⚠️ 強制結束程式（可改為 rclpy.shutdown() 比較安全）
+
             return
 
         # ✅ 顯示即時辨識畫面

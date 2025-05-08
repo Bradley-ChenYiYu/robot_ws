@@ -1,0 +1,106 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-2d0231cf016f6e7fb616.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "navigation_server",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "navigate_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-navigate_node-a1a74977d2c79ae72c9f.json",
+					"name" : "navigate_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "navigate_test_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-navigate_test_node-abd337883fd3092cacec.json",
+					"name" : "navigate_test_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "navigate_to_pose_client::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-navigate_to_pose_client-ffd7d8cad2ab6b750b6e.json",
+					"name" : "navigate_to_pose_client",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "navigate_to_pose_service::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-navigate_to_pose_service-b59701eae340ad04eb40.json",
+					"name" : "navigate_to_pose_service",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "navigation_server_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-navigation_server_uninstall-d0b8c9f9384a2398f69e.json",
+					"name" : "navigation_server_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-08881fa5031613747992.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/jason9308/robot_ws/src/build/navigation_server",
+		"source" : "/home/jason9308/robot_ws/src/tracer_ros2/navigation_server"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

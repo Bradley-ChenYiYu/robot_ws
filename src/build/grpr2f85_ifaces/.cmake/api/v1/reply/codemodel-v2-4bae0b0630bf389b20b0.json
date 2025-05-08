@@ -1,0 +1,233 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-d016ed36347feb410b7f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				},
+				{
+					"build" : "grpr2f85_ifaces__py",
+					"jsonFile" : "directory-grpr2f85_ifaces__py-29f93a42ffd40f487f6d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/jason9308/robot_ws/src/build/grpr2f85_ifaces/grpr2f85_ifaces__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "grpr2f85_ifaces",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_grpr2f85_ifaces_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_grpr2f85_ifaces_egg-f1da76324ce7d199e946.json",
+					"name" : "ament_cmake_python_build_grpr2f85_ifaces_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_grpr2f85_ifaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_grpr2f85_ifaces-28cf273bc01cd2c318f4.json",
+					"name" : "ament_cmake_python_copy_grpr2f85_ifaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces-d0a6d229859e3731caeb.json",
+					"name" : "grpr2f85_ifaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__cpp-a1beca5cadb6a632f435.json",
+					"name" : "grpr2f85_ifaces__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "grpr2f85_ifaces__py::@f2abe3b3871a6c2fef85",
+					"jsonFile" : "target-grpr2f85_ifaces__py-6328e8e1bda7fe23aecc.json",
+					"name" : "grpr2f85_ifaces__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_generator_c-7e92b16a00fc8152edbb.json",
+					"name" : "grpr2f85_ifaces__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_generator_py-4cde2465810b1584d85d.json",
+					"name" : "grpr2f85_ifaces__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_c-7226ba7ac73f474812a4.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_c__pyext-a9468947e911cb0d21c4.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_cpp-1ab212668ee7c1729149.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_fastrtps_c-4727e1e71bee74fa5261.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_fastrtps_c__pyext-03d209c7d329203e947a.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_fastrtps_cpp-9b2506d4ac91d7d7f161.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_introspection_c-0ce203d8cba48a8e6724.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_introspection_c__pyext-146ddd52f1b7acb8b6d2.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces__rosidl_typesupport_introspection_cpp-fa7f848fa333a7ccecf1.json",
+					"name" : "grpr2f85_ifaces__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "grpr2f85_ifaces_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-grpr2f85_ifaces_uninstall-fdf7aa1d17ef2a93e3ec.json",
+					"name" : "grpr2f85_ifaces_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-120473f3e4d48c09682a.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/jason9308/robot_ws/src/build/grpr2f85_ifaces",
+		"source" : "/home/jason9308/robot_ws/src/my_2f85gripper/grpr2f85_ifaces"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

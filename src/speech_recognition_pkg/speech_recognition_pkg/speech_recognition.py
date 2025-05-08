@@ -14,6 +14,7 @@ import os
 from playsound import playsound
 import sys
 from std_msgs.msg import String
+import time
 
 class SpeechRecognitionNode(Node):
     def __init__(self):
@@ -41,11 +42,19 @@ class SpeechRecognitionNode(Node):
             10
         )
 
+        self.shutdown_sub = self.create_subscription(
+            String,
+            'shutdown_signal',
+            self.shutdown_callback,
+            10
+        )
+        self.shutdown = False
+
         # 確保 JSON 檔案擁有所有的權限
         self.set_file_permissions(self.json_file_path)
 
         # 開始語音處理
-        self.listen_and_process()
+        # self.listen_and_process()
 
     def set_file_permissions(self, file_path):
         try:
@@ -54,9 +63,14 @@ class SpeechRecognitionNode(Node):
         except Exception as e:
             self.get_logger().error(f"無法設置檔案權限: {e}")
 
-    def listen_and_process(self):
+    def listen_and_process(self, executor):
         while rclpy.ok():
-            rclpy.spin_once(self, timeout_sec=0.1)
+            executor.spin_once(timeout_sec=0.1)
+            if self.shutdown:
+                self.get_logger().info("關閉語音辨識...")
+                time.sleep(2)
+                break
+
             with sr.Microphone() as source:
                 
                 self.get_logger().info("請說話...")
@@ -64,21 +78,32 @@ class SpeechRecognitionNode(Node):
                 self.recognizer.adjust_for_ambient_noise(source)
                 self.recognizer.pause_threshold = 1.5
                 # self.recognizer.energy_threshold = 6000
+
+                playsound("/home/jason9308/robot_ws/sound/start_lower.mp3")
                 audio_data = self.recognizer.listen(source)
+                playsound("/home/jason9308/robot_ws/sound/finish_lower.mp3")
+                
+                
+                executor.spin_once(timeout_sec=0.1)
+                if self.shutdown:
+                    self.get_logger().info("關閉語音辨識...")
+                    time.sleep(2)
+                    break
 
                 try:
                     text = self.recognizer.recognize_google(audio_data, language="zh-TW")
                     self.get_logger().info(f"你說了: {text}")
 
-                    if "機器人" in text or "鐵柱" in text:
+                    if "機器人" in text or "鐵柱" in text or "協助" in text:
                         response = self.generate_json(text)
                         self.get_logger().info(f"生成的 JSON: {response}")
 
                         if self.extract_and_dump_json(response, self.json_file_path):
                             self.get_logger().info("JSON 存檔成功")
                             self.play_voice("json_received.mp3")
-                            self.destroy_node()  # 關閉節點
-                            rclpy.shutdown()
+                            break
+                            # self.destroy_node()  # 關閉節點
+                            # rclpy.shutdown()
                             # sys.exit(0)
                         else:
                             self.get_logger().error("JSON 無效，請重新輸入")
@@ -88,9 +113,11 @@ class SpeechRecognitionNode(Node):
 
                 except sr.UnknownValueError:
                     self.get_logger().error("無法識別語音，請再試一次")
-                    self.play_voice("speech_not_understood.mp3")
+                    # self.play_voice("speech_not_understood.mp3")
                 except sr.RequestError as e:
                     self.get_logger().error(f"語音請求失敗: {e}")
+
+            executor.spin_once(timeout_sec=0.1) # spin once 讓其他訂閱者有機會接收訊息
 
     def extract_time_from_text(self, text):
 
@@ -144,28 +171,34 @@ class SpeechRecognitionNode(Node):
 
             [
                 {{
-                    "command": "<one of the following only: send medicine, go home, chat, video call>",
-                    "target" : "<one of the following only: dad, mom, child, grandpa, grandma, NULL>",
+                    "command": "<one of the following only: send medicine, go home, chat, video call, shutdown>",
+                    "target" : "<one of the following only: dad, mom, child, grandpa, grandma, Jason, Charlie, NULL>",
                     "time": "{time_to_use}"
                 }}
             ]
 
             - Only respond in valid JSON format.
-            - The command must be one of the following (do not generate anything else):
+            - The command must be one of the following (do not generate anything else, command can not be NULL!!):
                 - send medicine
                 - go home
                 - chat
                 - video call
+                - shutdown
             - The target must be one of the following (do not generate anything else):
                 - dad
                 - mom
                 - child
                 - grandpa
                 - grandma
+                - Jason
+                - Charlie
                 - NULL
             - If `command` is "send medicine", target **must not** be NULL.
-            - If `command` is "go home", "chat", or "video call", target **can** be NULL.
+            - If `command` is "go home", "chat", "video call", or "shutdown", target **can** be NULL.
             - 注意：「送藥」這個詞在語音辨識中可能被誤聽為「重要」，如果 instruction 中出現「重要」，請將 command 判斷為 "send medicine"。
+            - 注意 :「機器人」 或是 「鐵柱」 是我們的機器人名稱,有時候「鐵柱」會被聽成「協助」,聽到這幾個詞請當作機器人名稱。
+            - 注意 : 聽到 傑森 或發音相近的詞的時候 請當作目標 Jason, 聽到查理 或發音相近的詞的時候 請當作目標 Charlie
+
             """
 
         response = openai.ChatCompletion.create(
@@ -223,23 +256,34 @@ class SpeechRecognitionNode(Node):
     def modified_callback(self, msg):
         self.get_logger().info(f"收到 JSON 修改通知: {msg.data}")
         if msg.data == "true":
-            self.destroy_node()  # 關閉節點
-            rclpy.shutdown()
+            # self.destroy_node()  # 關閉節點
             # sys.exit(0)
+            # rclpy.shutdown()
+            self.shutdown = True
 
-    
+    def shutdown_callback(self, msg):
+        self.get_logger().info(f"收到關閉通知: {msg.data}")
+        if msg.data == "shutdown": 
+            # self.destroy_node() # 關閉節點
+            # sys.exit(0)
+            # rclpy.shutdown()
+            self.shutdown = True
+
 
 def main(args=None):
     rclpy.init(args=args)
+    from rclpy.executors import SingleThreadedExecutor
+
     node = SpeechRecognitionNode()
-    
-    if rclpy.ok():
-        rclpy.spin(node)
+    executor = SingleThreadedExecutor()
+    executor.add_node(node)
 
-    # rclpy.shutdown()
+    try:
+        node.listen_and_process(executor)
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
-    # for i, name in enumerate(sr.Microphone.list_microphone_names()):
-    #     print(f"{i}: {name}")
 
 if __name__ == "__main__":
     main()

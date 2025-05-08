@@ -1,0 +1,9 @@
+{
+  "package_name": "lslidar_msgs",
+  "non_idl_tuples": [
+    "/home/jason9308/robot_ws/src/lslidar_ros2/lslidar_msgs:msg/LslidarPacket.msg",
+    "/home/jason9308/robot_ws/src/lslidar_ros2/lslidar_msgs:msg/LslidarPoint.msg",
+    "/home/jason9308/robot_ws/src/lslidar_ros2/lslidar_msgs:msg/LslidarScan.msg",
+    "/home/jason9308/robot_ws/src/lslidar_ros2/lslidar_msgs:srv/Lslidarcontrol.srv"
+  ]
+}

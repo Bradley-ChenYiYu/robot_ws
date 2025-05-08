@@ -1,0 +1,37 @@
+[8.049s] Invoking command in '/home/jason9308/robot_ws/src/speech_recognition_pkg': PYTHONPATH=/home/jason9308/robot_ws/src/build/speech_recognition_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/speech_recognition_pkg build --build-base /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build install --record /home/jason9308/robot_ws/src/build/speech_recognition_pkg/install.log --single-version-externally-managed install_data
+[12.278s] running egg_info
+[12.305s] creating ../build/speech_recognition_pkg/speech_recognition_pkg.egg-info
+[12.305s] writing ../build/speech_recognition_pkg/speech_recognition_pkg.egg-info/PKG-INFO
+[12.305s] writing dependency_links to ../build/speech_recognition_pkg/speech_recognition_pkg.egg-info/dependency_links.txt
+[12.305s] writing entry points to ../build/speech_recognition_pkg/speech_recognition_pkg.egg-info/entry_points.txt
+[12.305s] writing requirements to ../build/speech_recognition_pkg/speech_recognition_pkg.egg-info/requires.txt
+[12.305s] writing top-level names to ../build/speech_recognition_pkg/speech_recognition_pkg.egg-info/top_level.txt
+[12.305s] writing manifest file '../build/speech_recognition_pkg/speech_recognition_pkg.egg-info/SOURCES.txt'
+[12.326s] reading manifest file '../build/speech_recognition_pkg/speech_recognition_pkg.egg-info/SOURCES.txt'
+[12.330s] writing manifest file '../build/speech_recognition_pkg/speech_recognition_pkg.egg-info/SOURCES.txt'
+[12.330s] running build
+[12.330s] running build_py
+[12.340s] creating /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build
+[12.340s] creating /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build/lib
+[12.340s] creating /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build/lib/speech_recognition_pkg
+[12.340s] copying speech_recognition_pkg/__init__.py -> /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build/lib/speech_recognition_pkg
+[12.340s] copying speech_recognition_pkg/speech_recognition.py -> /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build/lib/speech_recognition_pkg
+[12.340s] running install
+[12.349s] running install_lib
+[12.349s] creating /home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/python3.10/site-packages/speech_recognition_pkg
+[12.376s] copying /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build/lib/speech_recognition_pkg/__init__.py -> /home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/python3.10/site-packages/speech_recognition_pkg
+[12.376s] copying /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build/lib/speech_recognition_pkg/speech_recognition.py -> /home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/python3.10/site-packages/speech_recognition_pkg
+[12.377s] byte-compiling /home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/python3.10/site-packages/speech_recognition_pkg/__init__.py to __init__.cpython-310.pyc
+[12.377s] byte-compiling /home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/python3.10/site-packages/speech_recognition_pkg/speech_recognition.py to speech_recognition.cpython-310.pyc
+[12.377s] running install_data
+[12.377s] creating /home/jason9308/robot_ws/src/install/speech_recognition_pkg/share/ament_index
+[12.382s] creating /home/jason9308/robot_ws/src/install/speech_recognition_pkg/share/ament_index/resource_index
+[12.382s] creating /home/jason9308/robot_ws/src/install/speech_recognition_pkg/share/ament_index/resource_index/packages
+[12.382s] copying resource/speech_recognition_pkg -> /home/jason9308/robot_ws/src/install/speech_recognition_pkg/share/ament_index/resource_index/packages
+[12.382s] copying package.xml -> /home/jason9308/robot_ws/src/install/speech_recognition_pkg/share/speech_recognition_pkg
+[12.383s] running install_egg_info
+[12.401s] Copying ../build/speech_recognition_pkg/speech_recognition_pkg.egg-info to /home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/python3.10/site-packages/speech_recognition_pkg-0.0.0-py3.10.egg-info
+[12.403s] running install_scripts
+[12.565s] Installing speech_recognition script to /home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/speech_recognition_pkg
+[12.568s] writing list of installed files to '/home/jason9308/robot_ws/src/build/speech_recognition_pkg/install.log'
+[16.623s] Invoked command in '/home/jason9308/robot_ws/src/speech_recognition_pkg' returned '0': PYTHONPATH=/home/jason9308/robot_ws/src/build/speech_recognition_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/speech_recognition_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/speech_recognition_pkg build --build-base /home/jason9308/robot_ws/src/build/speech_recognition_pkg/build install --record /home/jason9308/robot_ws/src/build/speech_recognition_pkg/install.log --single-version-externally-managed install_data

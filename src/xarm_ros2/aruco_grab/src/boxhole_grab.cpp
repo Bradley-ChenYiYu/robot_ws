@@ -114,7 +114,7 @@ private:
     rclcpp::Time last_hand_time_;
     int hand_stable_counter_ = 0;
     bool hand_delivery_triggered_ = false;
-    const double hand_stability_threshold_ = 20.0; // mm
+    const double hand_stability_threshold_ = 35.0; // mm
     void handCallback(const std_msgs::msg::Float32MultiArray::SharedPtr msg);
     void performHandDelivery(const cv::Point3f& hand_pos);
 
@@ -331,9 +331,9 @@ void BoxHoleXArmControl::handCallback(const std_msgs::msg::Float32MultiArray::Sh
         double base_z = hand_base_pos.at<double>(2);
     
         // ==== Base frame 座標限制 ====
-        bool in_range = (base_x > 150.0 && base_x < 385.0) &&
-                        (base_y > -200.0 && base_y < 200.0) &&
-                        (base_z > 200.0 && base_z < 600.0);
+        bool in_range = (base_x > 100.0 && base_x < 400.0) &&
+                        (base_y > -250.0 && base_y < 250.0) &&
+                        (base_z > 50.0 && base_z < 600.0);
     
         if (!in_range) {
             RCLCPP_WARN(this->get_logger(),
@@ -533,7 +533,14 @@ void BoxHoleXArmControl::performGrasping() {
     hand_delivery_triggered_ = false;
     hand_stable_counter_ = 0;
     RCLCPP_INFO(this->get_logger(), "🔄 啟動 hand_detection node...");
-    std::string command = "nohup /bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run hand_detection yolo_hand_detector' > /dev/null 2>&1 &";
+
+    // std::string command = "nohup /bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run hand_detection yolo_hand_detector' > /dev/null 2>&1 &";
+    std::string command = 
+    "gnome-terminal --title=\"HandDetector\" -- bash -c '"
+    "source ~/robot_ws/install/setup.bash && "
+    "ros2 run hand_detection yolo_hand_detector"
+    "'";
+
     int ret = std::system(command.c_str());
     if (ret == 0) {
         RCLCPP_INFO(this->get_logger(), "✅ hand_detection node 啟動成功");
@@ -554,7 +561,7 @@ void BoxHoleXArmControl::performGrasping() {
         rclcpp::sleep_for(std::chrono::milliseconds(100));  // 每 100ms 等待一次
     }
     // std::system("pkill -f hand_detection_node");
-    std::system("pkill -f yolo_hand_detector");
+    std::system("pkill -2 -f yolo_hand_detector");
 
     // // 1. 將手部點從 camera → EE
     // cv::Mat hand_camera_pos = (cv::Mat_<double>(3, 1) << last_hand_pos_.x, last_hand_pos_.y, last_hand_pos_.z);

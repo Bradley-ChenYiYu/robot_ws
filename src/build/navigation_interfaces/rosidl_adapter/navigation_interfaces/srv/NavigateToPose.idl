@@ -1,0 +1,23 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from navigation_interfaces/srv/NavigateToPose.srv
+// generated code does not contain a copyright notice
+
+
+module navigation_interfaces {
+  module srv {
+    struct NavigateToPose_Request {
+      float x;
+
+      float y;
+
+      float z;
+
+      float w;
+    };
+    struct NavigateToPose_Response {
+      boolean success;
+
+      string message;
+    };
+  };
+};

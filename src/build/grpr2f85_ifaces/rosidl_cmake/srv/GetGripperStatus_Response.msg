@@ -1,0 +1,4 @@
+
+bool ok 0
+uint8 status_code
+string result ''

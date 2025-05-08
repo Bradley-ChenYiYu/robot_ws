@@ -1,0 +1,11 @@
+source;share/grpr2f85_ifaces/hook/cmake_prefix_path.ps1
+source;share/grpr2f85_ifaces/hook/cmake_prefix_path.dsv
+source;share/grpr2f85_ifaces/hook/cmake_prefix_path.sh
+source;share/grpr2f85_ifaces/hook/ld_library_path_lib.ps1
+source;share/grpr2f85_ifaces/hook/ld_library_path_lib.dsv
+source;share/grpr2f85_ifaces/hook/ld_library_path_lib.sh
+source;share/grpr2f85_ifaces/local_setup.bash
+source;share/grpr2f85_ifaces/local_setup.dsv
+source;share/grpr2f85_ifaces/local_setup.ps1
+source;share/grpr2f85_ifaces/local_setup.sh
+source;share/grpr2f85_ifaces/local_setup.zsh

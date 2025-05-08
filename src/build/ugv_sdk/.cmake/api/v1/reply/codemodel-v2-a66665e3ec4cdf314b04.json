@@ -1,0 +1,248 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-e88d23d1088f9bf428d0.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.1"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"build" : "sample",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"jsonFile" : "directory-sample-Release-7aef86e15b8d60915f51.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "sample"
+				},
+				{
+					"build" : "sample/scout_demo",
+					"jsonFile" : "directory-sample.scout_demo-Release-c82089a02fb744b6e285.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "sample/scout_demo",
+					"targetIndexes" : 
+					[
+						5,
+						6
+					]
+				},
+				{
+					"build" : "sample/tracer_demo",
+					"jsonFile" : "directory-sample.tracer_demo-Release-ad6ec0c08c7f7f667c7d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "sample/tracer_demo",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "sample/ranger_demo",
+					"jsonFile" : "directory-sample.ranger_demo-Release-090d051a152b6a0568dd.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "sample/ranger_demo",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "sample/bunker_demo",
+					"jsonFile" : "directory-sample.bunker_demo-Release-45fb8aeb00b905163f53.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "sample/bunker_demo",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "sample/hunter_demo",
+					"jsonFile" : "directory-sample.hunter_demo-Release-132cf7b4bfeb961f564b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "sample/hunter_demo",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "sample/utils_demo",
+					"jsonFile" : "directory-sample.utils_demo-Release-7c39241a5f6dae967bcc.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "sample/utils_demo",
+					"targetIndexes" : 
+					[
+						2,
+						4
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"name" : "ugv_sdk",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 5,
+					"id" : "demo_bunker_robot::@fd0d6255ffeb36cba202",
+					"jsonFile" : "target-demo_bunker_robot-Release-73adf77445a4c0e94b87.json",
+					"name" : "demo_bunker_robot",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "demo_hunter_robot::@f98fb22fc6b0cef7bf27",
+					"jsonFile" : "target-demo_hunter_robot-Release-ea77d0791272bae6831d.json",
+					"name" : "demo_hunter_robot",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "demo_protocol_detector::@d1f6d7610183206e7a8b",
+					"jsonFile" : "target-demo_protocol_detector-Release-5e13f689a974c4a106fb.json",
+					"name" : "demo_protocol_detector",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "demo_ranger_robot::@38accfcf609666128267",
+					"jsonFile" : "target-demo_ranger_robot-Release-952b19e288f5b02f0571.json",
+					"name" : "demo_ranger_robot",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "demo_robot_version::@d1f6d7610183206e7a8b",
+					"jsonFile" : "target-demo_robot_version-Release-6afa8e3d19f5c11bd851.json",
+					"name" : "demo_robot_version",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "demo_scout_mini_omni_robot::@f39ed475159a18fc4837",
+					"jsonFile" : "target-demo_scout_mini_omni_robot-Release-f191058e02960b559e1e.json",
+					"name" : "demo_scout_mini_omni_robot",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "demo_scout_robot::@f39ed475159a18fc4837",
+					"jsonFile" : "target-demo_scout_robot-Release-fbe5b690575e99ed3ab6.json",
+					"name" : "demo_scout_robot",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "demo_tracer_robot::@407a60817adfeae91710",
+					"jsonFile" : "target-demo_tracer_robot-Release-8e193a9b7ae2346b1d23.json",
+					"name" : "demo_tracer_robot",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ugv_sdk::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ugv_sdk-Release-7d7f17e913912f738526.json",
+					"name" : "ugv_sdk",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/jason9308/robot_ws/src/build/ugv_sdk",
+		"source" : "/home/jason9308/robot_ws/src/ugv_sdk"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

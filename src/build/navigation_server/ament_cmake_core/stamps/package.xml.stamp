@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>navigation_server</name>
+  <version>0.0.1</version>
+  <description>Navigation server for sending goal to Nav2</description>
+  <maintainer email="jason9308@gmail.com">jason9308</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- 這是建置工具 (ament_cmake) -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- 這些是執行時 (runtime) 依賴 -->
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>nav2_msgs</depend>
+  <depend>std_msgs</depend>
+  <!-- <depend>navigation_interfaces</depend>  **確保這行存在** -->
+
+  <exec_depend>navigation_interfaces</exec_depend>  <!-- **確保執行時也能找到 `navigation_interfaces`** -->
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

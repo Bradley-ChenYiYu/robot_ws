@@ -1,0 +1,37 @@
+[8.047s] Invoking command in '/home/jason9308/robot_ws/src/xarm_ros2/calibration_cross': PYTHONPATH=/home/jason9308/robot_ws/src/build/calibration_cross/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/calibration_cross/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/calibration_cross build --build-base /home/jason9308/robot_ws/src/build/calibration_cross/build install --record /home/jason9308/robot_ws/src/build/calibration_cross/install.log --single-version-externally-managed install_data
+[11.008s] running egg_info
+[11.009s] creating ../../build/calibration_cross/calibration_cross.egg-info
+[11.009s] writing ../../build/calibration_cross/calibration_cross.egg-info/PKG-INFO
+[11.009s] writing dependency_links to ../../build/calibration_cross/calibration_cross.egg-info/dependency_links.txt
+[11.010s] writing entry points to ../../build/calibration_cross/calibration_cross.egg-info/entry_points.txt
+[11.010s] writing requirements to ../../build/calibration_cross/calibration_cross.egg-info/requires.txt
+[11.010s] writing top-level names to ../../build/calibration_cross/calibration_cross.egg-info/top_level.txt
+[11.011s] writing manifest file '../../build/calibration_cross/calibration_cross.egg-info/SOURCES.txt'
+[11.014s] reading manifest file '../../build/calibration_cross/calibration_cross.egg-info/SOURCES.txt'
+[11.015s] writing manifest file '../../build/calibration_cross/calibration_cross.egg-info/SOURCES.txt'
+[11.015s] running build
+[11.016s] running build_py
+[11.016s] creating /home/jason9308/robot_ws/src/build/calibration_cross/build
+[11.016s] creating /home/jason9308/robot_ws/src/build/calibration_cross/build/lib
+[11.017s] creating /home/jason9308/robot_ws/src/build/calibration_cross/build/lib/calibration_cross
+[11.017s] copying calibration_cross/__init__.py -> /home/jason9308/robot_ws/src/build/calibration_cross/build/lib/calibration_cross
+[11.017s] copying calibration_cross/calibration_cross.py -> /home/jason9308/robot_ws/src/build/calibration_cross/build/lib/calibration_cross
+[11.027s] running install
+[11.028s] running install_lib
+[11.044s] creating /home/jason9308/robot_ws/src/install/calibration_cross/lib/python3.10/site-packages/calibration_cross
+[11.044s] copying /home/jason9308/robot_ws/src/build/calibration_cross/build/lib/calibration_cross/__init__.py -> /home/jason9308/robot_ws/src/install/calibration_cross/lib/python3.10/site-packages/calibration_cross
+[11.044s] copying /home/jason9308/robot_ws/src/build/calibration_cross/build/lib/calibration_cross/calibration_cross.py -> /home/jason9308/robot_ws/src/install/calibration_cross/lib/python3.10/site-packages/calibration_cross
+[11.060s] byte-compiling /home/jason9308/robot_ws/src/install/calibration_cross/lib/python3.10/site-packages/calibration_cross/__init__.py to __init__.cpython-310.pyc
+[11.086s] byte-compiling /home/jason9308/robot_ws/src/install/calibration_cross/lib/python3.10/site-packages/calibration_cross/calibration_cross.py to calibration_cross.cpython-310.pyc
+[11.086s] running install_data
+[11.086s] creating /home/jason9308/robot_ws/src/install/calibration_cross/share/ament_index
+[11.086s] creating /home/jason9308/robot_ws/src/install/calibration_cross/share/ament_index/resource_index
+[11.086s] creating /home/jason9308/robot_ws/src/install/calibration_cross/share/ament_index/resource_index/packages
+[11.088s] copying resource/calibration_cross -> /home/jason9308/robot_ws/src/install/calibration_cross/share/ament_index/resource_index/packages
+[11.088s] copying package.xml -> /home/jason9308/robot_ws/src/install/calibration_cross/share/calibration_cross
+[11.088s] running install_egg_info
+[11.098s] Copying ../../build/calibration_cross/calibration_cross.egg-info to /home/jason9308/robot_ws/src/install/calibration_cross/lib/python3.10/site-packages/calibration_cross-0.0.0-py3.10.egg-info
+[11.112s] running install_scripts
+[11.457s] Installing calibration_cross script to /home/jason9308/robot_ws/src/install/calibration_cross/lib/calibration_cross
+[11.472s] writing list of installed files to '/home/jason9308/robot_ws/src/build/calibration_cross/install.log'
+[12.429s] Invoked command in '/home/jason9308/robot_ws/src/xarm_ros2/calibration_cross' returned '0': PYTHONPATH=/home/jason9308/robot_ws/src/build/calibration_cross/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/calibration_cross/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/calibration_cross build --build-base /home/jason9308/robot_ws/src/build/calibration_cross/build install --record /home/jason9308/robot_ws/src/build/calibration_cross/install.log --single-version-externally-managed install_data

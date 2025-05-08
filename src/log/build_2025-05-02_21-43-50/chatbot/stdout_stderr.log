@@ -1,0 +1,35 @@
+running egg_info
+creating ../build/chatbot/chatbot.egg-info
+writing ../build/chatbot/chatbot.egg-info/PKG-INFO
+writing dependency_links to ../build/chatbot/chatbot.egg-info/dependency_links.txt
+writing entry points to ../build/chatbot/chatbot.egg-info/entry_points.txt
+writing requirements to ../build/chatbot/chatbot.egg-info/requires.txt
+writing top-level names to ../build/chatbot/chatbot.egg-info/top_level.txt
+writing manifest file '../build/chatbot/chatbot.egg-info/SOURCES.txt'
+reading manifest file '../build/chatbot/chatbot.egg-info/SOURCES.txt'
+writing manifest file '../build/chatbot/chatbot.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/jason9308/robot_ws/src/build/chatbot/build
+creating /home/jason9308/robot_ws/src/build/chatbot/build/lib
+creating /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot
+copying chatbot/__init__.py -> /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot
+copying chatbot/chatbot_node.py -> /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot
+running install
+running install_lib
+creating /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot
+copying /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot/__init__.py -> /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot
+copying /home/jason9308/robot_ws/src/build/chatbot/build/lib/chatbot/chatbot_node.py -> /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot
+byte-compiling /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot/chatbot_node.py to chatbot_node.cpython-310.pyc
+running install_data
+creating /home/jason9308/robot_ws/src/install/chatbot/share/ament_index
+creating /home/jason9308/robot_ws/src/install/chatbot/share/ament_index/resource_index
+creating /home/jason9308/robot_ws/src/install/chatbot/share/ament_index/resource_index/packages
+copying resource/chatbot -> /home/jason9308/robot_ws/src/install/chatbot/share/ament_index/resource_index/packages
+copying package.xml -> /home/jason9308/robot_ws/src/install/chatbot/share/chatbot
+running install_egg_info
+Copying ../build/chatbot/chatbot.egg-info to /home/jason9308/robot_ws/src/install/chatbot/lib/python3.10/site-packages/chatbot-0.0.0-py3.10.egg-info
+running install_scripts
+Installing chatbot_node script to /home/jason9308/robot_ws/src/install/chatbot/lib/chatbot
+writing list of installed files to '/home/jason9308/robot_ws/src/build/chatbot/install.log'

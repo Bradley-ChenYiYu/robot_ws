@@ -1,0 +1,40 @@
+[6.493s] Invoking command in '/home/jason9308/robot_ws/src/tmr_ros2/tm_simulation_node/tm_simulation_node': PYTHONPATH=/home/jason9308/robot_ws/src/build/tm_simulation_node/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/tm_simulation_node build --build-base /home/jason9308/robot_ws/src/build/tm_simulation_node/build install --record /home/jason9308/robot_ws/src/build/tm_simulation_node/install.log --single-version-externally-managed install_data
+[7.574s] running egg_info
+[7.575s] creating ../../../build/tm_simulation_node/tm_simulation_node.egg-info
+[7.575s] writing ../../../build/tm_simulation_node/tm_simulation_node.egg-info/PKG-INFO
+[7.576s] writing dependency_links to ../../../build/tm_simulation_node/tm_simulation_node.egg-info/dependency_links.txt
+[7.576s] writing entry points to ../../../build/tm_simulation_node/tm_simulation_node.egg-info/entry_points.txt
+[7.576s] writing requirements to ../../../build/tm_simulation_node/tm_simulation_node.egg-info/requires.txt
+[7.576s] writing top-level names to ../../../build/tm_simulation_node/tm_simulation_node.egg-info/top_level.txt
+[7.581s] writing manifest file '../../../build/tm_simulation_node/tm_simulation_node.egg-info/SOURCES.txt'
+[7.581s] reading manifest file '../../../build/tm_simulation_node/tm_simulation_node.egg-info/SOURCES.txt'
+[7.582s] writing manifest file '../../../build/tm_simulation_node/tm_simulation_node.egg-info/SOURCES.txt'
+[7.582s] running build
+[7.582s] running build_py
+[7.583s] creating /home/jason9308/robot_ws/src/build/tm_simulation_node/build
+[7.583s] creating /home/jason9308/robot_ws/src/build/tm_simulation_node/build/lib
+[7.583s] creating /home/jason9308/robot_ws/src/build/tm_simulation_node/build/lib/tm_simulation_node
+[7.583s] copying tm_simulation_node/control_joint_1to8.py -> /home/jason9308/robot_ws/src/build/tm_simulation_node/build/lib/tm_simulation_node
+[7.583s] copying tm_simulation_node/__init__.py -> /home/jason9308/robot_ws/src/build/tm_simulation_node/build/lib/tm_simulation_node
+[7.584s] copying tm_simulation_node/tm_simulation_node.py -> /home/jason9308/robot_ws/src/build/tm_simulation_node/build/lib/tm_simulation_node
+[7.589s] running install
+[7.589s] running install_lib
+[7.589s] creating /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages/tm_simulation_node
+[7.590s] copying /home/jason9308/robot_ws/src/build/tm_simulation_node/build/lib/tm_simulation_node/control_joint_1to8.py -> /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages/tm_simulation_node
+[7.590s] copying /home/jason9308/robot_ws/src/build/tm_simulation_node/build/lib/tm_simulation_node/__init__.py -> /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages/tm_simulation_node
+[7.590s] copying /home/jason9308/robot_ws/src/build/tm_simulation_node/build/lib/tm_simulation_node/tm_simulation_node.py -> /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages/tm_simulation_node
+[7.590s] byte-compiling /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages/tm_simulation_node/control_joint_1to8.py to control_joint_1to8.cpython-310.pyc
+[7.590s] byte-compiling /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages/tm_simulation_node/__init__.py to __init__.cpython-310.pyc
+[7.590s] byte-compiling /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages/tm_simulation_node/tm_simulation_node.py to tm_simulation_node.cpython-310.pyc
+[7.598s] running install_data
+[7.598s] creating /home/jason9308/robot_ws/src/install/tm_simulation_node/share/ament_index
+[7.599s] creating /home/jason9308/robot_ws/src/install/tm_simulation_node/share/ament_index/resource_index
+[7.599s] creating /home/jason9308/robot_ws/src/install/tm_simulation_node/share/ament_index/resource_index/packages
+[7.599s] copying resource/tm_simulation_node -> /home/jason9308/robot_ws/src/install/tm_simulation_node/share/ament_index/resource_index/packages
+[7.599s] copying package.xml -> /home/jason9308/robot_ws/src/install/tm_simulation_node/share/tm_simulation_node
+[7.599s] running install_egg_info
+[7.599s] Copying ../../../build/tm_simulation_node/tm_simulation_node.egg-info to /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages/tm_simulation_node-0.0.0-py3.10.egg-info
+[7.600s] running install_scripts
+[7.658s] Installing tm_simulation_node script to /home/jason9308/robot_ws/src/install/tm_simulation_node/lib/tm_simulation_node
+[7.658s] writing list of installed files to '/home/jason9308/robot_ws/src/build/tm_simulation_node/install.log'
+[7.713s] Invoked command in '/home/jason9308/robot_ws/src/tmr_ros2/tm_simulation_node/tm_simulation_node' returned '0': PYTHONPATH=/home/jason9308/robot_ws/src/build/tm_simulation_node/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jason9308/robot_ws/src/install/tm_simulation_node/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/tm_simulation_node build --build-base /home/jason9308/robot_ws/src/build/tm_simulation_node/build install --record /home/jason9308/robot_ws/src/build/tm_simulation_node/install.log --single-version-externally-managed install_data

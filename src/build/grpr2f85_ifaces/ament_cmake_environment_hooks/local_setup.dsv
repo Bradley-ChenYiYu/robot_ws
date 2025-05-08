@@ -1,0 +1,4 @@
+source;share/grpr2f85_ifaces/environment/ament_prefix_path.sh
+source;share/grpr2f85_ifaces/environment/library_path.sh
+source;share/grpr2f85_ifaces/environment/path.sh
+source;share/grpr2f85_ifaces/environment/pythonpath.sh

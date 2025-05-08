@@ -1,0 +1,4 @@
+source;share/json_file_watcher/local_setup.bash
+source;share/json_file_watcher/local_setup.dsv
+source;share/json_file_watcher/local_setup.sh
+source;share/json_file_watcher/local_setup.zsh
