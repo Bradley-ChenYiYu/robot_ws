@@ -1,3 +1,0 @@
-[console_scripts]
-write_pose = write_pose.write_pose:main
-

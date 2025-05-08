@@ -1,3 +1,0 @@
-[console_scripts]
-tm_simulation_node = tm_simulation_node.tm_simulation_node:main
-

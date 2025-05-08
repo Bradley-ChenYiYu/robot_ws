@@ -1,3 +1,0 @@
-[console_scripts]
-my_2f85gripper_py = my_2f85gripper_py.my_2f85_gripper:main
-

@@ -1,3 +1,0 @@
-[console_scripts]
-calibration_cross = calibration_cross.calibration_cross:main
-

@@ -1,3 +1,0 @@
-[console_scripts]
-speech_recognition = speech_recognition_pkg.speech_recognition:main
-

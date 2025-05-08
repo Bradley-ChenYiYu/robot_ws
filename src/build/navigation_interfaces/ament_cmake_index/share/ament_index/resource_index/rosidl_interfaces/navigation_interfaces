@@ -1,4 +1,0 @@
-srv/NavigateToPose.idl
-srv/NavigateToPose.srv
-srv/NavigateToPose_Request.msg
-srv/NavigateToPose_Response.msg

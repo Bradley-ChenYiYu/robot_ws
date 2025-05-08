@@ -1,9 +1,0 @@
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/uninstall.dir
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/xarm_description_uninstall.dir
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/test.dir
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/edit_cache.dir
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/rebuild_cache.dir
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/list_install_components.dir
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/install.dir
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/install/local.dir
-/home/jason9308/robot_ws/src/build/xarm_description/CMakeFiles/install/strip.dir

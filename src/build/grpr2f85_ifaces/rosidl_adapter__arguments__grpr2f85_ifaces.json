@@ -1,8 +1,0 @@
-{
-  "package_name": "grpr2f85_ifaces",
-  "non_idl_tuples": [
-    "/home/jason9308/robot_ws/src/my_2f85gripper/grpr2f85_ifaces:srv/Reset.srv",
-    "/home/jason9308/robot_ws/src/my_2f85gripper/grpr2f85_ifaces:srv/GetGripperStatus.srv",
-    "/home/jason9308/robot_ws/src/my_2f85gripper/grpr2f85_ifaces:srv/SetGripperState.srv"
-  ]
-}

@@ -1,3 +1,0 @@
-[console_scripts]
-chatbot_node = chatbot.chatbot_node:main
-

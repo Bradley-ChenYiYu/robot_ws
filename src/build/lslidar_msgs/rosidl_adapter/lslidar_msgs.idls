@@ -1,4 +1,0 @@
-/home/jason9308/robot_ws/src/build/lslidar_msgs/rosidl_adapter/lslidar_msgs:msg/LslidarPacket.idl
-/home/jason9308/robot_ws/src/build/lslidar_msgs/rosidl_adapter/lslidar_msgs:msg/LslidarPoint.idl
-/home/jason9308/robot_ws/src/build/lslidar_msgs/rosidl_adapter/lslidar_msgs:msg/LslidarScan.idl
-/home/jason9308/robot_ws/src/build/lslidar_msgs/rosidl_adapter/lslidar_msgs:srv/Lslidarcontrol.idl

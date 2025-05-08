@@ -1,4 +1,0 @@
-[console_scripts]
-camera = face_recognition.camera:main
-face_recognition = face_recognition.face_recognition:main
-

@@ -1,6 +1,0 @@
-{
-  "package_name": "techman_robot_msgs",
-  "non_idl_tuples": [
-    "/home/jason9308/robot_ws/src/tmr_ros2/techman_robot_msgs:srv/TechmanRobotCommand.srv"
-  ]
-}

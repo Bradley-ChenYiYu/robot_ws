@@ -1,6 +1,0 @@
-source;share/calibration_cross/hook/pythonpath.ps1
-source;share/calibration_cross/hook/pythonpath.dsv
-source;share/calibration_cross/hook/pythonpath.sh
-source;share/calibration_cross/hook/ament_prefix_path.ps1
-source;share/calibration_cross/hook/ament_prefix_path.dsv
-source;share/calibration_cross/hook/ament_prefix_path.sh
