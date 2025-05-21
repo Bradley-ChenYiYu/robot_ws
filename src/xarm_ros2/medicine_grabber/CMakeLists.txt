@@ -15,6 +15,7 @@ find_package(xarm_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(std_msgs REQUIRED)
 
 # === [Include directories] ===
 include_directories(

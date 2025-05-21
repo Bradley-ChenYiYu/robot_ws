@@ -34,6 +34,9 @@ class SpeechRecognitionNode(Node):
         # JSON 存放路徑
         self.json_file_path = "/home/jason9308/robot_ws/command_jason/output.json"
 
+        # 觸發詞
+        self.full_trigger_words = ["鐵柱", "鐵注", "鐵住", "鐵助", "鐵駐", "鐵註", "鐵祝", "鐵著", "鐵蛀", "鐵鑄", "鐵炷", "鐵佇"]
+
         # JSON modified topic 訂閱
         self.modified_sub = self.create_subscription(
             String,
@@ -48,10 +51,18 @@ class SpeechRecognitionNode(Node):
             self.shutdown_callback,
             10
         )
+
+        self.chat_publisher = self.create_publisher(String, '/chat_messages', 10)
+
         self.shutdown = False
 
         # 確保 JSON 檔案擁有所有的權限
         self.set_file_permissions(self.json_file_path)
+
+        # 初始化時先清空聊天畫面
+        clear_msg = String()
+        clear_msg.data = "clear"
+        self.chat_publisher.publish(clear_msg)
 
         # 開始語音處理
         # self.listen_and_process()
@@ -76,7 +87,9 @@ class SpeechRecognitionNode(Node):
                 self.get_logger().info("請說話...")
                 self.recognizer.dynamic_energy_threshold = True
                 self.recognizer.adjust_for_ambient_noise(source)
-                self.recognizer.pause_threshold = 1.5
+                self.recognizer.pause_threshold = 1.7
+                self.get_logger().info(f"energy_threshold: {self.recognizer.energy_threshold}")
+
                 # self.recognizer.energy_threshold = 6000
 
                 playsound("/home/jason9308/robot_ws/sound/start_lower.mp3")
@@ -93,13 +106,21 @@ class SpeechRecognitionNode(Node):
                 try:
                     text = self.recognizer.recognize_google(audio_data, language="zh-TW")
                     self.get_logger().info(f"你說了: {text}")
+                    # 顯示聽到的語音內容到介面
+                    user_msg = String()
+                    user_msg.data = f"USER: {text}"
+                    self.chat_publisher.publish(user_msg)
 
-                    if "機器人" in text or "鐵柱" in text or "協助" in text:
+                    if any(word in text for word in self.full_trigger_words) or "機器人" in text or "協助" in text:
                         response = self.generate_json(text)
                         self.get_logger().info(f"生成的 JSON: {response}")
 
                         if self.extract_and_dump_json(response, self.json_file_path):
                             self.get_logger().info("JSON 存檔成功")
+                            
+                            bot_msg = String()
+                            bot_msg.data = f"BOT: 好的，我收到了。"
+                            self.chat_publisher.publish(bot_msg)
                             self.play_voice("json_received.mp3")
                             break
                             # self.destroy_node()  # 關閉節點
@@ -107,6 +128,10 @@ class SpeechRecognitionNode(Node):
                             # sys.exit(0)
                         else:
                             self.get_logger().error("JSON 無效，請重新輸入")
+
+                            bot_msg = String()
+                            bot_msg.data = f"BOT: 抱歉，我好像聽不太懂。可以再說一次嗎？"
+                            self.chat_publisher.publish(bot_msg)
                             self.play_voice("json_invalid.mp3")
                     else:
                         self.get_logger().info("未偵測到『機器人 or 鐵柱』，繼續監聽中...")
@@ -184,21 +209,25 @@ class SpeechRecognitionNode(Node):
                 - chat
                 - video call
                 - shutdown
-            - The target must be one of the following (do not generate anything else):
-                - dad
-                - mom
-                - child
-                - grandpa
-                - grandma
-                - Jason
-                - Charlie
-                - NULL
+            - The `target` must be one of the following **and must be a string** (do not generate anything else, and do not use null without quotes!):
+                - "dad"
+                - "mom"
+                - "child"
+                - "grandpa"
+                - "grandma"
+                - "Jason"
+                - "Charlie"
+                - "NULL"
+
+            - Important: If there is no valid target, you **must** use `"target": "NULL"` (as a string), not `null`
             - If `command` is "send medicine", target **must not** be NULL.
             - If `command` is "go home", "chat", "video call", or "shutdown", target **can** be NULL.
-            - 注意：「送藥」這個詞在語音辨識中可能被誤聽為「重要」，如果 instruction 中出現「重要」，請將 command 判斷為 "send medicine"。
-            - 注意 :「機器人」 或是 「鐵柱」 是我們的機器人名稱,有時候「鐵柱」會被聽成「協助」,聽到這幾個詞請當作機器人名稱。
+            - If the instruction is unclear, you MUST return an empty array: `[]`
+            - If both command and target are not explicitly mentioned, return `[]`.
+            - 注意：「送藥」這個詞在語音辨識中可能被誤聽為「重要」，如果 instruction 中出現「重要」，請將 command 判斷為 "send medicine"
+            - 注意 :「機器人」 或是 「鐵柱」 是我們的機器人名稱,有時候「鐵柱」會被聽成「協助」,聽到這幾個詞請當作機器人名稱
             - 注意 : 聽到 傑森 或發音相近的詞的時候 請當作目標 Jason, 聽到查理 或發音相近的詞的時候 請當作目標 Charlie
-
+            - 注意：「關機」這個指令有時可能會被辨識成「關」，如果 instruction 中出現「關」，請將 command 判斷為 "shutdown"
             """
 
         response = openai.ChatCompletion.create(
@@ -227,9 +256,14 @@ class SpeechRecognitionNode(Node):
                 self.get_logger().error("解析 JSON 失敗！")
                 return False
         
+        if not parsed_json:
+            self.get_logger().error("❌ 回傳為空陣列 []，拒絕寫入 JSON。")
+            # self.play_voice("json_invalid.mp3")  # 可選：播放語音提醒
+            return False
+
         for item in parsed_json:
             if item.get("command") == "send medicine" and item.get("target") == "NULL":
-                self.get_logger().error("command 是 'send medicine' 但 target 是 NULL，拒絕寫入 JSON。")
+                self.get_logger().error("command 是 'send medicine' 但 target 是 NULL,拒絕寫入 JSON。")
                 return False
             
         try:

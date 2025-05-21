@@ -12,6 +12,7 @@ import wave
 from playsound import playsound
 import speech_recognition as sr
 import random
+from std_msgs.msg import String
 
 class ChatbotNode(Node):
     def __init__(self):
@@ -101,6 +102,12 @@ class ChatbotNode(Node):
         ]
 
         self.get_logger().info("🤖 Chatbot 已啟動，等待語音輸入...")
+
+        self.chat_publisher = self.create_publisher(String, '/chat_messages', 10)
+        clear_msg = String()
+        clear_msg.data = "clear"
+        self.chat_publisher.publish(clear_msg)
+        
         self.chat_loop()
 
     def chat_loop(self):
@@ -114,12 +121,18 @@ class ChatbotNode(Node):
                 continue
 
             self.get_logger().info(f"你說：{text}")
+            user_msg = String()
+            user_msg.data = f"USER: {text}"
+            self.chat_publisher.publish(user_msg)
 
             if any(keyword in text for keyword in self.exit_keywords):
                 self.get_logger().info("🛑 偵測到結束關鍵詞，準備結束聊天")
 
                 # 溫柔回應後再關閉
                 goodbye_text = "好的，掰掰～祝您今天愉快，有空再來跟我聊聊天喔！"
+                bot_msg = String()
+                bot_msg.data = f"BOT: {goodbye_text}"
+                self.chat_publisher.publish(bot_msg)
                 self.speak_response(goodbye_text)
 
                 break
@@ -130,6 +143,9 @@ class ChatbotNode(Node):
                 continue
 
             response = self.ask_gpt(text)
+            bot_msg = String()
+            bot_msg.data = f"BOT: {response}"
+            self.chat_publisher.publish(bot_msg)
             self.speak_response(response)
 
         self.destroy_node()

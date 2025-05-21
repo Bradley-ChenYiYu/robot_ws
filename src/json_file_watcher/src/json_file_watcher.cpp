@@ -67,9 +67,9 @@ int main(int argc, char* argv[]) {
 
     // open another terminal and run speech_recognition node
     // std::string command = "gnome-terminal -- bash -c 'sleep 0.5; wmctrl -r :ACTIVE: -e 0,0,0,960,1080; source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)'";
-    std::string command = "gnome-terminal -- bash -c 'sleep 0.1; wmctrl -r :ACTIVE: -e 0,0,0,966,1108; source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)'";
+    // std::string command = "gnome-terminal -- bash -c 'sleep 0.1; wmctrl -r :ACTIVE: -e 0,0,0,966,1108; source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)'";
 
-    // std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)' &";
+    std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition 2> >(grep -v ALSA >&2)' &";
     // std::string command = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run speech_recognition_pkg speech_recognition' &";
     int ret = std::system(command.c_str());
     if (ret == 0) {

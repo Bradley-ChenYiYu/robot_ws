@@ -1,0 +1,39 @@
+{
+    "patient": [
+        {
+            "name": "grandpa",
+            "pillBox": "1",
+            "room": "520"
+        },
+        {
+            "name": "grandma",
+            "pillBox": "2",
+            "room": "521"
+        },
+        {
+            "name": "dad",
+            "pillBox": "3",
+            "room": "520"
+        },
+        {
+            "name": "mom",
+            "pillBox": "4",
+            "room": "520"
+        },
+        {
+            "name": "child",
+            "pillBox": "1",
+            "room": "520"
+        },
+        {
+            "name": "Charlie",
+            "pillBox": "2",
+            "room": "521"
+        },
+        {
+            "name": "Jason",
+            "pillBox": "3",
+            "room": "521"
+        }
+    ]
+}

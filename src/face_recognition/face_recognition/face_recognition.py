@@ -47,9 +47,15 @@ class FaceRecognitionNode(Node):
         # self.view_pose = [22.4, 0.8, 502.4, 3.1329, -1.0408, 0.0017] # 看臉位置
         self.view_pose = [401.1, -2.7, 509.2, 3.0364, -1.3345, 0.0646] # 看臉位置NEW
 
-        self.idle_pose = [200, 0, 250, 3.14, 0, 0]      # 待機位置
+        self.idle_pose = [150, 0, 200, 3.14, 0, 0]      # 待機位置
         self.move_arm_to(self.view_pose)
+        self.chat_publisher = self.create_publisher(String, '/chat_messages', 10)
+
+        bot_msg = String()
+        bot_msg.data = f"BOT: 請將臉對著鏡頭。"
+        self.chat_publisher.publish(bot_msg)
         self.play_voice("face_please_look.mp3")
+
 
 
     def load_reference_image(self, img_path):
@@ -72,7 +78,11 @@ class FaceRecognitionNode(Node):
             face_tensor = self.preprocess_face(aligned)
             with torch.no_grad():
                 embedding = self.face_recognizer(face_tensor)
-            return embedding.squeeze().detach().cpu().numpy()
+                embedding = embedding.squeeze().detach().cpu().numpy()    
+                ## L2 正規化
+                embedding = embedding / np.linalg.norm(embedding)
+            return embedding
+        
         else:
             self.get_logger().error("未偵測到參考人臉！")
             return None
@@ -191,6 +201,8 @@ class FaceRecognitionNode(Node):
         # ✅ 前處理 + 轉成張量後送進 FaceNet 模型取得特徵向量
         face_tensor = self.preprocess_face(aligned_face)
         detected_embedding = self.face_recognizer(face_tensor).squeeze().detach().cpu().numpy()
+        # L2 正規化
+        detected_embedding = detected_embedding / np.linalg.norm(detected_embedding)
 
         # ✅ 與參考圖片進行 cosine similarity 比對
         if self.reference_embedding is not None:
@@ -232,10 +244,13 @@ class FaceRecognitionNode(Node):
             # cv2.waitKey(2000)  # 等待 3 秒
 
             # 播放語音提示
+            bot_msg = String()
+            bot_msg.data = f"BOT: 身份確認成功。"
+            self.chat_publisher.publish(bot_msg)
             self.play_voice("identity_confirmed.mp3")
 
             # ✅ 清理：關閉畫面 + 訂閱、發布器、節點
-            self.move_arm_to(self.idle_pose) # 移動robot arm到待機位置
+            # self.move_arm_to(self.idle_pose) # 移動robot arm到待機位置
             cv2.destroyAllWindows()
             self.image_sub = None
             self.result_pub = None

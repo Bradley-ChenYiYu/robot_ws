@@ -6,6 +6,8 @@ MedicineGrabber::MedicineGrabber()
 {
     setupSubscriptions();
     setupClients();
+    setupPublishers();
+    setupArucoDetector();
 
     RCLCPP_INFO(this->get_logger(), "MedicineGrabber node started.");
 
@@ -60,6 +62,25 @@ void MedicineGrabber::setupClients()
     gripper_open_client_ = this->create_client<xarm_msgs::srv::Call>("/ufactory/open_lite6_gripper");
     gripper_close_client_ = this->create_client<xarm_msgs::srv::Call>("/ufactory/close_lite6_gripper");
     gripper_stop_client_ = this->create_client<xarm_msgs::srv::Call>("/ufactory/stop_lite6_gripper");
+}
+
+void MedicineGrabber::setupPublishers()
+{
+    chat_publisher_ = this->create_publisher<std_msgs::msg::String>("/chat_messages", 10);
+}
+
+void MedicineGrabber::setupArucoDetector()
+{
+    // ArUco 設定
+    dictionary_ = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_5X5_100);
+    parameters_ = cv::aruco::DetectorParameters::create();
+    parameters_->adaptiveThreshWinSizeMin = 3;
+    parameters_->adaptiveThreshWinSizeMax = 23;
+    parameters_->adaptiveThreshWinSizeStep = 10;
+    parameters_->minMarkerPerimeterRate = 0.03;
+    parameters_->maxMarkerPerimeterRate = 4.0;
+    parameters_->polygonalApproxAccuracyRate = 0.04;
+    parameters_->cornerRefinementMethod = cv::aruco::CORNER_REFINE_SUBPIX;
 }
 
 cv::Mat MedicineGrabber::computeEEtoBaseTransform(const std::array<double, 6>& pose)
@@ -179,13 +200,10 @@ void MedicineGrabber::imageCallback(const sensor_msgs::msg::Image::SharedPtr msg
     cv::Mat gray;
     cv::cvtColor(rgb_image_, gray, cv::COLOR_BGR2GRAY);
 
-    // ArUco 設定
-    cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_5X5_100);
+    // 偵測 ArUco 標記
     std::vector<int> markerIds;
     std::vector<std::vector<cv::Point2f>> markerCorners;
-
-    // 偵測 ArUco 標記
-    cv::aruco::detectMarkers(gray, dictionary, markerCorners, markerIds);
+    cv::aruco::detectMarkers(gray, dictionary_, markerCorners, markerIds, parameters_);
 
     if (markerIds.empty()) {
         // RCLCPP_WARN(this->get_logger(), "No ArUco markers detected!");
@@ -203,6 +221,7 @@ void MedicineGrabber::handCallback(const std_msgs::msg::Float32MultiArray::Share
     float x = msg->data[0];
     float y = msg->data[1];
     float z = msg->data[2];
+    char buf[100];
     cv::Point3f current(x, y, z);
 
     if (hand_stable_counter_ == 0) {
@@ -217,13 +236,21 @@ void MedicineGrabber::handCallback(const std_msgs::msg::Float32MultiArray::Share
     if (dist < hand_stability_threshold_) {
         hand_stable_counter_++;
         last_hand_pos_ = current;
-        RCLCPP_INFO(this->get_logger(), "🟢 Hand stable count: %d / 20", hand_stable_counter_);
+        
+        snprintf(buf, sizeof(buf), "🟢 Hand stable count: %d / 10", hand_stable_counter_);
+        bot_msg_.data = std::string("BOT: ") + buf;
+        chat_publisher_->publish(bot_msg_);
+        RCLCPP_INFO(this->get_logger(), "🟢 Hand stable count: %d / 10", hand_stable_counter_);
     } else {
+
+        snprintf(buf, sizeof(buf), "🔴 Hand moved too much! Count reset.");
+        bot_msg_.data = std::string("BOT: ") + buf;
+        chat_publisher_->publish(bot_msg_);
         RCLCPP_INFO(this->get_logger(), "🔄 Hand moved too much, reset stability counter.");
         hand_stable_counter_ = 0;
     }
 
-    if (hand_stable_counter_ >= 20) {  // 約 2 秒穩定
+    if (hand_stable_counter_ >= 10) {  // 約 2 秒穩定
         // ==== Camera → EE ====
         cv::Point3f hand_camera_pos(x, y, z);
         cv::Point3f hand_base_pos = transformCameraToBase(hand_camera_pos);
@@ -242,7 +269,9 @@ void MedicineGrabber::handCallback(const std_msgs::msg::Float32MultiArray::Share
                 "❌ [最終檢查] 手部(base)座標超出安全範圍 (x=%.1f, y=%.1f, z=%.1f)，取消放藥。",
                 base_x, base_y, base_z);
             hand_stable_counter_ = 0;
-    
+            
+            bot_msg_.data = "BOT: 您的手太遠了，請靠近一點。";
+            chat_publisher_->publish(bot_msg_);
             // 播放提示音
             std::system("mpg123 /home/jason9308/robot_ws/sound/hand_out_of_range.mp3");
             return;
@@ -272,7 +301,7 @@ cv::Point3f MedicineGrabber::computeHoleCenter(int id, const cv::Point3f& base_c
 
 
 bool MedicineGrabber::moveXArmToPose(const std::array<double, 6>& pose) {
-    if (!xarm_move_cartesian_client_->wait_for_service(std::chrono::seconds(3))) {
+    if (!xarm_move_cartesian_client_->wait_for_service(std::chrono::seconds(5))) {
         RCLCPP_ERROR(this->get_logger(), "Service /xarm/set_position is not available!");
         return false;
     }
@@ -417,10 +446,11 @@ void MedicineGrabber::performGrasping() {
     std::string command = 
     "gnome-terminal --title=\"HandDetector\" -- bash -c '"
     "sleep 0.1; "
-    "wmctrl -r \"HandDetector\" -e 0,0,0,966,1108; "
+    "xdotool search --name \"HandDetector\" windowminimize; "
     "source ~/robot_ws/install/setup.bash && "
     "ros2 run hand_detection yolo_hand_detector"
     "'";
+
 
     int ret = std::system(command.c_str());
     if (ret == 0) {
@@ -432,6 +462,8 @@ void MedicineGrabber::performGrasping() {
     // 等待 2 秒鐘，確保手部偵測節點啟動完成
     rclcpp::sleep_for(std::chrono::seconds(2));
     // 播放提示音
+    bot_msg_.data = "BOT: 您的藥來了，請伸出手。";
+    chat_publisher_->publish(bot_msg_);
     play_audio("/home/jason9308/robot_ws/sound/medicine_please_take.mp3");
 
     // 等待手部穩定
@@ -444,6 +476,9 @@ void MedicineGrabber::performGrasping() {
 
     // 停止手部偵測節點
     std::system("pkill -2 -f yolo_hand_detector");
+
+    bot_msg_.data = "clear";
+    chat_publisher_->publish(bot_msg_);
 
     // 放藥到手上
     double hand_base_x = last_hand_base_pos_.x;
@@ -464,7 +499,9 @@ void MedicineGrabber::performGrasping() {
     // back to initial position
     target_pose = { hand_base_x, hand_base_y, hand_base_z + 150.0, 3.14, 0, 0 };
     moveArm_check(target_pose, "手部更上方");
-    target_pose = {200, 0, 250, 3.14, 0, 0};
+
+    target_pose = {150, 0, 200, 3.14, 0, 0};
+    // target_pose = {189, -0.3, 316.4, 2.965, -1.438, 0.173}; // 導航位置
     moveArm_check(target_pose, "初始位置");
 }
 

@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'speech_recognition_pkg'
+package_name = 'ui_pkg'
 
 setup(
     name=package_name,
@@ -13,15 +13,16 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='robotics',
-    maintainer_email='yiyuchen.bradley@gmail.com',
+    maintainer='jason9308',
+    maintainer_email='jason9308@gmail.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-                 'speech_recognition = speech_recognition_pkg.speech_recognition:main',
-                    'chat_decision = speech_recognition_pkg.chat_decision:main',
+            'map_viewer_node = ui_pkg.map_viewer:main',
+            'chat_viewer_node = ui_pkg.chat_viewer:main',
+            'main_ui = ui_pkg.main_ui:main',
         ],
     },
 )

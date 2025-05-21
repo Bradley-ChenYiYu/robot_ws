@@ -6,8 +6,8 @@ import os
 from playsound import playsound
 
 # ✅ 你可以在這裡自由設定內容與儲存位置
-text = "身份確認成功"
-output_path = "/home/jason9308/robot_ws/sound/identity_confirmed.mp3"
+text = "好的，那我先走囉～"
+output_path = "/home/jason9308/robot_ws/sound/chat_no.mp3"
 
 def speak(text, output_path):
     # 讀取 API 金鑰

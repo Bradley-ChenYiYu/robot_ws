@@ -1,15 +1,26 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash
 from flask_cors import CORS
 import json
 import os
 from datetime import datetime  # 引入 datetime 來處理時間
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+app.secret_key = 'your_secret_key'  # 必須要設定 flash 功能
 
 json_path = '/home/jason9308/robot_ws/command_jason/output.json'
+patient_json_path = '/home/jason9308/robot_ws/command_jason/patient.json'
 status_path = '/home/jason9308/robot_ws/command_jason/status.json'
 close_meeting_path = '/home/jason9308/robot_ws/command_jason/close_meeting.json'
+UPLOAD_FOLDER = '/home/jason9308/robot_ws/src/face_recognition'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'HEIC', 'HEIF', 'webp'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route("/")
 def index():
@@ -57,6 +68,27 @@ def update_json():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+@app.route('/patient_json', methods=['POST'])
+def patient_update_json():
+    new_patient = request.get_json()
+
+    # 若檔案不存在就初始化
+    if not os.path.exists(patient_json_path):
+        data = {"patient": []}
+    else:
+        with open(patient_json_path, 'r') as f:
+            data = json.load(f)
+
+    # 附加新病人資料
+    data["patient"].append(new_patient)
+
+    # 寫回檔案
+    with open(patient_json_path, 'w') as f:
+        json.dump(data, f, indent=4)
+
+    return jsonify({"status": "success", "added": new_patient}), 200
+    
 @app.route('/status', methods=['GET'])
 def get_status():
     try:
@@ -112,6 +144,31 @@ def set_close_meeting():
         return jsonify({"message": "已設定 end_meeting"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files or 'username' not in request.form:
+        return '缺少檔案或檔名', 400
+
+    file = request.files['file']
+    filename = request.form['username'].strip()
+
+    if not filename:
+        return '檔名不能為空', 400
+
+    if file and allowed_file(file.filename):
+        ext = file.filename.rsplit('.', 1)[1].lower()
+        new_filename = f"{filename}.{ext}"
+        filepath = os.path.join(UPLOAD_FOLDER, new_filename)
+        file.save(filepath)
+        return jsonify({"status": "success", "redirect": url_for("index")})
+
+    else:
+        return '❌ 不支援的檔案格式', 400
+
+@app.route('/data/patient.json')
+def serve_patient_json():
+    return send_from_directory('/home/jason9308/robot_ws/command_jason', 'patient.json')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

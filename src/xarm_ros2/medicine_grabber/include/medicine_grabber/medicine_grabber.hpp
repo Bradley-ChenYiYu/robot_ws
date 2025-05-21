@@ -26,6 +26,7 @@
 #include "xarm_msgs/srv/move_cartesian.hpp"
 #include "xarm_msgs/srv/call.hpp"
 #include "std_msgs/msg/float32_multi_array.hpp"
+#include "std_msgs/msg/string.hpp"
 
 
 class MedicineGrabber : public rclcpp::Node
@@ -39,6 +40,7 @@ private:
     // ==== ROS 通訊 ====
     void setupSubscriptions();
     void setupClients();
+    void setupPublishers();
 
     // ==== callback ====
     void imageCallback(const sensor_msgs::msg::Image::SharedPtr msg);
@@ -95,9 +97,20 @@ private:
     const double hand_stability_threshold_ = 40.0; // mm
     cv::Point3f last_hand_base_pos_;  // 已轉換為 base frame 座標
 
+    // Aruco偵測參數
+    cv::Ptr<cv::aruco::Dictionary> dictionary_;
+    cv::Ptr<cv::aruco::DetectorParameters> parameters_;
+    void setupArucoDetector();
+
     // hole 尺寸參數
     float hole_width = 82.0;
     float hole_height = 82.0;
+
+    // 
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr chat_publisher_;
+    std_msgs::msg::String bot_msg_;
+    std_msgs::msg::String user_msg_;
+
 };
 
 #endif  // MEDICINE_GRABBER_HPP_

@@ -1,15 +1,21 @@
+
 /* reset margin/padding, remove all default borders & outlines, use border‑box */
+/* CSS Reset: 清除所有預設 margin/padding，設定統一 box-sizing */
 * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        border: none;
-        outline: none;
-      }
-html, body {
 margin: 0;
 padding: 0;
-box-sizing: border-box;
+
+}
+
+html, body {
+height: 100%;
+margin: 0;
+padding: 0;
+font-family: sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+margin: 0;
 }
 
 header {
@@ -26,7 +32,7 @@ h1 {
         position:absolute;
         left:120px;
         top:0;
-        line-height:120px;
+        line-height:80px;
 }
 
 body {
@@ -134,16 +140,12 @@ color: #333;
 text-align: center;
 }
 
-/* --------- 新增以下樣式 --------- */
-/* 取代內嵌的 flex 佈局，讓 current‑task 脫離左右兩欄的 flex */
-.flex-container {
-display: flex;
-gap: 30px;
+.left {
+        margin : 20px
 }
 
-/* 左右兩欄 */
-.left, .right {
-flex: 1;
+.right {
+        margin : 20px
 }
       
 /* 讓 current‑task 全寬並置中 */
@@ -153,10 +155,75 @@ text-align: center;
 margin: 20px auto;
 }
 
-/* 讓狀態圖片置中 */
+
+
+@media only screen  {
+* {
+margin: 0;
+padding: 0;
+
+}
+
+html, body {
+height: 100%;
+margin: 0;
+padding: 0;
+font-family: sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+margin: 0;
+}
+
+
+}
+
+@media only screen and (min-width: 768px) {
+        /* --------- 新增以下樣式 --------- */
+/* 取代內嵌的 flex 佈局，讓 current‑task 脫離左右兩欄的 flex */
+.flex-container {
+        display: flex;
+        gap: 30px;
+        }
+        
+        .left {
+        flex: 3;
+        }
+        
+        .right {
+        flex: 2;
+        }
+        .flex-container2 {
+                display: flex;
+                gap: 30px
+                }
+                
+                .current-task {
+                flex: 1;
+                
+                }
+                
+                .canvas {
+                flex: 1;
+                }
+}
+
+@media only screen and (max-width: 767px) {
+body {
+overflow-x: hidden;
+}
+html, body {
+width: 100%;
+overflow-x: hidden;
+}
 #task-image {
-        display: block;
-        margin: 10px auto 0 auto;   /* 上 10px，左右 auto */
-        max-width: 300px;
-        border-radius: 10px;
-    }
+display: block;
+margin: auto;
+max-width: 100%;
+}
+
+#map-canvas {
+transform: scale(0.35);
+transform-origin: top left;
+}
+}
