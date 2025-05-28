@@ -87,7 +87,11 @@ class SpeechRecognitionNode(Node):
                 self.get_logger().info("請說話...")
                 self.recognizer.dynamic_energy_threshold = True
                 self.recognizer.adjust_for_ambient_noise(source)
-                self.recognizer.pause_threshold = 1.7
+
+                #  如果改用固定閾值
+                # self.recognizer.energy_threshold = 5000
+                # self.recognizer.dynamic_energy_threshold = False
+                self.recognizer.pause_threshold = 1.5
                 self.get_logger().info(f"energy_threshold: {self.recognizer.energy_threshold}")
 
                 # self.recognizer.energy_threshold = 6000

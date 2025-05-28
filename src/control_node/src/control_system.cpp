@@ -34,8 +34,9 @@ public:
         load_all_patients("/home/jason9308/robot_ws/command_jason/patient.json");
         print_all_patients();
 
-        location_map_["home"] = std::make_tuple(-0.585f, 0.391f, 0.234f, 0.972f); // 預設家裡的座標
-
+        // location_map_["home"] = std::make_tuple(-0.585f, 0.391f, 0.234f, 0.972f); // 預設家裡的座標
+        // location_map_["home"] = std::make_tuple(0.182f, 0.943f, -0.002f, 1.000f); 
+        location_map_["home"] = std::make_tuple(0.087, 0.867,-0.000, 1.000);
         json_sub_ = this->create_subscription<std_msgs::msg::String>(
             "/json_modified", 10,
             [this](const std_msgs::msg::String::SharedPtr msg) {
@@ -313,8 +314,10 @@ private:
     
     void init_room_mapping() {
         room_to_location_ = {
-            {520, {2.998f, 2.708f, 0.331f, 0.944f}},
-            {521, {11.902f, 5.695f, 0.209f, 0.978f}}
+            // {520, {2.998f, 2.708f, 0.331f, 0.944f}},
+            // {521, {11.902f, 5.695f, 0.209f, 0.978f}}
+            {520, {1.352f, 0.502f, -0.036f, 0.999f}},
+            {521, {1.352f, 0.502f, -0.036f, 0.999f}}
         };
     }
 
@@ -610,7 +613,7 @@ private:
         std::system(cmd3.c_str());
 
         // 加個延遲，確保 arm 完全 idle
-        std::this_thread::sleep_for(std::chrono::milliseconds(800));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(800));
 
         status_ = "delivering medicine(handing over the medication)";
         write_status_to_json();
@@ -739,7 +742,8 @@ private:
 
             // 2. 
             RCLCPP_INFO(this->get_logger(), "移動手臂至視訊位置");
-            cmd = prefix + "ros2 run move_arm move_arm_node 401.1 -2.7 509.2 3.0364 -1.3345 0.0646'";
+            // cmd = prefix + "ros2 run move_arm move_arm_node 401.1 -2.7 509.2 3.0364 -1.3345 0.0646'";
+            cmd = prefix + "ros2 run move_arm move_arm_node 401.1 -2.7 509.2 3.0364 -1.3345 0.0646 &'";
             std::system(cmd.c_str());
             // std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -765,7 +769,8 @@ private:
             // 5.
             RCLCPP_INFO(this->get_logger(), "移動手臂至預設位置");
             // cmd = prefix + "ros2 run move_arm move_arm_node 200 0 250 3.14 0 0'";
-            cmd = prefix + "ros2 run move_arm move_arm_node 189 -0.3 316.4 2.965 -1.438 0.173'";
+            // cmd = prefix + "ros2 run move_arm move_arm_node 189 -0.3 316.4 2.965 -1.438 0.173'";
+            cmd = prefix + "ros2 run move_arm move_arm_node 189 -0.3 316.4 2.965 -1.438 0.173 &'";
             std::system(cmd.c_str());
             // std::this_thread::sleep_for(std::chrono::seconds(1));
 

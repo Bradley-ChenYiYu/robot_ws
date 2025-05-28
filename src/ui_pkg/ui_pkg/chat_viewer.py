@@ -53,8 +53,8 @@ class ChatGUI(QWidget):
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_chat)
-        self.timer.start(1000)
-        # self.timer.start(300)
+        # self.timer.start(1000)
+        self.timer.start(300)
 
         self.last_len = 0
 
@@ -120,7 +120,7 @@ def main():
         if rclpy.ok():
             rclpy.spin_once(ros_node, timeout_sec=0.01)
     timer.timeout.connect(spin_once)
-    timer.start(200)
+    timer.start(100)
 
     app.exec_()
     ros_node.destroy_node()

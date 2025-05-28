@@ -155,11 +155,14 @@ class ChatbotNode(Node):
     def listen_and_transcribe(self):
         recognizer = sr.Recognizer()
         recognizer.pause_threshold = 1.5
-        # recognizer.energy_threshold = 600
         with sr.Microphone() as source:
             self.get_logger().info("🎙️ 等待你說話...")
             recognizer.dynamic_energy_threshold = True
             recognizer.adjust_for_ambient_noise(source)
+            #  如果改用固定閾值
+            # recognizer.dynamic_energy_threshold = False
+            # recognizer.energy_threshold = 5000  # 調整為較高的閾值以過濾雜音
+
             playsound("/home/jason9308/robot_ws/sound/start_lower.mp3")
             audio = recognizer.listen(source)
             playsound("/home/jason9308/robot_ws/sound/finish_lower.mp3")

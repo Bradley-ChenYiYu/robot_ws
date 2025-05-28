@@ -35,6 +35,10 @@ class ChatDecisionNode(Node):
                 self.get_logger().info("請問您想聊天嗎？請回答...")
                 self.recognizer.dynamic_energy_threshold = True
                 self.recognizer.adjust_for_ambient_noise(source)
+
+                #  如果改用固定閾值
+                # self.recognizer.energy_threshold = 5000
+                # self.recognizer.dynamic_energy_threshold = False
                 self.recognizer.pause_threshold = 1.5
                 try:
                     playsound("/home/jason9308/robot_ws/sound/start_lower.mp3")

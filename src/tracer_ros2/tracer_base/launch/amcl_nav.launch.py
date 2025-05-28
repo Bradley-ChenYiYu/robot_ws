@@ -7,7 +7,7 @@ def generate_launch_description():
     # YAML 檔案的絕對路徑（開發中建議用這個，省去 colcon build）
     config_dir = '/home/jason9308/robot_ws/src/tracer_ros2/tracer_base/config'
     rviz_config_file_path = '/home/jason9308/robot_ws/src/tracer_ros2/tracer_base/rviz_config/pathplanning.rviz'
-    map_yaml_file = '/home/jason9308/robot_ws/Map/11Frtabmap.yaml'
+    map_yaml_file = '/home/jason9308/robot_ws/Map/1Frtabmap.yaml'
 
     controller_yaml = os.path.join(config_dir, 'controller.yaml')
     planner_yaml = os.path.join(config_dir, 'planner_server.yaml')

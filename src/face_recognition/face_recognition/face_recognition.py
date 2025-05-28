@@ -142,7 +142,8 @@ class FaceRecognitionNode(Node):
     
     def move_arm_to(self, pose):
         pose_str = " ".join([str(v) for v in pose])
-        command = f"bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run move_arm move_arm_node {pose_str}'"
+        # command = f"bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run move_arm move_arm_node {pose_str}'"
+        command = f"bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ros2 run move_arm move_arm_node {pose_str} &'"
         ret = os.system(command)
         if ret == 0:
             self.get_logger().info(f"✅ 移動到位置：{pose_str}")
@@ -217,11 +218,13 @@ class FaceRecognitionNode(Node):
             self.pass_score = 0  # 初始化 pass_score，只做一次
 
         # ✅ 根據相似度調整分數（類似加權累積判斷）
-        if cosine_similarity > 0.70:
-            self.pass_score += 1  # 相似度高，加 2 分
+        # if cosine_similarity > 0.75:
+        #     self.pass_score += 1  # 相似度高，加 2 分
+        if cosine_similarity > 0.70:    # can be 0.72 or 0.75 (0.70 for demo)
+            self.pass_score += 1
         elif cosine_similarity < 0.65:
             self.pass_score -= 1  # 相似度低，扣 1 分
-        # 若在 0.65~0.70 之間，則 pass_score 不變
+        # 若在 0.65~0.75 之間，則 pass_score 不變
 
         # ✅ 限制積分區間在 0～20 之間，避免爆表或變負數
         self.pass_score = max(0, min(self.pass_score, 70))

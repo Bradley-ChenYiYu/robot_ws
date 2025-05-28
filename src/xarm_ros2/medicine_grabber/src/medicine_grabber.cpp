@@ -19,7 +19,7 @@ MedicineGrabber::MedicineGrabber()
     openGripper();
     rclcpp::sleep_for(std::chrono::seconds(1));
 
-    std::array<double, 6> initial_pose = {200, -50, 400, 3.14, 0, 0};
+    std::array<double, 6> initial_pose = {200, -50, 500, 3.14, 0, 0};
     if (!moveXArmToPose(initial_pose)) {
         RCLCPP_ERROR(this->get_logger(), "Failed to move to initial position!");
     } 
@@ -77,7 +77,7 @@ void MedicineGrabber::setupArucoDetector()
     parameters_->adaptiveThreshWinSizeMin = 3;
     parameters_->adaptiveThreshWinSizeMax = 23;
     parameters_->adaptiveThreshWinSizeStep = 10;
-    parameters_->minMarkerPerimeterRate = 0.03;
+    parameters_->minMarkerPerimeterRate = 0.05;
     parameters_->maxMarkerPerimeterRate = 4.0;
     parameters_->polygonalApproxAccuracyRate = 0.04;
     parameters_->cornerRefinementMethod = cv::aruco::CORNER_REFINE_SUBPIX;
@@ -228,6 +228,8 @@ void MedicineGrabber::handCallback(const std_msgs::msg::Float32MultiArray::Share
         last_hand_pos_ = current;
         last_hand_time_ = this->now();
         hand_stable_counter_ = 1;
+        snprintf(buf, sizeof(buf), "🟢 Hand stable count: %d / 10", hand_stable_counter_);
+        RCLCPP_INFO(this->get_logger(), "%s", buf);
         return;
     }
 
@@ -343,8 +345,18 @@ void MedicineGrabber::performGrasping() {
     bool valid_marker = false;
     cv::Point3f aruco_base_pos;
 
+    int retry_count = 0;
+    int max_retry = 3;
     while(!valid_marker)
     {
+        if(retry_count >= max_retry)
+        {
+            RCLCPP_ERROR(this->get_logger(), "❌ Failed to detect valid ArUco marker after %d retries.", max_retry);
+            aruco_base_pos = cv::Point3f(308, -112, 190); // 設定一個default位置
+            break;
+        }
+        retry_count++;
+
         start_time = this->now();
         timeout_time = start_time + rclcpp::Duration::from_seconds(3.0);
         while (rclcpp::ok() && this->now() < timeout_time) 
@@ -368,7 +380,7 @@ void MedicineGrabber::performGrasping() {
 
         // 取得 ArUco 標記的深度 (單位：mm)
         float depth_value = depth_image_.at<float>(detected_marker_corners_[0][0].y, detected_marker_corners_[0][0].x);
-
+        
         if (depth_value <= 0) {
             RCLCPP_WARN(this->get_logger(), "Invalid depth value detected!");
             continue;
@@ -390,7 +402,7 @@ void MedicineGrabber::performGrasping() {
 
         // ==== Base frame 座標限制 ====
         bool in_range = aruco_base_pos.x > 290 && aruco_base_pos.x < 320 &&
-                    aruco_base_pos.y > -130 && aruco_base_pos.y < -110 &&
+                    aruco_base_pos.y > -130 && aruco_base_pos.y < -100 &&
                     aruco_base_pos.z > 185 && aruco_base_pos.z < 195;
 
         if(in_range)
@@ -433,7 +445,9 @@ void MedicineGrabber::performGrasping() {
     moveArm_check(target_pose, "藥格上方");
 
     // 移動到觀察手掌出現的觀察點
-    target_pose = {230.0, 0.3499999940395355, 420.0, 3.140000104904175, -0.25, 0.0};
+    // target_pose = {230.0, 0.3499999940395355, 420.0, 3.140000104904175, -0.25, 0.0};
+    // target_pose = {80.0, 0.0, 530.0, 3.14, 0, 0}; // 調整到觀察點
+    target_pose = {87.4, 1.5, 532.7, -3.1227, -0.1553, 0.0087};
     moveArm_check(target_pose, "觀察手掌的位置");
 
     
