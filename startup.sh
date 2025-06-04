@@ -7,6 +7,7 @@ ROS2_WS=~/robot_ws
 gnome-terminal --title="ngrok" -- bash -c "
 cd ~/robot_ws
 ngrok start --all
+exec bash
 "
 
 sleep 1
@@ -14,7 +15,8 @@ sleep 1
 # 啟動 Web Server
 gnome-terminal --title="Web Server" -- bash -c "
 cd ~/robot_ws
-python3 web/app.py
+python3 web_latest/app.py
+exec bash
 "
 
 sleep 1
@@ -23,6 +25,7 @@ sleep 1
 gnome-terminal --title="Webcam WS Node" -- bash -c "
 cd ~/robot_ws
 python3 web/webcam_websocket_node.py
+exec bash
 "
 
 sleep 1
@@ -31,6 +34,7 @@ sleep 1
 gnome-terminal --title="tracer_base sensor" -- bash -c "
 source $ROS2_WS/install/setup.bash
 ros2 launch tracer_base sensor.xml
+exec bash
 "
 
 sleep 1
@@ -39,6 +43,7 @@ sleep 1
 gnome-terminal --title="Realsense Driver" -- bash -c "
 source $ROS2_WS/install/setup.bash
 ros2 launch realsense2_camera rs_launch.py
+exec bash
 "
 
 sleep 1
@@ -47,6 +52,7 @@ sleep 1
 gnome-terminal --title="xArm Driver" -- bash -c "
 source $ROS2_WS/install/setup.bash
 ros2 launch xarm_api lite6_driver.launch.py robot_ip:=192.168.1.166 add_gripper:=true
+exec bash
 "
 
 gnome-terminal --title="xArm Init" -- bash -c "
@@ -57,6 +63,7 @@ sleep 2
 ros2 service call /ufactory/set_mode xarm_msgs/srv/SetInt16 \"{data: 0}\"
 sleep 2
 ros2 service call /ufactory/set_state xarm_msgs/srv/SetInt16 \"{data: 0}\"
+exec bash
 "
 
 sleep 1
@@ -65,5 +72,12 @@ sleep 1
 gnome-terminal --title="Navigation (AMCL)" -- bash -c "
 source $ROS2_WS/install/setup.bash
 ros2 launch tracer_base amcl_nav.launch.py
+exec bash
+"
+
+# 啟動 Chat Viewer Node
+gnome-terminal --title="Chat Viewer" -- bash -c "
+source $ROS2_WS/install/setup.bash
+ros2 run ui_pkg chat_viewer_node
 exec bash
 "

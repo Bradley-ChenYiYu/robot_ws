@@ -63,7 +63,9 @@ ament_target_dependencies(tracer_base_node rclcpp tf2 tf2_ros std_msgs nav_msgs 
 install(TARGETS tracer_base_node
   DESTINATION lib/${PROJECT_NAME})
 
-install(DIRECTORY launch
+install(DIRECTORY 
+  launch
+  new_config
   DESTINATION share/${PROJECT_NAME}/)
   
 if(BUILD_TESTING)

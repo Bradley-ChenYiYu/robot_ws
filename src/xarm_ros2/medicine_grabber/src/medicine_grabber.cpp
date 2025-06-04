@@ -352,7 +352,7 @@ void MedicineGrabber::performGrasping() {
         if(retry_count >= max_retry)
         {
             RCLCPP_ERROR(this->get_logger(), "❌ Failed to detect valid ArUco marker after %d retries.", max_retry);
-            aruco_base_pos = cv::Point3f(308, -112, 190); // 設定一個default位置
+            aruco_base_pos = cv::Point3f(305, -116, 186); // 設定一個default位置
             break;
         }
         retry_count++;

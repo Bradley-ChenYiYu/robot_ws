@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>送藥機器人 鐵柱</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>送藥機器人 鐵柱</h1>
+    <div>
+      <button onclick="submitShutdown()" style="background: none; border: none;" class="shutBtn">
+          <img src="/static/images/shutdown.png" alt="Shutdown" width="40" height="40">
+      </button>
+    </div>
+  
+  </header>
+  <!-- display: flex;  style="flex: 1;"-->
+  <div class="flex-container" >
+    <!-- 左側：輸入表單 -->
+    <div class="left">
+      <div id="button-group">
+        <div class="command-item">
+          <button class="command-btn" onclick="selectCommand('send medicine')">
+            <div class="btn-content">
+              <img src="/static/images/send_medicine.png" alt="send medicine">
+              <span>send medicine</span>
+            </div>
+          </button>
+        </div>
+        <div class="command-item">
+          <button class="command-btn" onclick="submitCommand('go home')">
+            <div class="btn-content">
+              <img src="/static/images/go_home.png" alt="go home">
+              <span>go home</span>
+            </div>
+          </button>
+        </div>
+        <div class="command-item">
+          <button class="command-btn" onclick="submitCommand('chat')">
+            <div class="btn-content">
+              <img src="/static/images/chat.png" alt="chat">
+              <span>chat</span>
+            </div>
+          </button>
+        </div>
+        <div class="command-item">
+          <button class="command-btn" onclick="submitCommand('video call')">
+            <div class="btn-content">
+              <img src="/static/images/video_call.png" alt="video call">
+              <span>video call</span>
+            </div>
+          </button>
+        </div>
+        <div class="command-item">
+          <button class="command-btn" onclick="selectCommand('new patient')">
+            <div class="btn-content">
+              <img src="/static/images/patient.jpg" alt="new patient">
+              <span>new patient</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div id="form-group" class="hidden">
+        <label for="target">Target:</label>
+        <select id="target"></select>
+        <br><br>
+
+        <label for="time">Time:</label>
+        <input type="time" id="time">
+        <br><br>
+
+        <button onclick="submitSendMedicine()">儲存 send medicine</button>
+      </div>
+
+      <div id="new-patient-group" class="hidden">
+        <label for="username">你的名字：</label><br>
+        <div class="username"><input type="text" id="username" placeholder="例如：my_image"><br><br></div>
+        <label for="room">Room:</label>
+        <select id="room">
+          <option value="520">520</option>
+          <option value="521">521</option>
+          <option value="522">522</option>
+        </select>
+        <br><br>
+        <label for="pill box">pill box:</label>
+        <select id="pill_box">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+        <br><br>
+        <h2>上傳照片</h2>
+                 
+        <label for="file">選擇圖片:</label><br>
+        <input type="file" id="file"><br><br>
+        <button onclick="submitNewPatient()">上傳</button>
+
+        <p id="result"></p>
+      </div>
+
+      <div id="error"></div>
+      
+    </div>
+
+    <!-- 右側：排程任務 -->
+    <div class="right">
+      <h2>排程任務</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>目標對象</th>
+            <th>時間</th>
+          </tr>
+        </thead>
+        <tbody id="task-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="flex-container2">
+    <div id="current-task" class="current-task">
+      <div id="command-message" style="display:none; color:green; margin-top:10px;"></div>
+      <p id="task-text">目前任務狀態：載入中...</p>
+      <div id="video-call-controls" class="hidden">
+        <p>目前會議連結：<a id="meeting-link" href="#" target="_blank">載入中...</a></p>
+        <button onclick="endMeeting()">結束會議</button>
+      </div>
+      <img id="task-image" src="" alt="狀態圖片" />
+    </div>
+    <div><canvas id="map-canvas" width="983" height="650" class="map-canvas"></canvas></div>
+    <div><canvas id="canvas" width="640" height="480" class="canvas"></canvas></div>
+  </div>
+
+
+  <script>
+    fetch('/data/patient.json')
+    .then(response => response.json())
+    .then(data => {
+      const select = document.getElementById('target');
+      const names = new Set();
+
+      data.patient.forEach(entry => {
+        names.add(entry.name);
+      });
+
+      names.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('載入 patient.json 失敗:', error);
+    });
+
+
+    // 自動在 3 秒後隱藏 flash 訊息
+    setTimeout(() => {
+      const msg = document.getElementById('flash-msg');
+      if (msg) msg.style.display = 'none';
+    }, 3000);
+
+    const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        // ws://localhost:8765
+        const ws = new WebSocket('http://172.20.10.7:8765/');  // WebSocket 伺服器 URL
+
+        ws.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onmessage = (event) => {
+            const image_data = event.data;
+
+            // 解碼 base64 編碼的影像並顯示
+            const img = new Image();
+            img.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);  // 清空畫布
+                ctx.drawImage(img, 0, 0);  // 顯示圖片
+            };
+            img.src = 'data:image/jpeg;base64,' + image_data;  // 轉換成圖片源
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket Error:', error);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+    const imageMap = {
+      "idle": "idle.gif",
+      "waiting to deliver medicine": "waiting.gif",
+      "delivering medicine(moving to destination)": "moving.gif",
+      "delivering medicine(handing over the medication)": "handover.gif",
+      "delivering medicine(face recognition)": "face_recognition.gif",
+      "going home": "gohome.gif",
+      "chatting": "chat.gif",
+      "video calling": "video.gif"
+    };
+
+    function showCommandMessage(cmd) {
+      const messageDiv = document.getElementById('command-message');
+      messageDiv.innerText = `指令 ${cmd} 設定完成`;
+      messageDiv.style.display = 'block';
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    function submitShutdown() {
+        const now = new Date();
+        const timeStr = now.toTimeString().split(" ")[0]; // "HH:MM:SS"
+
+        const commandData = {
+            command: "shutdown",
+            target: "null",  // 明確地設成字串
+            time: timeStr
+        };
+
+        fetch("/json", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(commandData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            showCommandMessage("shutdown");  // 顯示指令完成訊息
+            console.log(data);
+        })
+        .catch(error => {
+            console.error("錯誤:", error);
+        });
+    }
+
+    function selectCommand(cmd) {
+      if (cmd === 'send medicine') {
+        document.getElementById('button-group').classList.add('hidden');
+        document.getElementById('form-group').classList.remove('hidden');
+      }
+      if (cmd === 'new patient') {
+        document.getElementById('button-group').classList.add('hidden');
+        document.getElementById('new-patient-group').classList.remove('hidden');
+      }
+    }
+
+    async function submitSendMedicine() {
+      const data = {
+        command: 'send medicine',
+        target: document.getElementById('target').value,
+        time: document.getElementById('time').value
+      };
+
+      await postJSON(data);
+      showCommandMessage("send medicine");
+      document.getElementById('form-group').classList.add('hidden');
+      document.getElementById('button-group').classList.remove('hidden');
+
+    }
+
+    async function submitCommand(cmd) {
+      const now = new Date();
+      const formattedTime = now.toTimeString().slice(0, 8); // "HH:MM:SS"
+
+      const data = {
+        command: cmd,
+        target: "null",
+        time: formattedTime
+      };
+      await postJSON(data);
+      showCommandMessage(cmd); 
+    }
+
+    async function submitNewPatient() {
+      submitCommand('new patient');
+      const data = {
+        name: document.getElementById('username').value,
+        pillBox: document.getElementById('pill_box').value,
+        room: document.getElementById('room').value
+      };
+
+      // 1. 上傳病人 JSON
+      await fetch('/patient_json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      // 2. 上傳圖片與名稱
+      const fileInput = document.getElementById("file");
+      const nameInput = document.getElementById("username");
+      const result = document.getElementById("result");
+
+      if (!fileInput.files.length || !nameInput.value.trim()) {
+          alert("請填寫名稱並選擇圖片");
+          return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+      formData.append("username", nameInput.value.trim());
+
+      try {
+          const response = await fetch("/upload", {
+              method: "POST",
+              body: formData
+          });
+
+          const data = await response.json();
+
+          if (data.status === "success") {
+              window.location.href = data.redirect;
+          } else {
+              result.innerText = data.message || "❌ 上傳失敗";
+          }
+      } catch (err) {
+          result.innerText = "❌ 上傳失敗：" + err;
+      }
+
+      document.getElementById('new-patient-group').classList.add('hidden');
+      document.getElementById('button-group').classList.remove('hidden');
+    }
+
+    async function postJSONPatient(jsonData) {
+      // try {
+      //   await fetch('/patient_json', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify(jsonData)
+      //   });
+      //   document.getElementById('error').innerText = '';
+      // } catch (error) {
+      //   document.getElementById('error').innerText = '儲存錯誤：' + error;
+      // }
+
+      try {
+        // 1. 上傳病人 JSON
+        await fetch('/patient_json', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(jsonData)
+        });
+
+        // 2. 上傳圖片與名稱
+        const fileInput = document.getElementById('upload-image');
+        const file = fileInput.files[0];
+        if (!file) throw new Error('未選擇圖片');
+
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('name', jsonData.name);  // 改名依據
+
+        await fetch('/upload', {
+          method: 'POST',
+          body: formData  // 這裡不要設定 Content-Type，瀏覽器會自動加上 multipart/form-data
+        });
+
+        document.getElementById('error').innerText = '';
+      } catch (error) {
+        document.getElementById('error').innerText = '儲存錯誤：' + error;
+      }
+
+    }
+
+    async function postJSON(jsonData) {
+      try {
+        await fetch('/json', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(jsonData)
+        });
+        document.getElementById('error').innerText = '';
+      } catch (error) {
+        document.getElementById('error').innerText = '儲存錯誤：' + error;
+      }
+    }
+    async function endMeeting() {
+      try {
+        await fetch('/close_meeting', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ end_meeting: 1 })
+        });
+        document.getElementById('video-call-controls').classList.add('hidden');
+      } catch (error) {
+        console.error('無法送出結束會議請求', error);
+      }
+    }
+
+    async function fetchCloseMeetingData() {
+      try {
+        const res = await fetch('/close_meeting');
+        const data = await res.json();
+        return data;
+      } catch (e) {
+        console.error('讀取 close_meeting.json 失敗', e);
+        return { end_meeting: 0, meet_link: "" };
+      }
+    }
+    async function fetchStatus() {
+  try {
+    const response = await fetch('/status');
+    const data = await response.json();
+    const tasks = (data.scheduled_tasks || []).sort((a, b) => a.time.localeCompare(b.time));
+    const currentTask = data.current_task?.status || '未知';
+
+    const tbody = document.getElementById('task-table-body');
+    tbody.innerHTML = '';
+    tasks.forEach((task, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${index + 1}</td><td>${task.target}</td><td>${task.time}</td>`;
+      tbody.appendChild(row);
+    });
+
+    document.getElementById('task-text').innerText = `目前任務狀態：${currentTask}`;
+
+    const videoControl = document.getElementById('video-call-controls');
+    if (currentTask === 'video calling') {
+      const closeMeetingData = await fetchCloseMeetingData();
+      const meetLink = document.getElementById('meeting-link');
+      meetLink.href = closeMeetingData.meet_link;
+      meetLink.innerText = closeMeetingData.meet_link || '（無會議連結）';
+      videoControl.classList.remove('hidden');
+    } else {
+      videoControl.classList.add('hidden');
+    }
+
+    document.getElementById('task-image').style.display = 'none';
+
+    let canvas = document.getElementById('map-canvas');
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.id = 'map-canvas';
+      canvas.style.border = '1px solid #ccc';
+      document.getElementById('current-task').appendChild(canvas);
+    }
+
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = '/static/images/1Frtabmap_map.png';
+
+    img.onload = async () => {
+      // ✅ 根據圖片尺寸動態調整 canvas 尺寸
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      try {
+        const poseRes = await fetch('/pose');
+        const pose = await poseRes.json();
+
+        // 地圖參數（來自 YAML）
+        const resolution = 0.05;
+        const scale = 1 / resolution;
+        const originX = -16.468;
+        const originY = -29.3034;
+
+        // 計算像素位置
+        const x = (pose.x - originX) * scale;
+        const y = canvas.height - (pose.y - originY) * scale;
+
+        // 畫紅點
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, 2 * Math.PI);
+        ctx.fillStyle = 'red';
+        ctx.fill();
+
+        // 計算方向箭頭
+        const { qx, qy, qz, qw } = pose;
+        const siny_cosp = 2 * (qw * qz + qx * qy);
+        const cosy_cosp = 1 - 2 * (qy * qy + qz * qz);
+        const yaw = Math.atan2(siny_cosp, cosy_cosp);
+
+        const arrowLength = 25;
+        const arrowX = x + arrowLength * Math.cos(yaw);
+        const arrowY = y - arrowLength * Math.sin(yaw); // y 軸方向為反向
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(arrowX, arrowY);
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      } catch (e) {
+        console.error('pose 讀取失敗', e);
+      }
+    };
+
+    // 任務對應圖片（如 idle.gif 等）
+    document.getElementById('task-image').style.display = 'block';
+    document.getElementById('task-image').src = `/static/images/${imageMap[currentTask] || 'idle.gif'}`;
+  } catch (err) {
+    console.error('載入 status.json 失敗：', err);
+  }
+}
+
+
+    window.onload = () => {
+      fetchStatus();
+      setInterval(fetchStatus, 5000);
+    };
+  </script>
+</body>
+</html>
