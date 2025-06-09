@@ -19,6 +19,10 @@ MedicineGrabber::MedicineGrabber()
     openGripper();
     rclcpp::sleep_for(std::chrono::seconds(1));
 
+    // 檢查機械手臂狀態
+    checkArmState();
+    
+    // 移動手臂到初始位置
     std::array<double, 6> initial_pose = {200, -50, 500, 3.14, 0, 0};
     if (!moveXArmToPose(initial_pose)) {
         RCLCPP_ERROR(this->get_logger(), "Failed to move to initial position!");
@@ -81,6 +85,28 @@ void MedicineGrabber::setupArucoDetector()
     parameters_->maxMarkerPerimeterRate = 4.0;
     parameters_->polygonalApproxAccuracyRate = 0.04;
     parameters_->cornerRefinementMethod = cv::aruco::CORNER_REFINE_SUBPIX;
+}
+
+void MedicineGrabber::checkArmState()
+{
+    rclcpp::Time start = this->now();
+    rclcpp::Duration timeout = rclcpp::Duration::from_seconds(3.0);
+    while (xarm_state_ == 100 && (this->now() - start) < timeout) {
+        rclcpp::spin_some(this->get_node_base_interface());
+        rclcpp::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    if (xarm_state_ > 2) {
+        RCLCPP_ERROR(this->get_logger(), "❌ xArm is not in the correct state for movement! current state: %d", xarm_state_);
+        std::string prefix = "/bin/bash -c 'source ~/robot_ws/install/setup.bash && ";
+        std::string cmd = prefix + "ros2 service call /ufactory/set_state xarm_msgs/srv/SetInt16 \"{data: 0}\"'";
+        std::system(cmd.c_str());
+    }
+
+    else {
+        RCLCPP_INFO(this->get_logger(), "✅ xArm is ready for movement, current state: %d", xarm_state_);
+    }
+    return;
 }
 
 cv::Mat MedicineGrabber::computeEEtoBaseTransform(const std::array<double, 6>& pose)
@@ -185,6 +211,7 @@ void MedicineGrabber::xarmFeedbackCallback(const xarm_msgs::msg::RobotMsg::Share
             xarm_current_pose_[i] = msg->pose[i];
         }
     }
+    xarm_state_ = msg->state;
 }
 
 void MedicineGrabber::imageCallback(const sensor_msgs::msg::Image::SharedPtr msg) {

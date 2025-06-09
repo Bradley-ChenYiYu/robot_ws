@@ -66,6 +66,14 @@
             </div>
           </button>
         </div>
+        <div class="command-item">
+          <button class="command-btn" onclick="selectCommand('grab medicine')">
+            <div class="btn-content">
+              <img src="/static/images/grab_medicine.png" alt="grab medicine">
+              <span>grab medicine</span>
+            </div>
+          </button>
+        </div>
       </div>
 
       <div id="form-group" class="hidden">
@@ -77,7 +85,15 @@
         <input type="time" id="time">
         <br><br>
 
-        <button onclick="submitSendMedicine()">儲存 send medicine</button>
+        <button onclick="submitSendMedicine('send medicine')">儲存 send medicine</button>
+      </div>
+
+      <div id="grab-form-group" class="hidden">
+        <label for="target">Target:</label>
+        <select id="target2"></select>
+        <br><br>
+
+        <button onclick="submitSendMedicine('grab medicine')">儲存 grab medicine</button>
       </div>
 
       <div id="new-patient-group" class="hidden">
@@ -165,6 +181,27 @@
       console.error('載入 patient.json 失敗:', error);
     });
 
+    fetch('/data/patient.json')
+    .then(response => response.json())
+    .then(data => {
+      const select = document.getElementById('target2');
+      const names = new Set();
+
+      data.patient.forEach(entry => {
+        names.add(entry.name);
+      });
+
+      names.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('載入 patient.json 失敗:', error);
+    });
+
 
     // 自動在 3 秒後隱藏 flash 訊息
     setTimeout(() => {
@@ -175,7 +212,7 @@
     const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         // ws://localhost:8765
-        const ws = new WebSocket('http://172.20.10.7:8765/');  // WebSocket 伺服器 URL
+        const ws = new WebSocket('http://192.168.235.110:8765/');  // WebSocket 伺服器 URL
 
         ws.onopen = () => {
             console.log('WebSocket connection established');
@@ -257,21 +294,42 @@
         document.getElementById('button-group').classList.add('hidden');
         document.getElementById('new-patient-group').classList.remove('hidden');
       }
+      if (cmd === 'grab medicine') {
+        document.getElementById('button-group').classList.add('hidden');
+        document.getElementById('grab-form-group').classList.remove('hidden');
+      }
     }
 
-    async function submitSendMedicine() {
-      const data = {
-        command: 'send medicine',
-        target: document.getElementById('target').value,
-        time: document.getElementById('time').value
-      };
+    async function submitSendMedicine(cmd) {
+      if (cmd === 'send medicine') {
+        const data = {
+          command: cmd,
+          target: document.getElementById('target').value,
+          time: document.getElementById('time').value
+        };
 
-      await postJSON(data);
-      showCommandMessage("send medicine");
-      document.getElementById('form-group').classList.add('hidden');
-      document.getElementById('button-group').classList.remove('hidden');
+        await postJSON(data);
+        showCommandMessage(cmd);
+        document.getElementById('form-group').classList.add('hidden');
+        document.getElementById('button-group').classList.remove('hidden');
+      }
 
+      if (cmd === 'grab medicine') {
+        const now = new Date();
+        const timeStr = now.toTimeString().split(" ")[0]; // "HH:MM:SS"
+        const data = {
+          command: cmd,
+          target: document.getElementById('target2').value,
+          time: timeStr
+        };
+
+        await postJSON(data);
+        showCommandMessage(cmd);
+        document.getElementById('grab-form-group').classList.add('hidden');
+        document.getElementById('button-group').classList.remove('hidden');
+      }
     }
+
 
     async function submitCommand(cmd) {
       const now = new Date();
@@ -512,7 +570,7 @@
 
     window.onload = () => {
       fetchStatus();
-      setInterval(fetchStatus, 5000);
+      setInterval(fetchStatus, 1000);
     };
   </script>
 </body>

@@ -4,20 +4,20 @@
 ROS2_WS=~/robot_ws
 
 # 啟動 Web ngrok
-gnome-terminal --title="ngrok" -- bash -c "
-cd ~/robot_ws
-ngrok start --all
-exec bash
-"
+# gnome-terminal --title="ngrok" -- bash -c "
+# cd ~/robot_ws
+# ngrok start --all
+# exec bash
+# "
 
-sleep 1
+# sleep 1
 
 # 啟動 Web Server
-gnome-terminal --title="Web Server" -- bash -c "
-cd ~/robot_ws
-python3 web_latest/app.py
-exec bash
-"
+# gnome-terminal --title="Web Server" -- bash -c "
+# cd ~/robot_ws
+# python3 web_latest/app.py
+# exec bash
+# "
 
 sleep 1
 

@@ -21,7 +21,7 @@ def generate_launch_description():
     waypoint_follower_yaml = os.path.join(get_package_share_directory(
         'tracer_base'), 'new_config', 'waypoint_follower.yaml')
     rviz_config_file_path = os.path.join(get_package_share_directory(
-        'tracer_base'), 'rviz_config', 'localization.rviz')
+        'tracer_base'), 'rviz_config', 'pathplanning.rviz')
     velocity_smoother_yaml = os.path.join(get_package_share_directory(
         'tracer_base'), 'new_config', 'velocity_smoother.yaml')
     smoother_server_yaml = os.path.join(get_package_share_directory(

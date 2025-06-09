@@ -555,6 +555,8 @@ private:
         } else if (command == "new patient") {
             load_new_patient("/home/jason9308/robot_ws/command_jason/new_patient.json");
             RCLCPP_INFO(this->get_logger(), "新增病人資料");
+        } else if(command == "grab medicine") {
+            send_medicine_flow(target, time);
         } else {
             RCLCPP_WARN(this->get_logger(), "未知的指令：%s", command.c_str());
         }
@@ -566,16 +568,25 @@ private:
         int med_id = medicine_map_[target][period];
         RCLCPP_INFO(this->get_logger(), "任務時間為 %s,判定時段為 %s,%s 的藥包編號為 %d", time.c_str(), period.c_str(), target.c_str(), med_id);
 
-        auto [x, y, z, w] = location_map_[target];
-        RCLCPP_INFO(this->get_logger(), "導航至 %s 的座標位置 (%.2f, %.2f, %.2f, %.2f)", target.c_str(), x, y, z, w);
+        // auto [x, y, z, w] = location_map_[target];
+        // RCLCPP_INFO(this->get_logger(), "導航至 %s 的座標位置 (%.2f, %.2f, %.2f, %.2f)", target.c_str(), x, y, z, w);
         
-        status_ = "delivering medicine(moving to destination)";
-        write_status_to_json();
-        transition("navigation", target);
+        // status_ = "delivering medicine(moving to destination)";
+        // write_status_to_json();
+        // transition("navigation", target);
 
         status_ = "delivering medicine(face recognition)";
         write_status_to_json();
         transition("face_recognition", target);
+
+        std::string prefix = "/bin/bash -c 'source ~/robot_ws/install/setup.bash && ";
+        std::string cmd1 = prefix + "ros2 service call /ufactory/motion_enable xarm_msgs/srv/SetInt16ById \"{id: 8, data: 1}\"'";
+        std::string cmd2 = prefix + "ros2 service call /ufactory/set_mode xarm_msgs/srv/SetInt16 \"{data: 0}\"'";
+        std::string cmd3 = prefix + "ros2 service call /ufactory/set_state xarm_msgs/srv/SetInt16 \"{data: 0}\"'";
+
+        std::system(cmd1.c_str());
+        std::system(cmd2.c_str());
+        std::system(cmd3.c_str());
 
         status_ = "delivering medicine(handing over the medication)";
         write_status_to_json();
@@ -603,17 +614,7 @@ private:
         write_status_to_json();
         transition("face_recognition", target);
 
-        std::string prefix = "/bin/bash -c 'source ~/robot_ws/install/setup.bash && ";
-        std::string cmd1 = prefix + "ros2 service call /ufactory/motion_enable xarm_msgs/srv/SetInt16ById \"{id: 8, data: 1}\"'";
-        std::string cmd2 = prefix + "ros2 service call /ufactory/set_mode xarm_msgs/srv/SetInt16 \"{data: 0}\"'";
-        std::string cmd3 = prefix + "ros2 service call /ufactory/set_state xarm_msgs/srv/SetInt16 \"{data: 0}\"'";
-
-        std::system(cmd1.c_str());
-        std::system(cmd2.c_str());
-        std::system(cmd3.c_str());
-
-        // 加個延遲，確保 arm 完全 idle
-        // std::this_thread::sleep_for(std::chrono::milliseconds(800));
+        // std::string prefix = "/bin/bash -c 'source ~/robot_ws/install/setup.bash && ";
 
         status_ = "delivering medicine(handing over the medication)";
         write_status_to_json();
@@ -630,7 +631,7 @@ private:
         
         chat_decision_ = "undecided";
 
-        // std::string prefix = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ";
+        std::string prefix = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ";
         std::string cmd;
         cmd = prefix + "ros2 run speech_recognition_pkg chat_decision' &";
         std::system(cmd.c_str());
@@ -743,7 +744,8 @@ private:
             // 2. 
             RCLCPP_INFO(this->get_logger(), "移動手臂至視訊位置");
             // cmd = prefix + "ros2 run move_arm move_arm_node 401.1 -2.7 509.2 3.0364 -1.3345 0.0646'";
-            cmd = prefix + "ros2 run move_arm move_arm_node 401.1 -2.7 509.2 3.0364 -1.3345 0.0646 &'";
+            cmd = prefix + "ros2 run move_arm move_arm_node 282.3 -1.5 325.4 0.166 -1.559 2.943 &'";
+            // cmd = prefix + "ros2 run move_arm move_arm_node 142.7, 1.5, 361.2, 2.996, -1.420, 0.150 &'";
             std::system(cmd.c_str());
             // std::this_thread::sleep_for(std::chrono::seconds(1));
 

@@ -111,6 +111,10 @@ private:
     std_msgs::msg::String bot_msg_;
     std_msgs::msg::String user_msg_;
 
+    // 用於檢查手臂state
+    int xarm_state_ = 100; // 儲存 /ufactory/robot_states 中的 state 值
+    void checkArmState();
+
 };
 
 #endif  // MEDICINE_GRABBER_HPP_

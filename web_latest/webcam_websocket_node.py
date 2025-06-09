@@ -44,7 +44,7 @@ class ImageWebsocketBridge(Node):
             self.frame_count += 1
             
             # 每 3 幀傳送 1 幀
-            if self.frame_count % 3 != 0:
+            if self.frame_count % 5 != 0:
                 return
             
             # 轉換影像格式

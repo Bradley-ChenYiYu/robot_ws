@@ -45,7 +45,8 @@ class FaceRecognitionNode(Node):
         self.pass_required = 50
 
         # self.view_pose = [22.4, 0.8, 502.4, 3.1329, -1.0408, 0.0017] # 看臉位置
-        self.view_pose = [401.1, -2.7, 509.2, 3.0364, -1.3345, 0.0646] # 看臉位置NEW
+        # self.view_pose = [142.7, 1.5, 361.2, 2.996, -1.420, 0.150] # 看臉位置
+        self.view_pose = [282.3, -1.5, 325.4, 0.166, -1.559, 2.943] # 看臉位置NEW
 
         self.idle_pose = [150, 0, 200, 3.14, 0, 0]      # 待機位置
         self.move_arm_to(self.view_pose)

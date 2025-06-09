@@ -10,8 +10,20 @@ class MoveArmNode : public rclcpp::Node {
 public:
     MoveArmNode(const std::array<double, 6>& target_pose)
         : Node("move_arm_node"), target_pose_(target_pose) {
+        
+        // std::string prefix = "/bin/bash -c 'source ~/robot_ws/install/setup.bash && ";
+        // std::string cmd1 = prefix + "ros2 service call /ufactory/motion_enable xarm_msgs/srv/SetInt16ById \"{id: 8, data: 1}\"'";
+        // std::string cmd2 = prefix + "ros2 service call /ufactory/set_mode xarm_msgs/srv/SetInt16 \"{data: 0}\"'";
+        // std::string cmd3 = prefix + "ros2 service call /ufactory/set_state xarm_msgs/srv/SetInt16 \"{data: 0}\"'";
+        // std::system(cmd1.c_str());
+        // std::system(cmd2.c_str());
+        // std::system(cmd3.c_str());
+
         setupClient();
         setupFeedbackSub();
+        setupStateSub();
+
+        checkArmState();
         moveToTarget();
     }
 
@@ -20,6 +32,9 @@ private:
     std::array<double, 6> current_pose_;
     rclcpp::Client<xarm_msgs::srv::MoveCartesian>::SharedPtr move_client_;
     rclcpp::Subscription<xarm_msgs::msg::RobotMsg>::SharedPtr feedback_sub_;
+    rclcpp::Subscription<xarm_msgs::msg::RobotMsg>::SharedPtr state_sub_; 
+
+    int xarm_state_ = 100; // 儲存 /ufactory/robot_states 中的 state 值
 
     void setupClient() {
         move_client_ = this->create_client<xarm_msgs::srv::MoveCartesian>("/ufactory/set_position");
@@ -36,6 +51,28 @@ private:
                 }
             }
         );
+    }
+
+    void checkArmState() {
+
+        rclcpp::Time start = this->now();
+        rclcpp::Duration timeout = rclcpp::Duration::from_seconds(3.0);
+        while (xarm_state_ == 100 && (this->now() - start) < timeout) {
+            rclcpp::spin_some(this->get_node_base_interface());
+            rclcpp::sleep_for(std::chrono::milliseconds(100));
+        }
+
+        if (xarm_state_ > 2) {
+            RCLCPP_ERROR(this->get_logger(), "❌ xArm is not in the correct state for movement! current state: %d", xarm_state_);
+            std::string prefix = "/bin/bash -c 'source ~/robot_ws/install/setup.bash && ";
+            std::string cmd = prefix + "ros2 service call /ufactory/set_state xarm_msgs/srv/SetInt16 \"{data: 0}\"'";
+            std::system(cmd.c_str());
+        }
+
+        else {
+            RCLCPP_INFO(this->get_logger(), "✅ xArm is ready for movement, current state: %d", xarm_state_);
+        }
+        return;
     }
 
     void moveToTarget() {
@@ -67,6 +104,15 @@ private:
         } else {
             RCLCPP_WARN(this->get_logger(), "⚠️ Timeout: arm may not have reached target.");
         }
+    }
+
+    void setupStateSub() {
+        state_sub_ = this->create_subscription<xarm_msgs::msg::RobotMsg>(
+            "/ufactory/robot_states", 10,
+            [this](const xarm_msgs::msg::RobotMsg::SharedPtr msg) {
+                xarm_state_ = msg->state;
+            }
+        );
     }
 
     bool wait_for_arrival(const std::array<double, 6>& target, double tolerance = 1.0) {
