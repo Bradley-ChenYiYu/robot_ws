@@ -107,6 +107,10 @@ class ChatbotNode(Node):
         clear_msg = String()
         clear_msg.data = "clear"
         self.chat_publisher.publish(clear_msg)
+        playsound("/home/jason9308/robot_ws/sound/chat_start.mp3")
+        start_msg = String()
+        start_msg.data = "BOT: 你好呀，我是鐵柱！有什麼想跟我分享的嗎？"
+        self.chat_publisher.publish(start_msg)
         
         self.chat_loop()
 

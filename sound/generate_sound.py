@@ -6,8 +6,8 @@ import os
 from playsound import playsound
 
 # ✅ 你可以在這裡自由設定內容與儲存位置
-text = "好的，掰掰～祝您今天愉快，有空再來跟我聊聊天喔！"
-output_path = "/home/jason9308/robot_ws/sound/chat_finish.mp3"
+text = "你好呀，我是鐵柱！有什麼想跟我分享的嗎？"
+output_path = "/home/jason9308/robot_ws/sound/chat_start.mp3"
 
 def speak(text, output_path):
     # 讀取 API 金鑰

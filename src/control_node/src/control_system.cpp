@@ -306,8 +306,8 @@ private:
     void init_medicine_mapping() {
         pillbox_to_medicine_ = {
             {1, {1, 5, 9}},
-            {2, {2, 6, 10}},
-            {3, {3, 7, 11}},
+            {2, {1, 5, 10}},
+            {3, {4, 7, 12}},
             {4, {4, 8, 12}}
         };
     }
@@ -625,31 +625,34 @@ private:
         write_status_to_json();
         transition("video_call", target);
 
-        // 聊天(optional)
+        // 聊天(直接開始)
         status_ = "chatting";
         write_status_to_json();
+        transition("chatbot", target);
+
+        // 聊天(optional)
+        // status_ = "chatting";
+        // write_status_to_json();
         
-        chat_decision_ = "undecided";
+        // chat_decision_ = "undecided";
 
-        std::string prefix = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ";
-        std::string cmd;
-        cmd = prefix + "ros2 run speech_recognition_pkg chat_decision' &";
-        std::system(cmd.c_str());
+        // std::string prefix = "/bin/bash -c 'source /home/jason9308/robot_ws/install/setup.bash && ";
+        // std::string cmd;
+        // cmd = prefix + "ros2 run speech_recognition_pkg chat_decision' &";
+        // std::system(cmd.c_str());
 
-        while (chat_decision_ == "undecided") {
-            RCLCPP_INFO(this->get_logger(), "等待聊天決策...");
-            rclcpp::spin_some(this->get_node_base_interface());
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
+        // while (chat_decision_ == "undecided") {
+        //     RCLCPP_INFO(this->get_logger(), "等待聊天決策...");
+        //     rclcpp::spin_some(this->get_node_base_interface());
+        //     std::this_thread::sleep_for(std::chrono::seconds(1));
+        // }
 
-        if(chat_decision_ == "yes")
-        {
-            transition("chatbot", target);
-        }
+        // if(chat_decision_ == "yes")
+        // {
+        //     transition("chatbot", target);
+        // }
 
-        // auto [x, y, z, w] = location_map_["home"];
-        // RCLCPP_INFO(this->get_logger(), "回家導航至座標位置 (%.2f, %.2f, %.2f, %.2f)", x, y, z, w);
-        
+        // 導航回家
         go_home_flow();
 
         status_ = "idle";
