@@ -64,14 +64,15 @@
 5. **夾藥模組（機械手臂控制）**  
    使用 xArm Lite6 搭配 RealSense D435 完成 [手眼校正](https://youtu.be/MsT9OtA3d_w?si=70Rc7QNobzVqoryr)，將相**機座標**轉換至**機械手臂的基座座標系** (base frame)，確保抓取位置準確。
 系統會偵測 ArUco 標記以計算藥盒座標，並根據轉換結果控制手臂精準抓取藥包並交付給患者。
+
     ![image](https://hackmd.io/_uploads/SyzpuQDilg.png)
 
 
-6. **視訊通話模組**  
+7. **視訊通話模組**  
    透過 **Selenium + LineBot** 自動建立 **Google Meet** 連線。  
    方便醫護人員遠端視訊，提升照護的即時性。  
 
-7. **聊天機器人模組**  
+8. **聊天機器人模組**  
    整合 **OpenAI GPT、Google STT 與 OpenAI TTS**，提供自然語音對話。  
    陪伴患者進行簡單交談，增進互動與陪伴感。  
    
