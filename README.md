@@ -64,10 +64,8 @@
 5. **夾藥模組（機械手臂控制）**  
    使用 xArm Lite6 搭配 RealSense D435 完成 [手眼校正](https://youtu.be/MsT9OtA3d_w?si=70Rc7QNobzVqoryr)，將相**機座標**轉換至**機械手臂的基座座標系** (base frame)，確保抓取位置準確。
 系統會偵測 ArUco 標記以計算藥盒座標，並根據轉換結果控制手臂精準抓取藥包並交付給患者。
-    | 類別 | 手眼校正結果 |
-    |------|------|
-    | 旋轉矩陣 (R) | $$ R = \begin{bmatrix} -0.0021 & -0.99995 & -0.0096 \\\\ 0.99990 & -0.0020 & -0.0143 \\\\ 0.0143 & -0.0097 & 0.99985 \end{bmatrix} $$ |
-    | 平移向量 (T, 單位 mm) | $$ T = \begin{bmatrix} 70.26 \\\\ -36.00 \\\\ -60.00 \end{bmatrix} $$ |
+    ![image](https://hackmd.io/_uploads/SyzpuQDilg.png)
+
 
 6. **視訊通話模組**  
    透過 **Selenium + LineBot** 自動建立 **Google Meet** 連線。  
