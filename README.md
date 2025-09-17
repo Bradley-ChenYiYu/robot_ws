@@ -68,7 +68,7 @@
 
 
 5. **夾藥模組（機械手臂控制）** 
-    使用 xArm Lite6 搭配 RealSense D435 完成 [手眼校正](https://youtu.be/MsT9OtA3d_w?si=70Rc7QNobzVqoryr)，將相機座標轉換至機械手臂的基座座標系 (base frame)，確保抓取位置準確。
+    使用 xArm Lite6 搭配 RealSense D435 完成 [手眼校正](https://youtu.be/MsT9OtA3d_w?si=70Rc7QNobzVqoryr)，採用 Tsai–Lenz 演算法（eye-in-hand，AX=XB），求得相機座標到機械手臂基座的轉換矩陣 𝑋 = [𝑅∣𝑡] 。
 系統會偵測 ArUco 標記以計算藥盒座標，並根據轉換結果控制手臂抓取藥包。
 同時，透過 YOLOv10（自行訓練）進行手部偵測，辨識患者的手部位置，確保機械手臂能將藥包正確放置到患者手上，完成安全交付。 
    
