@@ -39,7 +39,7 @@
    讓使用者能以自然語音操作，支援送藥、聊天、視訊等功能。  
 
 2. **網頁控制模組**  
-   以 **LineBot + Web 前端 (HTML/CSS/JS)** 作為輸入界面，醫護人員可直接下達或修改指令。  
+   以 **Web 前端 (HTML/CSS/JS)** 作為輸入界面，醫護人員可直接下達或修改指令。  
    提供任務排程、狀態查詢及導航地圖顯示。  
    ![image](https://hackmd.io/_uploads/HJxsCGwslx.png)
 
