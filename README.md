@@ -45,14 +45,14 @@
 
 
 3. **導航模組**  
-   結合 RTAB-Map (SLAM) 與 Nav2，先利用 Velodyne LiDAR 與 RealSense 深度相機建立環境地圖。
+   結合 **RTAB-Map (SLAM)** 與 **Nav2**，先利用 Velodyne LiDAR 與 RealSense 深度相機建立環境地圖。
 導航時會根據環境即時更新 **global costmap** 與 **local costmap**，用於路徑規劃與避障。
 能在室內環境中自主導航至病房或指定地點。  
 
-    | 樓層 | 導航地圖 |
+    | 圖片 |  |
     |------|----------|
-    | 11 樓 | ![11樓地圖](https://hackmd.io/_uploads/rkawJmPsee.png) |
-    | 1 樓  | ![1樓地圖](https://hackmd.io/_uploads/BJ3PWmDigg.png)<br>藍色區域代表**障礙物代價（costmap）**，會影響路徑規劃 |
+    | 11 樓地圖 | ![11樓地圖](https://hackmd.io/_uploads/rkawJmPsee.png) |
+    | 11 樓導航畫面  | ![image](https://hackmd.io/_uploads/B1gDFnwoex.png)<br>淺藍色區域代表**障礙物代價（costmap）**，會影響路徑規劃 <br> 深藍色線條代表planner規劃出來的導航路徑|
 
 
 
@@ -60,21 +60,33 @@
 4. **臉部辨識模組**  
    採用 **YOLOv10** (以 WIDER FACE 資料集自行訓練）進行人臉偵測，並以 **Dlib** 做五點對齊，最後利用 **InceptionResnet V1 (FaceNet)** 進行身份驗證。  
    確保藥物正確遞送給對應病人。  
+   
+    | 圖片 |  |
+    |------|----------|
+    | yolov10訓練 | ![results](https://hackmd.io/_uploads/rJ9b7CDiel.png) |
+    | 人臉辨識通過  | ![image](https://hackmd.io/_uploads/Bk7UTaPjlg.png) |
 
-5. **夾藥模組（機械手臂控制）**  
-   使用 xArm Lite6 搭配 RealSense D435 完成 [手眼校正](https://youtu.be/MsT9OtA3d_w?si=70Rc7QNobzVqoryr)，將相**機座標**轉換至**機械手臂的基座座標系** (base frame)，確保抓取位置準確。
-系統會偵測 ArUco 標記以計算藥盒座標，並根據轉換結果控制手臂精準抓取藥包並交付給患者。
 
-    ![image](https://hackmd.io/_uploads/SyzpuQDilg.png)
+5. **夾藥模組（機械手臂控制）** 
+    使用 xArm Lite6 搭配 RealSense D435 完成 [手眼校正](https://youtu.be/MsT9OtA3d_w?si=70Rc7QNobzVqoryr)，將相機座標轉換至機械手臂的基座座標系 (base frame)，確保抓取位置準確。
+系統會偵測 ArUco 標記以計算藥盒座標，並根據轉換結果控制手臂抓取藥包。
+同時，透過 YOLOv10（自行訓練）進行手部偵測，辨識患者的手部位置，確保機械手臂能將藥包正確放置到患者手上，完成安全交付。 
+   
+    | 類別 | 手眼校正結果 |
+    |------|------|
+    | 旋轉矩陣 (R) | $$ R = \begin{bmatrix} -0.0021 & -0.99995 & -0.0096 \\\\ 0.99990 & -0.0020 & -0.0143 \\\\ 0.0143 & -0.0097 & 0.99985 \end{bmatrix} $$ |
+    | 平移向量 (T, 單位 mm) | $$ T = \begin{bmatrix} 70.26 \\\\ -36.00 \\\\ -60.00 \end{bmatrix} $$ |
 
-
-7. **視訊通話模組**  
+6. **視訊通話模組**  
    透過 **Selenium + LineBot** 自動建立 **Google Meet** 連線。  
    方便醫護人員遠端視訊，提升照護的即時性。  
 
-8. **聊天機器人模組**  
-   整合 **OpenAI GPT、Google STT 與 OpenAI TTS**，提供自然語音對話。  
-   陪伴患者進行簡單交談，增進互動與陪伴感。  
+7. **聊天機器人模組**  
+   整合 **OpenAI GPT、Google STT 與 OpenAI TTS**，提供自然語音對話以及聊天介面顯示。  
+   陪伴患者進行簡單交談，增進互動與陪伴感。
+   ![image](https://hackmd.io/_uploads/r1p2o6Diex.png)
+
+
    
 
 ---
